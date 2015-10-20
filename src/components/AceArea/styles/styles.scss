@@ -1,0 +1,16 @@
+/* AceArea styles */
+
+:local(.styles) {
+  display: inline-block;
+  position: absolute;
+  width: 35%;
+  height: 30%;
+
+  left: 50%;
+  top: 10%;
+  background: #9af;
+
+  & div { 
+    top: 1%;
+  }
+}

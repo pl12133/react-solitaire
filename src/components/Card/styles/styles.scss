@@ -1,0 +1,8 @@
+/* Card styles */
+
+/* These styles display when a card is flipped */
+:local(.styles) {
+  background: lightblue !important;
+  border: 1px dashed;
+  border-radius: 10px;
+}

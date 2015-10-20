@@ -1,0 +1,9 @@
+{
+  "globalstrict": true,
+  "node": true,
+  "expr": true,
+  "globals": {
+    "describe": false,
+    "it": false
+  }
+}

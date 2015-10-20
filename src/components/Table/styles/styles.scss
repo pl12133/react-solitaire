@@ -1,0 +1,180 @@
+/* Table styles */
+
+:local(.styles) {
+  width: 90%;
+  height: 100%;
+  min-height: 40%;
+  margin: 0 auto;
+  background: #0a0;
+  user-select: none;
+
+  overflow: hidden;
+
+
+  /* Deck styles */
+  & div[id*='-of-'] {
+    position: absolute;
+    width: 72px;
+    height: 95px;
+    padding: .5px;
+    margin: 0;
+    display: inline-block;
+  }
+
+  & #ace-of-clubs {
+   background:  url('/dist/cards.jpg') -1px -1px;
+  }
+  & #two-of-clubs {
+   background:  url('/dist/cards.jpg') -74px -1px;
+  }
+  & #three-of-clubs {
+   background:  url('/dist/cards.jpg') -147px -1px;
+  }
+  & #four-of-clubs {
+   background:  url('/dist/cards.jpg') -220px -1px;
+  }
+  & #five-of-clubs {
+   background:  url('/dist/cards.jpg') -293px -1px;
+  }
+  & #six-of-clubs {
+   background:  url('/dist/cards.jpg') -366px -1px;
+  }
+  & #seven-of-clubs {
+   background:  url('/dist/cards.jpg') -439px -1px;
+  }
+  & #eight-of-clubs {
+   background:  url('/dist/cards.jpg') -512px -1px;
+  }
+  & #nine-of-clubs {
+   background:  url('/dist/cards.jpg') -585px -1px;
+  }
+  & #ten-of-clubs {
+   background:  url('/dist/cards.jpg') -658px -1px;
+  }
+  & #jack-of-clubs {
+   background:  url('/dist/cards.jpg') -731px -1px;
+  }
+  & #queen-of-clubs {
+   background:  url('/dist/cards.jpg') -804px -1px;
+  }
+  & #king-of-clubs {
+   background:  url('/dist/cards.jpg') -877px -1px;
+  }
+  & #ace-of-spades {
+   background:  url('/dist/cards.jpg') -1px -99px;
+  }
+  & #two-of-spades {
+   background:  url('/dist/cards.jpg') -74px -99px;
+  }
+  & #three-of-spades {
+   background:  url('/dist/cards.jpg') -147px -99px;
+  }
+  & #four-of-spades {
+   background:  url('/dist/cards.jpg') -220px -99px;
+  }
+  & #five-of-spades {
+   background:  url('/dist/cards.jpg') -293px -99px;
+  }
+  & #six-of-spades {
+   background:  url('/dist/cards.jpg') -366px -99px;
+  }
+  & #seven-of-spades {
+   background:  url('/dist/cards.jpg') -439px -99px;
+  }
+  & #eight-of-spades {
+   background:  url('/dist/cards.jpg') -512px -99px;
+  }
+  & #nine-of-spades {
+   background:  url('/dist/cards.jpg') -585px -99px;
+  }
+  & #ten-of-spades {
+   background:  url('/dist/cards.jpg') -658px -99px;
+  }
+  & #jack-of-spades {
+   background:  url('/dist/cards.jpg') -731px -99px;
+  }
+  & #queen-of-spades {
+   background:  url('/dist/cards.jpg') -804px -99px;
+  }
+  & #king-of-spades {
+   background:  url('/dist/cards.jpg') -877px -99px;
+  }
+  & #ace-of-hearts {
+   background:  url('/dist/cards.jpg') -1px -197px;
+  }
+  & #two-of-hearts {
+   background:  url('/dist/cards.jpg') -74px -197px;
+  }
+  & #three-of-hearts {
+   background:  url('/dist/cards.jpg') -147px -197px;
+  }
+  & #four-of-hearts {
+   background:  url('/dist/cards.jpg') -220px -197px;
+  }
+  & #five-of-hearts {
+   background:  url('/dist/cards.jpg') -293px -197px;
+  }
+  & #six-of-hearts {
+   background:  url('/dist/cards.jpg') -366px -197px;
+  }
+  & #seven-of-hearts {
+   background:  url('/dist/cards.jpg') -439px -197px;
+  }
+  & #eight-of-hearts {
+   background:  url('/dist/cards.jpg') -512px -197px;
+  }
+  & #nine-of-hearts {
+   background:  url('/dist/cards.jpg') -585px -197px;
+  }
+  & #ten-of-hearts {
+   background:  url('/dist/cards.jpg') -658px -197px;
+  }
+  & #jack-of-hearts {
+   background:  url('/dist/cards.jpg') -731px -197px;
+  }
+  & #queen-of-hearts {
+   background:  url('/dist/cards.jpg') -804px -197px;
+  }
+  & #king-of-hearts {
+   background:  url('/dist/cards.jpg') -877px -197px;
+  }
+  & #ace-of-diamonds {
+   background:  url('/dist/cards.jpg') -1px -295px;
+  }
+  & #two-of-diamonds {
+   background:  url('/dist/cards.jpg') -74px -295px;
+  }
+  & #three-of-diamonds {
+   background:  url('/dist/cards.jpg') -147px -295px;
+  }
+  & #four-of-diamonds {
+   background:  url('/dist/cards.jpg') -220px -295px;
+  }
+  & #five-of-diamonds {
+   background:  url('/dist/cards.jpg') -293px -295px;
+  }
+  & #six-of-diamonds {
+   background:  url('/dist/cards.jpg') -366px -295px;
+  }
+  & #seven-of-diamonds {
+   background:  url('/dist/cards.jpg') -439px -295px;
+  }
+  & #eight-of-diamonds {
+   background:  url('/dist/cards.jpg') -512px -295px;
+  }
+  & #nine-of-diamonds {
+   background:  url('/dist/cards.jpg') -585px -295px;
+  }
+  & #ten-of-diamonds {
+   background:  url('/dist/cards.jpg') -658px -295px;
+  }
+  & #jack-of-diamonds {
+   background:  url('/dist/cards.jpg') -731px -295px;
+  }
+  & #queen-of-diamonds {
+   background:  url('/dist/cards.jpg') -804px -295px;
+  }
+  & #king-of-diamonds {
+   background:  url('/dist/cards.jpg') -877px -295px;
+  }
+}
