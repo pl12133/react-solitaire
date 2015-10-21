@@ -26,6 +26,8 @@
   },
   "devDependencies": {
     "babel-plugin-react-transform": "^1.1.1",
+    "babel-plugin-source-map-support": "0.0.1",
+    "babel-plugin-transform-react-display-name": "^6.1.18",
     "babel-preset-react": "^6.1.2",
     "react-tools": "^0.13.3",
     "react-transform-catch-errors": "^1.0.0",

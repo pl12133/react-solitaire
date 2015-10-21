@@ -16,8 +16,7 @@ const initialState = (function() {
     suits.forEach((suit) => {
       values.forEach((value) => {
         let str = value + '-of-' + suit;
-        memo.push({name: str, location: 'TABLE'});
-        //memo[str] = { location: 'TABLE' } // Memo as object
+        memo.push({name: str, location: 'TABLE', flipped: true});
       })
     })
 
@@ -51,7 +50,9 @@ export default function card(state = initialState, action) {
       //Memo as array:
       let next = state.filter((elem) => {
         return (elem.name !== action.card.name);
-      }).concat({name: action.card.name, location: action.destination});
+      }).concat({name: action.card.name,
+                 location: action.destination,
+                 flipped: action.card.flipped});
       return next;
     default:
       return state;

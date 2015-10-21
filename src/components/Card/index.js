@@ -7,13 +7,15 @@ const propTypes = {
   offsetX: PropTypes.number,
   offsetY: PropTypes.number,
   isDragging: PropTypes.bool.isRequired,
-  flipped: PropTypes.bool
+  flipped: PropTypes.bool.isRequired
 }
 
 class Card extends Component {
   constructor(props) {
     super(props);
     this.handleMouseDown = this.handleMouseDown.bind(this);
+    this.flip = this.flip.bind(this);
+    this.state = { toggleFlip: false }
   }
 
   handleMouseDown(e) {
@@ -23,10 +25,17 @@ class Card extends Component {
     }
   }
 
+  flip() {
+    this.setState({
+      toggleFlip: !this.state.toggleFlip
+    })
+  }
+
   render() {
     let { name, flipped } = this.props;
+    let { toggleFlip } = this.state;
     return (
-      <div id={name} className={(flipped) ? styles : ""}
+      <div id={name} className={(flipped ^ toggleFlip) ? styles : ""}
                      style={ {
                        zIndex: 10,
                        position: 'absolute',

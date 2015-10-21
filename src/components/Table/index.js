@@ -61,7 +61,7 @@ class Table extends Component {
   }
   handleEndDragDrop(e) {
     let { endDrag, dragdrop } = this.props;
-    let { dragNode } = dragdrop;
+    let { dragNode, dragCard } = dragdrop;
     let { clientX, clientY } = e;
     let tableDroppables = [].slice.call(document.querySelectorAll('#table > .droppable'));
     let aceDroppables = [].slice.call(document.querySelectorAll('#aceArea > .droppable'));
@@ -80,7 +80,8 @@ class Table extends Component {
                             elem.offsetWidth, elem.offsetHeight,
                             clientX, clientY)) {
           let { moveCard } = this.props;
-          moveCard({name: dragNode.id}, stackName + '-'+(index+1));
+          moveCard({name: dragCard.props.name,
+                    flipped: dragCard.props.flipped}, stackName + '-'+(index+1));
           return true;
         }
         return false;
@@ -141,13 +142,14 @@ class Table extends Component {
         return (elem.location === location);
       }
     }
-    let cardMap = (offsetWidth = 0, offsetHeight = 0, flipped = false ) => {
+    let cardMap = (offsetWidth = 0, offsetHeight = 0) => {
       return (card, index) => {
+        //console.log(index + ": " + card.name + " Flipped? " + card.flipped);
         return <Card isDragging={this.props.dragdrop.isDragging}
                      handleBeginDragDrop={this.handleBeginDragDrop}
                      offsetY={index*offsetHeight}
                      offsetX={index*offsetWidth}
-                     flipped={flipped}
+                     flipped={card.flipped}
                      key={card.name}
                      name={card.name} />
       }
@@ -165,11 +167,15 @@ class Table extends Component {
     for (let index = 1; index <= 7; ++index) {
       for (let innerIndex = index; innerIndex <= 7; ++innerIndex) {
         let card = cards[count++];
+        if (innerIndex === index)
+          card.flipped = false;
+
         moveCard(card, 'STACK-' + innerIndex);
       }
     }
-    for (let index = count; index < cards.length; ++index) {
-      let card = cards[index];
+    while (count < cards.length) {
+      let card = cards[count++];
+      card.flipped = true;
       moveCard(card, 'DEAL-AREA');
     }
   }
@@ -179,8 +185,6 @@ class Table extends Component {
   }
 
   render() {
-    let { cards } = this.props;
-
     let sevenDroppableStacks = this.createRow('STACK', 7, 0, 15, 65, 140);
     let aceDroppableStacks = this.createRow('ACE', 4, 0, 5, 20, 40);
     let dealAreaCards = this.cardSlice('DEAL-AREA', 5, 0);

@@ -17,14 +17,14 @@ module.exports = {
   },
   module: {
     loaders: [{
+        test: /\.scss$/,
+        loaders: ["style", "css", "sass"] 
+      }, {
         test: /\.js$/,
         loader: 'babel-loader',
         exclude: /node_modules/,
-      }, {
-        test: /\.scss$/,
-        loaders: ["style", "css", "sass"] 
       }
     ]
   },
-  devtool: 'eval-source-map'
+  devtool: 'source-map'
 };
