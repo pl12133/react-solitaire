@@ -23,8 +23,8 @@ class Table extends Component {
     super(props);
     let ownFuncs = [ "handleMouseUp", "handleMouseMove",
                      "handleEndDragDrop", "handleBeginDragDrop", 
-                     "getOffsetFromTable", "cardSlice", "createRow",
-                     "dealCards",
+                     "getOffsetFromTable", "cardSlice", "cardLocate",
+                     "createRow", "dealCards",
                      "render" ]
 
     ownFuncs.forEach((elem) => {
@@ -80,23 +80,32 @@ class Table extends Component {
         if (pointInsideRect(left, top,
                             elem.offsetWidth, elem.offsetHeight,
                             clientX, clientY)) {
-          let { moveCard } = this.props;
-          moveCard({name: dragCard.props.name,
-                    flipped: dragCard.props.flipped}, stackName + '-'+(index+1));
-          return true;
+          // Collision, check if drop is acceptable
+          let toStack = stackName + '-' + (index+1);
+          let droppedOn = this.refs[toStack];
+          let dropCard = {
+            name: dragCard.props.name,
+            flipped: dragCard.props.flipped
+          }
+          if (droppedOn.checkGoodDrop(dropCard)) {
+            //Successful drop!
+            let { moveCard } = this.props;
+            moveCard(dropCard, toStack);
+            return true;
+          }
+          return false;
         }
         return false;
       }
     }
 
-    console.log("Drop Target: (" + clientX + ", " + clientY + ")");
-
+    //console.log("Drop Target: (" + clientX + ", " + clientY + ")");
     let dropped = tableDroppables.some(dropCheck('STACK')) ||
                   aceDroppables.some(dropCheck('ACE'));
 
     if (!dropped) {
       // Snap back if not dropped
-      console.log("Not Dropped");
+      //console.log("Not Dropped");
       let { dragOrigin } = dragdrop;
       dragNode.style.left = dragOrigin.x;
       dragNode.style.top = dragOrigin.y;
@@ -114,7 +123,6 @@ class Table extends Component {
       let elemTop = clientY - offset.y;
       let off = { x: elemLeft - (dragNode.offsetWidth / 2),
                   y: elemTop - (dragNode.offsetHeight / 2)};
-//      console.log("Moving: (" + elemLeft + ", " + elemTop + ")");
       dragNode.style.left = off.x + 'px';
       dragNode.style.top =  off.y + 'px';
     }
@@ -127,9 +135,11 @@ class Table extends Component {
       let stackChildren = this.cardSlice(stackName, cardsXOffset, cardsYOffset);
       row.push(
         <DroppableStack key={stackName}
+                        stackName={stackName}
                         index={index+1}
                         distance={stackDistance}
-                        offsetLeft={offsetLeft}>
+                        offsetLeft={offsetLeft}
+                        ref={stackName}>
           {stackChildren}
         </DroppableStack>
       )
@@ -137,12 +147,16 @@ class Table extends Component {
     return row;
   }
 
-  cardSlice(location, offsetX = 0, offsetY = 0, flipped = false ) {
+  cardLocate(location) {
     function locationFilter(location) {
       return function(elem) {
         return (elem.location === location);
       }
     }
+    return locationFilter(location);
+  }
+
+  cardSlice(location, offsetX = 0, offsetY = 0) {
     let cardMap = (offsetWidth = 0, offsetHeight = 0) => {
       return (card, index) => {
         //console.log(index + ": " + card.name + " Flipped? " + card.flipped);
@@ -157,8 +171,8 @@ class Table extends Component {
     }
     let { cards } = this.props;
     return cards
-      .filter(locationFilter(location))
-      .map(cardMap(offsetX, offsetY, flipped));
+      .filter(this.cardLocate(location))
+      .map(cardMap(offsetX, offsetY));
   }
 
   dealCards() {
@@ -176,7 +190,7 @@ class Table extends Component {
     }
     while (count < cards.length) {
       let card = cards[count++];
-      card.flipped = true;
+      card.flipped = false;
       moveCard(card, 'DEAL-AREA');
     }
   }
@@ -188,7 +202,7 @@ class Table extends Component {
   render() {
     let sevenDroppableStacks = this.createRow('STACK', 7, 0, 15, 65, 140);
     let aceDroppableStacks = this.createRow('ACE', 4, 0, 5, 20, 40);
-    let dealAreaCards = this.cardSlice('DEAL-AREA', 5, 0);
+    let dealAreaCards = this.cardSlice('DEAL-AREA', 20, 0);
     let tableCards = this.cardSlice('TABLE');
 
     return (
