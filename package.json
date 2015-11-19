@@ -4,7 +4,7 @@
   "description": "A solitair game with react",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha --compilers js:./src/tests/compiler.js ./src/tests/Table.spec.js",
     "start": "node ./server.js"
   },
   "keywords": [],
@@ -22,13 +22,18 @@
     "redux": "^3.0.4",
     "sass": "^0.5.0",
     "sass-loader": "^3.1.1",
-    "style-loader": "^0.13.0"
+    "style-loader": "^0.13.0",
+    "unexpected-react": "^0.3.0"
   },
   "devDependencies": {
     "babel-plugin-react-transform": "^1.1.1",
     "babel-plugin-source-map-support": "0.0.1",
     "babel-plugin-transform-react-display-name": "^6.1.18",
     "babel-preset-react": "^6.1.2",
+    "css-modules-require-hook": "^2.0.2",
+    "jsdom": "^7.0.2",
+    "mocha": "^2.3.4",
+    "react-addons-test-utils": "^0.14.2",
     "react-tools": "^0.13.3",
     "react-transform-catch-errors": "^1.0.0",
     "react-transform-hmr": "^1.0.1",
@@ -36,6 +41,8 @@
     "redux-logger": "^2.0.4",
     "redux-thunk": "^1.0.0",
     "source-map": "^0.5.3",
+    "source-map-loader": "^0.1.5",
+    "unexpected": "^10.2.0",
     "webpack": "^1.12.3",
     "webpack-dev-server": "^1.12.1"
   }

@@ -9,11 +9,12 @@ module.exports = {
   output: {
       filename: 'bundle.js',
       path: path.join(__dirname, '/dist/'),
-      publicPath: '/dist/'
+      publicPath: '/dist/',
+      sourceMapFilename: 'debugging/[file].map'
   },
   resolve: {
     extensions: ['', '.jsx', '.js', '.json'],
-    modulesDirectories: ['node_modules', 'src']
+    modulesDirectories: ['node_modules', 'src'],
   },
   module: {
     loaders: [{
@@ -21,10 +22,10 @@ module.exports = {
         loaders: ["style", "css", "sass"] 
       }, {
         test: /\.js$/,
-        loader: 'babel-loader',
+        loaders: [ 'source-map-loader', 'babel-loader'],
         exclude: /node_modules/,
       }
     ]
   },
-  devtool: 'source-map'
+  devtool: 'eval'
 };

@@ -4,11 +4,12 @@ import React, { Component, PropTypes } from 'react';
 import styles from './styles/'
 
 /* Co-Components */
-import DealArea from 'components/DealArea/'
-import AceArea from 'components/AceArea/'
-import Deck from 'components/Deck/'
-import Card from 'components/Card/'
-import DroppableStack from 'components/DroppableStack/'
+
+
+import DealArea from '/home/krirken/projects/react-solitair/src/components/DealArea/'
+import AceArea from '/home/krirken/projects/react-solitair/src/components/AceArea/'
+import Card from '/home/krirken/projects/react-solitair/src/components/Card/'
+import DroppableStack from '/home/krirken/projects/react-solitair/src/components/DroppableStack/'
 
 const propTypes = {
   dragdrop: PropTypes.object.isRequired,

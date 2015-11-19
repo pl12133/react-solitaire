@@ -9,9 +9,8 @@ class DroppableStack extends Component {
     this.width = 75;
   }
   render() {
-    let { offsetLeft, index } = this.props;
+    let { offsetLeft = 0, index = 1 } = this.props;
     index -= 1; 
-    offsetLeft = offsetLeft || 0;
     let offset = (index === 0) ?
                    offsetLeft : 
                    offsetLeft + index * (this.width + this.props.distance);
@@ -26,8 +25,8 @@ class DroppableStack extends Component {
 }
 
 DroppableStack.propTypes = {
-  index: PropTypes.number.isRequired,
-  distance: PropTypes.number.isRequired,
+  index: PropTypes.number,
+  distance: PropTypes.number,
   offsetLeft: PropTypes.number
 }
 export default DroppableStack;
