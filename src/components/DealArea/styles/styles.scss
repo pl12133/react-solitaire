@@ -9,4 +9,26 @@
   left: 10%;
   top: 10%;
   background: #fa5;
+
+  & div#left {
+    position: relative;
+    display: inline-block;
+    padding: 0;
+    float: left;
+    background-color: red;
+    margin-top: 1%;
+    width: 55%;
+    height: 95%;
+  }
+
+  & div#right {
+    position: relative;
+    display: inline-block;
+    padding: 0;
+    float: right;
+    background-color: lightblue;
+    margin-top: 1%;
+    width: 30%;
+    height: 95%;
+  }
 }
