@@ -13,8 +13,15 @@ const propTypes = {
 class Card extends Component {
   constructor(props) {
     super(props);
-    this.handleMouseDown = this.handleMouseDown.bind(this);
-    this.flip = this.flip.bind(this);
+    let ownFuncs = [ "handleMouseDown", "flip", "isFlipped" ]
+    ownFuncs.forEach((elem) => {
+      if (!this[elem]) {
+        console.error("Attempt to self-bind \'" + elem + "\' to <Card> failed");
+        return;
+      }
+      this[elem] = this[elem].bind(this);
+    })
+
     this.state = { toggleFlip: false }
   }
 
@@ -29,6 +36,10 @@ class Card extends Component {
     this.setState({
       toggleFlip: !this.state.toggleFlip
     })
+  }
+
+  isFlipped() {
+    return (this.props.flipped ^ this.state.toggleFlip);
   }
 
   render() {
