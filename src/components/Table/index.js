@@ -55,7 +55,8 @@ class Table extends Component {
 
   handleBeginDragDrop(e, card) {
     let { isDragging } = this.props.dragdrop;
-    if (!isDragging) {
+    let isFlipped = card.isFlipped(); // Don't drag face down cards
+    if (!isDragging && !isFlipped) {
       let { beginDrag } = this.props;
       beginDrag(card);
     }
@@ -85,7 +86,7 @@ class Table extends Component {
           let droppedOn = this.refs[toStack];
           let dropCard = {
             name: dragCard.props.name,
-            flipped: dragCard.props.flipped
+            flipped: false
           }
           if (droppedOn.checkGoodDrop(dropCard)) {
             //Successful drop!
@@ -111,6 +112,7 @@ class Table extends Component {
       dragNode.style.top = dragOrigin.y;
     }
 
+    dragNode.style.zIndex = '10';
     endDrag(dragNode);
   }
 
@@ -125,6 +127,9 @@ class Table extends Component {
                   y: elemTop - (dragNode.offsetHeight / 2)};
       dragNode.style.left = off.x + 'px';
       dragNode.style.top =  off.y + 'px';
+      
+      // Dragging Card should appear above everything else
+      dragNode.style.zIndex = '100';
     }
   }
 
@@ -190,8 +195,8 @@ class Table extends Component {
     }
     while (count < cards.length) {
       let card = cards[count++];
-      card.flipped = false;
-      moveCard(card, 'DEAL-AREA');
+      //card.flipped = false;
+      moveCard(card, 'DEAL-AREA-FACEDOWN');
     }
   }
 
@@ -202,7 +207,9 @@ class Table extends Component {
   render() {
     let sevenDroppableStacks = this.createRow('STACK', 7, 0, 15, 65, 140);
     let aceDroppableStacks = this.createRow('ACE', 4, 0, 5, 20, 40);
-    let dealAreaCards = this.cardSlice('DEAL-AREA', 20, 0);
+    let dealAreaFaceDownCards = this.cardSlice('DEAL-AREA-FACEDOWN', 4, 0);
+    let dealAreaFaceUpCards = this.cardSlice('DEAL-AREA-FACEUP', 4, 0);
+    
     let tableCards = this.cardSlice('TABLE');
 
     return (
@@ -210,8 +217,9 @@ class Table extends Component {
                         onMouseMove={this.handleMouseMove} 
                         onMouseUp={this.handleMouseUp} >
         {'One day I will be a table'}
-        <DealArea>
-          {dealAreaCards}
+        <DealArea moveCard={this.props.moveCard}
+                  faceUp={dealAreaFaceUpCards}
+                  faceDown={dealAreaFaceDownCards}>
         </DealArea>
 
         <AceArea>
@@ -219,7 +227,7 @@ class Table extends Component {
         </AceArea>
 
         {sevenDroppableStacks}
-        {tableCards}
+        {/*dealAreaFaceUpCards*/}
 
       </div>
     )
