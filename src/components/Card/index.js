@@ -7,7 +7,8 @@ const propTypes = {
   offsetX: PropTypes.number,
   offsetY: PropTypes.number,
   isDragging: PropTypes.bool.isRequired,
-  flipped: PropTypes.bool.isRequired
+  flipped: PropTypes.bool.isRequired,
+  onMouseDown: PropTypes.func // For overriding a <Cards> MouseDown handler
 }
 
 class Card extends Component {
@@ -52,7 +53,7 @@ class Card extends Component {
                        position: 'absolute',
                        top: (this.props.offsetY || 0) + 'px',
                        left: (this.props.offsetX || 0) + 'px'} }
-                     onMouseDown={this.handleMouseDown}>
+                     onMouseDown={this.props.onMouseDown || this.handleMouseDown}>
       </div>
     )
   }
