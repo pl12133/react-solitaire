@@ -38,52 +38,34 @@ class DroppableStack extends Component {
       default:
         return 'blank';
     }
-//    if ((card.name.indexOf('hearts') >= 0) || (card.name.indexOf('diamonds') >= 0))
-//      return 'red';
-//
-//    if ((card.name.indexOf('spades') >= 0) || (card.name.indexOf('clubs') >= 0))
-//      return 'black'
   }
   getCardValue(card) {
     let { name } = card;
     let value = name.substr(0, name.indexOf('-'))
     //console.log(`Getting Card Value of ${name}: ${value}`);
     switch (value) {
-      case 'ace':
-        return 1;
-      case 'two':
-        return 2;
-      case 'three':
-        return 3;
-      case 'four':
-        return 4;
-      case 'five':
-        return 5;
-      case 'six':
-        return 6;
-      case 'seven':
-        return 7;
-      case 'eight':
-        return 8;
-      case 'nine':
-        return 9;
-      case 'ten':
-        return 10;
-      case 'jack':
-        return 11;
-      case 'queen':
-        return 12;
-      case 'king':
-        return 13;
-        
-       default:
-        return -1;
+      case 'ace': return 1;
+      case 'two': return 2;
+      case 'three': return 3;
+      case 'four': return 4;
+      case 'five': return 5;
+      case 'six': return 6;
+      case 'seven': return 7;
+      case 'eight': return 8;
+      case 'nine': return 9;
+      case 'ten': return 10;
+      case 'jack': return 11;
+      case 'queen': return 12;
+      case 'king': return 13;
+
+      default: return -1;
     }
   }
   handleAceDrop(card) {
     let { name } = card;
     let numChildren = this.props.children.length;
-    let [cardValue, cardSuit, cardColor] = [this.getCardValue(card), this.getCardSuit(card), this.getCardColor(card)]
+    let cardValue = this.getCardValue(card);
+    let cardSuit = this.getCardSuit(card);
 
     console.log(`!ACE DROP! Value of ${name} = ${cardValue} and ${cardSuit}`);
     if (cardValue === (numChildren + 1)) {
@@ -101,25 +83,44 @@ class DroppableStack extends Component {
   handleStackDrop(card) {
     let { name } = card;
     let numChildren = this.props.children.length;
-    let [cardValue, cardSuit, cardColor] = [this.getCardValue(card), this.getCardSuit(card), this.getCardColor(card)]
+    let cardValue = this.getCardValue(card);
+    let cardColor = this.getCardColor(card);
 
     console.log(`!STACK DROP! Value of ${name} = ${cardValue} and ${cardColor}`);
+    if (numChildren > 0) {
+      let { children } = this.props;
+      let lastChild = children[children.length - 1];
+      let stackCard = {name: lastChild.props.name};
+      let stackValue = this.getCardValue(stackCard);
+      let stackColor = this.getCardColor(stackCard);
 
-    return true;
+      return ((stackColor !== cardColor) && (stackValue === (cardValue + 1)))
+    } else {
+      return (cardValue === 13)
+    }
   }
   checkGoodDrop(card) {
     // This is called when there is a drop on this droppable from <Table>
     let { stackName } = this.props;
     if (stackName.indexOf('ACE') >= 0) {
-      //console.log('Dropping to Ace Stack')
       return this.handleAceDrop(card);
     }
     if (stackName.indexOf('STACK') >= 0) {
-      //console.log('Dropping to Play Stack')
       return this.handleStackDrop(card);
     }
   }
   componentWillReceiveProps(nextProps) {
+    let { children } = nextProps;
+    if (children.length !== this.props.children.length) {
+
+      let lastChild = 'child-' + (children.length-1);
+      let child = this.refs[lastChild];
+      if (child)
+        child.flip();
+      console.log('Facing Card: ', lastChild);
+      console.log("Refs: ", this.refs);
+      console.log("Child: ", child);
+    }
     //console.log("New Children: ", nextProps.children[nextProps.children.length - 1]);
 
   }
@@ -130,10 +131,16 @@ class DroppableStack extends Component {
     let offset = (index === 0) ?
                    offsetLeft : 
                    offsetLeft + index * (this.width + this.props.distance);
+    let cardIndex = 0;
+    let children = React.Children.map(this.props.children, function (child) {
+      return React.cloneElement(child, {
+        ref: 'child-' + (cardIndex++)
+      });
+    });
     return (
       <div className={'droppable ' + styles}
            style={{left: offset + "px"}} >
-        {this.props.children}
+        {children}
       </div>
     )
   }
@@ -141,6 +148,7 @@ class DroppableStack extends Component {
 }
 
 DroppableStack.propTypes = {
+  stackName: PropTypes.string.isRequired,
   index: PropTypes.number,
   distance: PropTypes.number,
   offsetLeft: PropTypes.number

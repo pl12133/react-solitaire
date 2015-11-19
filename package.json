@@ -4,7 +4,7 @@
   "description": "A solitair game with react",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --compilers js:./src/tests/compiler.js ./src/tests/Table.spec.js",
+    "test": "mocha --compilers js:./src/tests/compiler.js ./src/tests/*.spec.js",
     "start": "node ./server.js"
   },
   "keywords": [],

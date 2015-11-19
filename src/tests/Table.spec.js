@@ -78,7 +78,7 @@ describe('Table', () => {
     });
     it('should render 52 cards', () => {
         let result = renderer.getRenderOutput();
-        let { children } = renderer.getRenderOutput().props;
+        let { children } = result.props;
         let count = 0;
         function deepCheckForCardAndCount(elem) {
             function checkForCardAndCount(elem) {

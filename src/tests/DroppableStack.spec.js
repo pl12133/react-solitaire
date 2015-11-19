@@ -19,7 +19,9 @@ describe('DroppableStack', () => {
 
     beforeEach(() => {
         renderer = TestUtils.createRenderer();
-        renderer.render(<DroppableStack index={5} offsetLeft={50}>
+        renderer.render(<DroppableStack stackName={'ACE-1'} 
+                                        index={1}
+                                        offsetLeft={50}>
                           <div />
                           <div />
                         </DroppableStack>
@@ -33,6 +35,15 @@ describe('DroppableStack', () => {
     it('should render a ReactElement', () => {
         let result = renderer.getRenderOutput();
         return expect(TestUtils.isElement(result), 'to be ok');
+    });
+    it('should render with \'left:50\'', () => {
+        let result = renderer.getRenderOutput();
+        return expect(renderer, 'to have rendered', 
+            <div style={ {left: '50px'} }>
+              <div />
+              <div />
+            </div>
+        );
     });
 
     it('should render its children', () => {
