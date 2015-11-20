@@ -36,7 +36,8 @@ class Table extends Component {
         return;
       }
       this[elem] = this[elem].bind(this);
-    })
+    });
+    this.state = { redeal: false };
   }
 
   getOffsetFromTable(elem) {
@@ -209,26 +210,32 @@ class Table extends Component {
 
   dealCards() {
     this.props.shuffleCards();
-    let { moveCard, cards } = this.props;
-    let count = 0;
-    for (let index = 1; index <= 7; ++index) {
-      for (let innerIndex = index; innerIndex <= 7; ++innerIndex) {
-        let card = cards[count++];
-        card.flipped = (innerIndex !== index);
-        moveCard(card, 'STACK-' + innerIndex);
-      }
-    }
-    while (count < cards.length) {
-      let card = cards[count++];
-      card.flipped = true;
-      moveCard(card, 'DEAL-AREA-FACEDOWN');
-    }
+    this.setState({ redeal: true });
   }
 
   componentDidMount() {
     this.dealCards();
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.redeal) {
+      let { moveCard, cards } = this.props;
+      let count = 0;
+      for (let index = 1; index <= 7; ++index) {
+        for (let innerIndex = index; innerIndex <= 7; ++innerIndex) {
+          let card = cards[count++];
+          card.flipped = (innerIndex !== index);
+          moveCard(card, 'STACK-' + innerIndex);
+        }
+      }
+      while (count < cards.length) {
+        let card = cards[count++];
+        card.flipped = true;
+        moveCard(card, 'DEAL-AREA-FACEDOWN');
+      }
+      this.setState({ redeal: false });
+    }
+  }
   render() {
     let sevenDroppableStacks = this.createRow('STACK', 7, 0, CARD_Y_DISTANCE, 65, 140);
     let aceDroppableStacks = this.createRow('ACE', 4, 0, 0, 20, 40);
