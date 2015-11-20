@@ -38,6 +38,7 @@ class DealArea extends Component {
       // If the card is face down, flip the top three cards off the stack and move to FACEUP
       let { moveCard } = this.props;
       for (let end = children.length - 1, index = end; index > end - 3; --index) {
+        if (index < 0) return; // (end - 3) might go negative so check for below 0
         let refName = 'child-'+index;
         let { name } = this.refs[refName].props;
         moveCard({name, flipped: false}, 'DEAL-AREA-FACEUP');

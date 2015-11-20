@@ -15,7 +15,7 @@ const propTypes = {
 class Card extends Component {
   constructor(props) {
     super(props);
-    let ownFuncs = [ "handleMouseDown", "flip", "isFlipped" ]
+    let ownFuncs = [ "handleMouseDown", "isFlipped" ]
     ownFuncs.forEach((elem) => {
       if (!this[elem]) {
         console.error(`Attempt to self-bind \'${elem}\' to ${DISPLAY_NAME} failed`);
@@ -24,7 +24,7 @@ class Card extends Component {
       this[elem] = this[elem].bind(this);
     })
 
-    this.state = { toggleFlip: false }
+    //this.state = { toggleFlip: false }
   }
 
   handleMouseDown(e) {
@@ -35,21 +35,14 @@ class Card extends Component {
     }
   }
 
-  flip() {
-    this.setState({
-      toggleFlip: !this.state.toggleFlip
-    })
-  }
-
   isFlipped() {
-    return (this.props.flipped ^ this.state.toggleFlip);
+    return (this.props.flipped);
   }
 
   render() {
     let { name, flipped, offsetX, offsetY } = this.props;
-    let { toggleFlip } = this.state;
     return (
-      <div id={name} className={(flipped ^ toggleFlip) ? styles : ""}
+      <div id={name} className={(flipped) ? styles : ""}
                      style={ {
                        zIndex: 10,
                        position: 'absolute',

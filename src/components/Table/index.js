@@ -26,7 +26,8 @@ class Table extends Component {
     let ownFuncs = [ "handleMouseUp", "handleMouseMove",
                      "handleEndDragDrop", "handleBeginDragDrop", 
                      "getOffsetFromTable", "cardSlice", "cardLocate",
-                     "createRow", "dealCards",
+                     "createRow", "dealCards", "handleButtonClick",
+                     "handleCardFlip", 
                      "render" ]
 
     ownFuncs.forEach((elem) => {
@@ -46,8 +47,9 @@ class Table extends Component {
     }
     return offset;
   }
-  handleMouseDown(e) {
-    
+  handleButtonClick(e) {
+    this.dealCards();
+    console.log('Deal Button Clicked');
   }
   handleMouseUp(e) {
     let { isDragging } = this.props.dragdrop;
@@ -152,6 +154,10 @@ class Table extends Component {
     }
   }
 
+  handleCardFlip(card) {
+    let { flipCard } = this.props;
+    flipCard(card)
+  }
   createRow(namePrefix, numCols, cardsXOffset, cardsYOffset, stackDistance, offsetLeft) {
     let row = [];
     for (let index = 0; index < numCols; ++index) {
@@ -164,7 +170,8 @@ class Table extends Component {
                         distance={stackDistance}
                         offsetLeft={offsetLeft}
                         ref={stackName}
-                        handleBeginDragDrop={this.handleBeginDragDrop}>
+                        handleBeginDragDrop={this.handleBeginDragDrop}
+                        flipCard={this.handleCardFlip}>
           {stackChildren}
         </DroppableStack>
       )
@@ -207,15 +214,13 @@ class Table extends Component {
     for (let index = 1; index <= 7; ++index) {
       for (let innerIndex = index; innerIndex <= 7; ++innerIndex) {
         let card = cards[count++];
-        if (innerIndex === index)
-          card.flipped = false;
-
+        card.flipped = (innerIndex !== index);
         moveCard(card, 'STACK-' + innerIndex);
       }
     }
     while (count < cards.length) {
       let card = cards[count++];
-      //card.flipped = false;
+      card.flipped = true;
       moveCard(card, 'DEAL-AREA-FACEDOWN');
     }
   }
@@ -236,6 +241,10 @@ class Table extends Component {
                         onMouseMove={this.handleMouseMove} 
                         onMouseUp={this.handleMouseUp} >
         {'One day I will be a table'}
+        <button type={'button'}
+                onClick={this.handleButtonClick}>
+          {'Deal!'}
+        </button>
         <DealArea moveCard={this.props.moveCard}
                   faceUp={dealAreaFaceUpCards}
                   faceDown={dealAreaFaceDownCards}>

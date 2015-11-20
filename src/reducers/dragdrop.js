@@ -2,8 +2,8 @@ import { DRAGDROP_BEGIN_DRAG, DRAGDROP_END_DRAG } from 'actions/dragdrop';
 
 const initialState = {
   isDragging: false,
-  dragOrigins: [{x: 0, y: 0}],
-  dragNodes: [{x: 0, y: 0}],
+  dragOrigins: [],
+  dragNodes: [],
   dragCards: []
 };
 export default function dragdrop(state = initialState, action) {

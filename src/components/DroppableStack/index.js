@@ -123,9 +123,15 @@ class DroppableStack extends Component {
       let lastChild = 'child-' + (newChildren.length-1);
       let child = this.refs[lastChild];
       if (child && child.isFlipped()) {
-        let { stackName } = this.props;
+        //let { stackName } = this.props;
         //console.log(`Flipping on: ${stackName}`);
-        child.flip();
+        let { stackName, flipCard } = this.props;
+        flipCard({
+          name: child.props.name,
+          location: stackName,
+          flipped: child.isFlipped()
+        });
+        //child.flip();
       }
     }
 

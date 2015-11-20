@@ -32,6 +32,7 @@ function mapDispatchToProps(dispatch) {
                               beginDrag: dragActionCreators.beginDrag,
                               endDrag: dragActionCreators.endDrag,
                               moveCard: cardActionCreators.moveCard,
+                              flipCard: cardActionCreators.flipCard,
                               shuffleCards: cardActionCreators.shuffleCards }, dispatch);
 }
 
