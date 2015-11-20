@@ -2,26 +2,19 @@ import ReactDOM from 'react-dom';
 
 export const DRAGDROP_BEGIN_DRAG = 'DRAGDROP_BEGIN_DRAG'
 export const DRAGDROP_END_DRAG = 'DRAGDROP_END_DRAG'
-export const DRAGDROP_DO_DRAG = 'DRAGDROP_DO_DRAG'
 
-export function doDrag(card, mousePosition) {
-  return {
-    type: DRAGDROP_DO_DRAG,
-    card,
-    mousePosition
-  }
-}
-export function beginDrag(card) {
-  let origin = ReactDOM.findDOMNode(card);
+export function beginDrag(cards) {
+  let origins = cards.map((elem) => {
+    return ReactDOM.findDOMNode(elem);
+  });
   return {
     type: DRAGDROP_BEGIN_DRAG,
-    card,
-    origin
+    cards,
+    origins
   }
 }
-export function endDrag(card) {
+export function endDrag() {
   return {
     type: DRAGDROP_END_DRAG,
-    card
   }
 }
