@@ -227,7 +227,9 @@ class Table extends Component {
         </AceArea>
 
         {sevenDroppableStacks}
-        {/*dealAreaFaceUpCards*/}
+
+        {/* tableCards are rendered for testing */}
+        {tableCards}
 
       </div>
     )
