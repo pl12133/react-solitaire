@@ -1,24 +1,23 @@
-import { DRAGDROP_BEGIN_DRAG, DRAGDROP_END_DRAG, DRAGDROP_DO_DRAG } from 'actions/dragdrop'; 
+import { DRAGDROP_BEGIN_DRAG, DRAGDROP_END_DRAG } from 'actions/dragdrop'; 
 
 const initialState = {
   isDragging: false,
-  dragOrigin: {x: 0, y: 0},
-  dragNode: {x: 0, y: 0},
-  dragCard: null
+  dragOrigins: [{x: 0, y: 0}],
+  dragNodes: [{x: 0, y: 0}],
+  dragCards: []
 };
 export default function dragdrop(state = initialState, action) {
   switch (action.type) {
-    case DRAGDROP_DO_DRAG:
-      return Object.assign({}, state, {
-        dragNode: action.mousePosition
-      });
-
     case DRAGDROP_BEGIN_DRAG:
+      let dragOrigins = action.origins.map((elem) => {
+        return { x: elem.offsetLeft,
+                 y: elem.offsetTop }
+      });
       return {
         isDragging: true,
-        dragOrigin: { x: action.origin.offsetLeft, y: action.origin.offsetTop },
-        dragNode: action.origin,
-        dragCard: action.card
+        dragOrigins,
+        dragNodes: action.origins,
+        dragCards: action.cards
       }
 
     case DRAGDROP_END_DRAG:
