@@ -54,16 +54,37 @@ class DealArea extends Component {
     if (!faceUp.length) {
       faceDownHooked = [];
     } else {
-      let index = 0;
+      let len = faceUp.length;
+      let index = len % 3;
+      if (index) {
+        // Round length to the nearest multiple of three
+        len += index;
+      }
+
       faceUpHooked = React.Children.map(faceUp, (child) => {
         // Add refs to all children and an onMouseDown handler to the last child
-        if (index++ !== faceUp.length - 1) {
-          // Disable mouseDown on all cards except the top one
-          return React.cloneElement(child, {
-            onMouseDown: (e) => false
-          });
+        // Disable mouseDown on all cards except the top one
+        // Reposition cards so we always see three
+        
+        let thisIndex = index++;
+        let offset = (thisIndex % 3) * 15;
+        switch (thisIndex) {
+          case len - 2:
+            return React.cloneElement(child, {
+              offsetX: 15,
+              onMouseDown: (e) => false
+            });
+          case len - 1:
+            return React.cloneElement(child, {
+              offsetX: 30
+            });
+          
+          default:
+            return React.cloneElement(child, {
+              offsetX: 0,
+              onMouseDown: (e) => false
+            });
         }
-        return child;
       });
     }
     if (!faceDown.length) {
