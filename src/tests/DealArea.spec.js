@@ -25,8 +25,8 @@ describe('DealArea', () => {
 
     beforeEach(() => {
         renderer = TestUtils.createRenderer();
-        renderer.render(<DealArea faceUp={[{name: 'ace-of-hearts'}]}
-                                  faceDown={[{name: 'two-of-spades'}]} />);
+        renderer.render(<DealArea faceUp={[]}
+                                  faceDown={[]} />);
     });
 
     it('should be a function', () => {
