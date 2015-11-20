@@ -20,6 +20,17 @@ class DealArea extends Component {
     let { faceDown: children } = this.props;
     let childRefName = 'child-' + (children.length-1);
     let lastChild = this.refs[childRefName];
+    if (!lastChild) {
+      let { moveCard, faceUp } = this.props;
+      faceUp.forEach((elem) => {
+        let { name } = elem.props;
+        let card = {
+          name,
+          flipped: true,
+        }
+        moveCard(card, 'DEAL-AREA-FACEDOWN');
+      });
+    }
     if (lastChild.isFlipped()) {
       // If the card is face down, flip the top three cards off the stack and move to FACEUP
       let { moveCard } = this.props;
@@ -36,34 +47,41 @@ class DealArea extends Component {
   render() {
     let index = 0;
     let { faceUp, faceDown } = this.props;
-    let faceDownHooked = React.Children.map(faceDown, (child) => {
-      // Add refs to all children and an onMouseDown handler to the last child
-      if (index !== faceDown.length - 1) {
+    let faceDownHooked;
+    if (!faceDown.length) {
+      faceDownHooked = <div className={'reset'}
+                            onMouseDown={this.handleMouseDown}/>
+    } else {
+      faceDownHooked = React.Children.map(faceDown, (child) => {
+        // Add refs to all children and an onMouseDown handler to the last child
+        if (index !== faceDown.length - 1) {
+          return React.cloneElement(child, {
+            ref: 'child-' + (index++)
+          });
+        }
+        console.log('Hooking MouseDown onto child ', child);
         return React.cloneElement(child, {
+          onMouseDown: this.handleMouseDown,
           ref: 'child-' + (index++)
         });
-      }
-      console.log('Hooking MouseDown onto child ', child);
-      return React.cloneElement(child, {
-        onMouseDown: this.handleMouseDown,
-        ref: 'child-' + (index++)
       });
-    });
+    }
     return (
       <div className={styles}>
-        <div id={'left'}>
+        <span id={'left'}>
           {faceDownHooked}
-        </div>
-        <div id={'right'}>
+        </span>
+        <span id={'right'}>
           {faceUp}
-        </div>
+        </span>
       </div>
     )
   }
 }
 
 DealArea.propTypes = {
-
+  faceUp: PropTypes.array.isRequired,
+  faceDown: PropTypes.array.isRequired
 }
 
 export default DealArea;

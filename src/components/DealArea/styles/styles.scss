@@ -1,7 +1,6 @@
 /* DealArea styles */
 
 :local(.styles) {
-  display: inline-block;
   position: absolute;
   width: 25%;
   height: 30%;
@@ -10,9 +9,12 @@
   top: 10%;
   background: #fa5;
 
-  & div#left {
+  & div.reset {
+    width: 100%;
+    height: 100%;
+  }
+  & span#left {
     position: relative;
-    display: inline-block;
     padding: 0;
     float: left;
     background-color: red;
@@ -21,7 +23,7 @@
     height: 95%;
   }
 
-  & div#right {
+  & span#right {
     position: relative;
     display: inline-block;
     padding: 0;
