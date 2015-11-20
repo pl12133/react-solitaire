@@ -8,6 +8,7 @@ class DroppableStack extends Component {
   constructor(props) {
     super(props);
     let ownFuncs = [ "checkGoodDrop", "handleStackDrop", "handleAceDrop",
+                     "handleMouseDown",
                      "getCardColor", "getCardValue", "getCardSuit" ]
     ownFuncs.forEach((elem) => {
       if (!this[elem]) {
@@ -130,6 +131,20 @@ class DroppableStack extends Component {
 
   }
 
+  handleMouseDown(e, childIndex) {
+    let { children } = this.props;
+    let stackBelowClicked = [];
+    for (let index = childIndex, len = children.length; index < len; ++index) {
+      let refName = 'child-' + index;
+      stackBelowClicked.push(this.refs[refName]);
+    }
+    stackBelowClicked.forEach((elem) => {
+      console.log(`Below Clicked: ${elem.props.name}`);
+    });
+    let clickedChild = stackBelowClicked[0];
+    if (clickedChild)
+      clickedChild.handleMouseDown(e);
+  }
   render() {
     let { offsetLeft = 0, index = 1 } = this.props;
     index -= 1; 
@@ -137,8 +152,9 @@ class DroppableStack extends Component {
                    offsetLeft : 
                    offsetLeft + index * (this.width + this.props.distance);
     let cardIndex = 0;
-    let children = React.Children.map(this.props.children, function (child) {
+    let children = React.Children.map(this.props.children, (child) => {
       return React.cloneElement(child, {
+        onMouseDown: ((index) => { return (e) => this.handleMouseDown(e, index) })(cardIndex),
         ref: 'child-' + (cardIndex++)
       });
     });
