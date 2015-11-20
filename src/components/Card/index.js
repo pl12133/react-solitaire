@@ -3,6 +3,7 @@ import React, { Component, PropTypes } from 'react';
 /* Styles */
 import styles from './styles/'
 
+const DISPLAY_NAME = '<Card>';
 const propTypes = {
   offsetX: PropTypes.number,
   offsetY: PropTypes.number,
@@ -17,7 +18,7 @@ class Card extends Component {
     let ownFuncs = [ "handleMouseDown", "flip", "isFlipped" ]
     ownFuncs.forEach((elem) => {
       if (!this[elem]) {
-        console.error("Attempt to self-bind \'" + elem + "\' to <Card> failed");
+        console.error(`Attempt to self-bind \'${elem}\' to ${DISPLAY_NAME} failed`);
         return;
       }
       this[elem] = this[elem].bind(this);
