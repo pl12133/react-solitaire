@@ -41,8 +41,6 @@ function shuffle(array) {
     array[currentIndex] = array[randomIndex];
     array[randomIndex] = temporaryValue;
   }
-
-  console.log('Shuffled: ' + array.map((elem) => elem.name).join(', '));
   return array;
 }
 
