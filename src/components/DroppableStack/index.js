@@ -70,7 +70,7 @@ class DroppableStack extends Component {
     let cardValue = this.getCardValue(card);
     let cardSuit = this.getCardSuit(card);
 
-    console.log(`!ACE DROP! Value of ${name} = ${cardValue} and ${cardSuit}`);
+    //console.log(`!ACE DROP! Value of ${name} = ${cardValue} and ${cardSuit}`);
     if (cardValue === (numChildren + 1)) {
       if (numChildren > 0) {
         let firstChild = this.props.children[0];
@@ -89,7 +89,7 @@ class DroppableStack extends Component {
     let cardValue = this.getCardValue(card);
     let cardColor = this.getCardColor(card);
 
-    console.log(`!STACK DROP! Value of ${name} = ${cardValue} and ${cardColor}`);
+    //console.log(`!STACK DROP! Value of ${name} = ${cardValue} and ${cardColor}`);
     if (numChildren > 0) {
       let { children } = this.props;
       let lastChild = children[children.length - 1];
@@ -124,7 +124,7 @@ class DroppableStack extends Component {
       let child = this.refs[lastChild];
       if (child && child.isFlipped()) {
         let { stackName } = this.props;
-        console.log(`Flipping on: ${stackName}`);
+        //console.log(`Flipping on: ${stackName}`);
         child.flip();
       }
     }
@@ -141,9 +141,15 @@ class DroppableStack extends Component {
     stackBelowClicked.forEach((elem) => {
       console.log(`Below Clicked: ${elem.props.name}`);
     });
-    let clickedChild = stackBelowClicked[0];
-    if (clickedChild)
+    if (stackBelowClicked.length > 1) {
+      let { handleBeginDragDrop } = this.props;
+      handleBeginDragDrop(e, stackBelowClicked);
+      console.log(`Starting Multidrag`);
+
+    } else if (stackBelowClicked.length === 1) {
+      let clickedChild = stackBelowClicked[0];
       clickedChild.handleMouseDown(e);
+    }
   }
   render() {
     let { offsetLeft = 0, index = 1 } = this.props;
@@ -172,6 +178,7 @@ DroppableStack.propTypes = {
   stackName: PropTypes.string.isRequired,
   index: PropTypes.number,
   distance: PropTypes.number,
-  offsetLeft: PropTypes.number
+  offsetLeft: PropTypes.number,
+  handleBeginDragDrop: PropTypes.func
 }
 export default DroppableStack;
