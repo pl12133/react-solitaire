@@ -53,29 +53,6 @@ describe('Table', () => {
         let result = renderer.getRenderOutput();
         return expect(TestUtils.isElement(result), 'to be ok');
     });
-    it('should have an array of 52 cards', () => {
-        let result = renderer.getRenderOutput();
-        let { children } = result.props;
-        let cardsArr = [];
-        children.forEach((child) => {
-            let childrenObjects = Object.keys(child).reduce((memo, current) => {
-                let grandChild = child[current];
-                if (typeof grandChild === 'object' && grandChild !== null) {
-                    memo.push(grandChild);
-                }
-                return memo;
-            }, []);
-            // All cards have keys of the form 'value-of-suit', eg 'two-of-hearts'
-            if (childrenObjects.length > 0) {
-                let { key } = childrenObjects[0];
-                if (key) {
-                  if (/.*-of-.*/.test(key))
-                      cardsArr = child; 
-                }
-            }
-        });
-        return expect(cardsArr, 'to have length', 52);
-    });
     it('should render 52 cards', () => {
         let result = renderer.getRenderOutput();
         let { children } = result.props;
@@ -89,9 +66,10 @@ describe('Table', () => {
                 }
             }
             if (Array.isArray(elem))
-                elem.forEach(checkForCardAndCount);
-            else
+                elem.forEach(deepCheckForCardAndCount);
+            else {
                 checkForCardAndCount(elem);
+            }
         }
         children.forEach(deepCheckForCardAndCount);
 
