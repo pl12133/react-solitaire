@@ -2,6 +2,8 @@ import React, { Component, PropTypes } from 'react';
 /* Styles */
 import styles from './styles/'
 
+const DISPLAY_NAME = '<DroppableStack>';
+
 class DroppableStack extends Component {
   constructor(props) {
     super(props);
@@ -9,7 +11,7 @@ class DroppableStack extends Component {
                      "getCardColor", "getCardValue", "getCardSuit" ]
     ownFuncs.forEach((elem) => {
       if (!this[elem]) {
-        console.error("Attempt to self-bind \'" + elem + "\' to <DroppableStack> failed");
+        console.error(`Attempt to self-bind \'${elem}\' to ${DISPLAY_NAME} failed`);
         return;
       }
       this[elem] = this[elem].bind(this);
@@ -101,6 +103,7 @@ class DroppableStack extends Component {
   }
   checkGoodDrop(card) {
     // This is called when there is a drop on this droppable from <Table>
+    // return true to accept the drop, false to rejct it
     let { stackName } = this.props;
     if (stackName.indexOf('ACE') >= 0) {
       return this.handleAceDrop(card);
@@ -110,6 +113,8 @@ class DroppableStack extends Component {
     }
   }
   componentWillReceiveProps(nextProps) {
+    // When receiving new props, if the facing card is face down,
+    // then flip it over
     let { children: newChildren } = nextProps;
     let { children: oldChildren } = this.props;
     
@@ -121,11 +126,7 @@ class DroppableStack extends Component {
         console.log(`Flipping on: ${stackName}`);
         child.flip();
       }
-      console.log('Facing Card: ', lastChild);
-      console.log("Refs: ", this.refs);
-      console.log("Child: ", child);
     }
-    //console.log("New Children: ", nextProps.children[nextProps.children.length - 1]);
 
   }
 
