@@ -11,6 +11,7 @@ import AceArea from '/home/krirken/projects/react-solitair/src/components/AceAre
 import Card from '/home/krirken/projects/react-solitair/src/components/Card/'
 import DroppableStack from '/home/krirken/projects/react-solitair/src/components/DroppableStack/'
 
+const DISPLAY_NAME = '<Table>';
 const propTypes = {
   dragdrop: PropTypes.object.isRequired,
   cards: PropTypes.array.isRequired,
@@ -29,7 +30,7 @@ class Table extends Component {
 
     ownFuncs.forEach((elem) => {
       if (!this[elem]) {
-        console.error("Attempt to self-bind \'" + elem + "\' to <Table> failed");
+        console.error(`Attempt to self-bind \'${elem}\' to ${DISPLAY_NAME} failed`);
         return;
       }
       this[elem] = this[elem].bind(this);
@@ -206,7 +207,7 @@ class Table extends Component {
 
   render() {
     let sevenDroppableStacks = this.createRow('STACK', 7, 0, 15, 65, 140);
-    let aceDroppableStacks = this.createRow('ACE', 4, 0, 5, 20, 40);
+    let aceDroppableStacks = this.createRow('ACE', 4, 0, 0, 20, 40);
     let dealAreaFaceDownCards = this.cardSlice('DEAL-AREA-FACEDOWN', 4, 0);
     let dealAreaFaceUpCards = this.cardSlice('DEAL-AREA-FACEUP', 4, 0);
     
