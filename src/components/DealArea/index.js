@@ -1,13 +1,15 @@
 import React, {Component, PropTypes } from 'react';
 import styles from './styles'
 
+const DISPLAY_NAME = '<DealArea>';
+
 class DealArea extends Component {
   constructor(props) {
     super(props)
     let ownFuncs = [ "componentWillReceiveProps", "handleMouseDown", "render" ];
     ownFuncs.forEach((elem) => {
       if (!this[elem]) {
-        console.error("Attempt to self-bind \'" + elem + "\' to <DealArea> failed");
+        console.error(`Attempt to self-bind \'${elem}\' to ${DISPLAY_NAME} failed`);
         return;
       }
       this[elem] = this[elem].bind(this);
@@ -22,7 +24,7 @@ class DealArea extends Component {
     let lastChild = this.refs[childRefName];
     if (!lastChild) {
       let { moveCard, faceUp } = this.props;
-      faceUp.forEach((elem) => {
+      faceUp.reverse().forEach((elem) => {
         let { name } = elem.props;
         let card = {
           name,
@@ -30,6 +32,7 @@ class DealArea extends Component {
         }
         moveCard(card, 'DEAL-AREA-FACEDOWN');
       });
+      return;
     }
     if (lastChild.isFlipped()) {
       // If the card is face down, flip the top three cards off the stack and move to FACEUP
@@ -45,13 +48,29 @@ class DealArea extends Component {
     }
   }
   render() {
-    let index = 0;
     let { faceUp, faceDown } = this.props;
+    let faceUpHooked;
     let faceDownHooked;
+    if (!faceUp.length) {
+      faceDownHooked = [];
+    } else {
+      let index = 0;
+      faceUpHooked = React.Children.map(faceUp, (child) => {
+        // Add refs to all children and an onMouseDown handler to the last child
+        if (index++ !== faceUp.length - 1) {
+          // Disable mouseDown on all cards except the top one
+          return React.cloneElement(child, {
+            onMouseDown: (e) => false
+          });
+        }
+        return child;
+      });
+    }
     if (!faceDown.length) {
       faceDownHooked = <div className={'reset'}
                             onMouseDown={this.handleMouseDown}/>
     } else {
+      let index = 0;
       faceDownHooked = React.Children.map(faceDown, (child) => {
         // Add refs to all children and an onMouseDown handler to the last child
         if (index !== faceDown.length - 1) {
@@ -72,7 +91,7 @@ class DealArea extends Component {
           {faceDownHooked}
         </span>
         <span id={'right'}>
-          {faceUp}
+          {faceUpHooked}
         </span>
       </div>
     )
