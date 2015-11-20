@@ -30,7 +30,8 @@ class Card extends Component {
   handleMouseDown(e) {
     let { isDragging } = this.props;
     if (!isDragging) {
-      this.props.handleBeginDragDrop(e, this);
+      let dragging = [this];
+      this.props.handleBeginDragDrop(e, dragging);
     }
   }
 
@@ -45,15 +46,15 @@ class Card extends Component {
   }
 
   render() {
-    let { name, flipped } = this.props;
+    let { name, flipped, offsetX, offsetY } = this.props;
     let { toggleFlip } = this.state;
     return (
       <div id={name} className={(flipped ^ toggleFlip) ? styles : ""}
                      style={ {
                        zIndex: 10,
                        position: 'absolute',
-                       top: (this.props.offsetY || 0) + 'px',
-                       left: (this.props.offsetX || 0) + 'px'} }
+                       top: (offsetY || 0) + 'px',
+                       left: (offsetX || 0) + 'px'} }
                      onMouseDown={this.props.onMouseDown || this.handleMouseDown}>
       </div>
     )
