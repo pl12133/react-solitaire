@@ -22,7 +22,7 @@ module.exports = {
         loaders: ["style", "css", "sass"] 
       }, {
         test: /\.js$/,
-        loaders: [ 'source-map-loader', 'babel-loader'],
+        loader: 'babel-loader',
         exclude: /node_modules/,
       }
     ]
