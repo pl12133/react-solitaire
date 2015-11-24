@@ -9,7 +9,7 @@ const propTypes = {
   offsetY: PropTypes.number,
   isDragging: PropTypes.bool.isRequired,
   flipped: PropTypes.bool.isRequired,
-  onMouseDown: PropTypes.func // For overriding a <Cards> MouseDown handler
+  onMouseDown: PropTypes.func, // For overriding a <Cards> MouseDown handler
   onTouchStart: PropTypes.func // For overriding a <Cards> TouchStart handler
 }
 
