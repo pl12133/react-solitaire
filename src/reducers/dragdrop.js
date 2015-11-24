@@ -21,7 +21,7 @@ export default function dragdrop(state = initialState, action) {
       }
 
     case DRAGDROP_END_DRAG:
-      return Object.assign({}, initialState)
+      return initialState;
 
     default:
       return state;
