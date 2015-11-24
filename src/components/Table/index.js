@@ -27,6 +27,7 @@ class Table extends Component {
                      "handleEndDragDrop", "handleBeginDragDrop", 
                      "getOffsetFromTable", "cardSlice", "cardLocate",
                      "createRow", "dealCards", "handleButtonClick",
+                     "handleTouchEnd", "handleTouchMove",
                      "handleCardFlip", 
                      "render" ]
 
@@ -57,7 +58,20 @@ class Table extends Component {
     if (isDragging)
       this.handleEndDragDrop(e);
   }
-
+  
+  handleTouchMove(e) {
+    console.log('Touch Moving');
+    let touchObj = e.changedTouches[0];
+    if (touchObj) {
+      this.handleMouseMove(touchObj);
+    }
+  }
+  handleTouchEnd(e) {
+    let touchObj = e.changedTouches[0];
+    if (touchObj) {
+      this.handleMouseUp(touchObj);
+    }
+  }
   handleBeginDragDrop(e, cards) {
     let { isDragging } = this.props.dragdrop;
     if (!cards || !Array.isArray(cards)) {
@@ -246,7 +260,9 @@ class Table extends Component {
     return (
       <div id={'table'} className={styles}
                         onMouseMove={this.handleMouseMove} 
-                        onMouseUp={this.handleMouseUp} >
+                        onMouseUp={this.handleMouseUp}
+                        onTouchMove={this.handleTouchMove}
+                        onTouchEnd={this.handleTouchEnd} >
         {'One day I will be a table'}
         <button type={'button'}
                 onClick={this.handleButtonClick}>

@@ -8,7 +8,7 @@ class DroppableStack extends Component {
   constructor(props) {
     super(props);
     let ownFuncs = [ "checkGoodDrop", "handleStackDrop", "handleAceDrop",
-                     "handleMouseDown",
+                     "handleMouseDown", "handleTouchStart",
                      "getCardColor", "getCardValue", "getCardSuit" ]
     ownFuncs.forEach((elem) => {
       if (!this[elem]) {
@@ -136,7 +136,12 @@ class DroppableStack extends Component {
     }
 
   }
-
+  handleTouchStart(e, childIndex) {
+    let touchObj = e.changedTouches[0];
+    if (touchObj) {
+      this.handleMouseDown(touchObj, childIndex);
+    }
+  }
   handleMouseDown(e, childIndex) {
     let { children } = this.props;
     let stackBelowClicked = [];
@@ -167,6 +172,7 @@ class DroppableStack extends Component {
     let children = React.Children.map(this.props.children, (child) => {
       return React.cloneElement(child, {
         onMouseDown: ((index) => { return (e) => this.handleMouseDown(e, index) })(cardIndex),
+        onTouchStart: ((index) => { return (e) => this.handleTouchStart(e, index) })(cardIndex),
         ref: 'child-' + (cardIndex++)
       });
     });

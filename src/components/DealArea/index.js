@@ -6,7 +6,8 @@ const DISPLAY_NAME = '<DealArea>';
 class DealArea extends Component {
   constructor(props) {
     super(props)
-    let ownFuncs = [ "componentWillReceiveProps", "handleMouseDown", "render" ];
+    let ownFuncs = [ "componentWillReceiveProps", "handleMouseDown",
+                     "handleTouchStart", "render" ];
     ownFuncs.forEach((elem) => {
       if (!this[elem]) {
         console.error(`Attempt to self-bind \'${elem}\' to ${DISPLAY_NAME} failed`);
@@ -48,6 +49,13 @@ class DealArea extends Component {
       lastChild.handleMouseDown(e);
     }
   }
+  handleTouchStart(e) {
+    let touchObj = e.changedTouches[0];
+    if (touchObj) {
+      e.preventDefault();
+      this.handleMouseDown(touchObj);
+    }
+  }
   render() {
     let { faceUp, faceDown } = this.props;
     let faceUpHooked;
@@ -73,7 +81,8 @@ class DealArea extends Component {
           case len - 2:
             return React.cloneElement(child, {
               offsetX: 15,
-              onMouseDown: (e) => false
+              onMouseDown: (e) => false,
+              onTouchStart: (e) => false
             });
           case len - 1:
             return React.cloneElement(child, {
@@ -83,14 +92,16 @@ class DealArea extends Component {
           default:
             return React.cloneElement(child, {
               offsetX: 0,
-              onMouseDown: (e) => false
+              onMouseDown: (e) => false,
+              onTouchStart: (e) => false
             });
         }
       });
     }
     if (!faceDown.length) {
       faceDownHooked = <div className={'reset'}
-                            onMouseDown={this.handleMouseDown}/>
+                            onMouseDown={this.handleMouseDown}
+                            onTouchStart={this.handleTouchStart} />
     } else {
       let index = 0;
       faceDownHooked = React.Children.map(faceDown, (child) => {
@@ -103,6 +114,7 @@ class DealArea extends Component {
         console.log('Hooking MouseDown onto child ', child);
         return React.cloneElement(child, {
           onMouseDown: this.handleMouseDown,
+          onTouchStart: this.handleTouchStart,
           ref: 'child-' + (index++)
         });
       });
