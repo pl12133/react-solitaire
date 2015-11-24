@@ -137,6 +137,8 @@ class DroppableStack extends Component {
 
   }
   handleTouchStart(e, childIndex) {
+    e.preventDefault();
+    e.stopPropagation();
     let touchObj = e.changedTouches[0];
     if (touchObj) {
       this.handleMouseDown(touchObj, childIndex);

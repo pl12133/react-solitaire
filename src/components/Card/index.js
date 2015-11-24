@@ -10,6 +10,7 @@ const propTypes = {
   isDragging: PropTypes.bool.isRequired,
   flipped: PropTypes.bool.isRequired,
   onMouseDown: PropTypes.func // For overriding a <Cards> MouseDown handler
+  onTouchStart: PropTypes.func // For overriding a <Cards> TouchStart handler
 }
 
 class Card extends Component {
@@ -35,10 +36,11 @@ class Card extends Component {
     }
   }
   handleTouchStart(e) {
+    e.preventDefault();
+    e.stopPropagation();
     let touchObj = e.changedTouches[0];
     //console.log('Card Touche: ', e);
     if (touchObj) {
-      e.preventDefault();
       this.handleMouseDown(touchObj);
     }
   }

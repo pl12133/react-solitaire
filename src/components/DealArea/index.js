@@ -50,9 +50,10 @@ class DealArea extends Component {
     }
   }
   handleTouchStart(e) {
+    e.preventDefault();
+    e.preventPropagation();
     let touchObj = e.changedTouches[0];
     if (touchObj) {
-      e.preventDefault();
       this.handleMouseDown(touchObj);
     }
   }
