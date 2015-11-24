@@ -256,6 +256,14 @@ class Table extends Component {
     let dealAreaFaceDownCards = this.cardSlice('DEAL-AREA-FACEDOWN', 4, 0);
     let dealAreaFaceUpCards = this.cardSlice('DEAL-AREA-FACEUP', 4, 0);
     let tableCards = this.cardSlice('TABLE');
+    let allAceChildren = this.props.cards.filter((elem) => {
+      if (!elem) return false;
+      return (elem.location.indexOf('ACE') >= 0);
+    });
+
+    if (allAceChildren.length === 52) {
+      alert('You Win!!');
+    }
 
     return (
       <div id={'table'} className={styles}
@@ -263,7 +271,6 @@ class Table extends Component {
                         onMouseUp={this.handleMouseUp}
                         onTouchMove={this.handleTouchMove}
                         onTouchEnd={this.handleTouchEnd} >
-        {'One day I will be a table'}
         <button type={'button'}
                 onClick={this.handleButtonClick}>
           {'Deal!'}
