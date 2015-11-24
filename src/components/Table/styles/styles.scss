@@ -10,6 +10,10 @@
 
   overflow: hidden;
 
+  button[type='button'] {
+    margin-left: 5px;
+    margin-top: 5px;
+  }
 
   /* Deck styles */
   & div[id*='-of-'] {
