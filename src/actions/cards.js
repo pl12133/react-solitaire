@@ -1,4 +1,4 @@
-export const MOVE_CARD = 'MOVE_CARD';
+export const MOVE_CARDS = 'MOVE_CARDS';
 export const SHUFFLE_CARDS = 'SHUFFLE_CARDS';
 export const FLIP_CARD = 'FLIP_CARD';
 export const UNDO_MOVE = 'UNDO_MOVE';
@@ -9,10 +9,10 @@ export function shuffleCards() {
     type: SHUFFLE_CARDS
   }
 }
-export function moveCard(card, destination) {
+export function moveCards(cards, destination) {
   return {
-    type: MOVE_CARD,
-    card,
+    type: MOVE_CARDS,
+    cards,
     destination
   }
 }
