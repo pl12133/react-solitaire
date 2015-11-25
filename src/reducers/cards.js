@@ -1,4 +1,7 @@
-import { MOVE_CARD, SHUFFLE_CARDS, FLIP_CARD } from 'actions/cards'
+import { MOVE_CARD, SHUFFLE_CARDS, FLIP_CARD, UNDO_MOVE, REDO_MOVE } from 'actions/cards'
+
+/* Undoable setup */
+import undoable, { includeAction } from 'redux-undo'
 
 //Cards state is an array of 52 objects of form {name, location}
 //
@@ -44,7 +47,7 @@ function shuffle(array) {
   return array;
 }
 
-export default function card(state = initialState, action) {
+function card(state = initialState, action) {
   switch (action.type) {
     case SHUFFLE_CARDS:
       return shuffle(initialState);
@@ -70,3 +73,11 @@ export default function card(state = initialState, action) {
   }
 
 }
+
+export default undoable(card, {
+    filter: includeAction([MOVE_CARD]),
+    limit: 20,
+    debug: true,
+    undoType: UNDO_MOVE,
+    redoType: REDO_MOVE
+});
