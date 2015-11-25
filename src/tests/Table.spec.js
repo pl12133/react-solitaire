@@ -43,7 +43,7 @@ describe('Table', () => {
                                cards={ deck }
                                beginDrag={function() {}}
                                endDrag={function() {}}
-                               moveCard={function() {}} />);
+                               moveCards={function() {}} />);
     });
 
     it('should be a function', () => {
