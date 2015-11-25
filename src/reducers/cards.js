@@ -1,4 +1,4 @@
-import { MOVE_CARD, SHUFFLE_CARDS, FLIP_CARD, UNDO_MOVE, REDO_MOVE } from 'actions/cards'
+import { MOVE_CARDS, SHUFFLE_CARDS, FLIP_CARD, UNDO_MOVE, REDO_MOVE } from 'actions/cards'
 
 /* Undoable setup */
 import undoable, { includeAction } from 'redux-undo'
@@ -51,12 +51,18 @@ function card(state = initialState, action) {
   switch (action.type) {
     case SHUFFLE_CARDS:
       return shuffle(initialState);
-    case MOVE_CARD: {
-      let next = state.filter((elem) => {
-        return (elem.name !== action.card.name);
-      }).concat({name: action.card.name,
-                 location: action.destination,
-                 flipped: action.card.flipped});
+    case MOVE_CARDS: {
+      let next = state.filter((stateCard) => {
+        return !action.cards.some((card) => {
+          return card.name === stateCard.name;
+        });
+      }).concat(action.cards.map((card) => {
+        return {
+          name: card.name,
+          location: action.destination,
+          flipped: card.flipped
+        }
+      }));
       return next;
     }
     case FLIP_CARD: {
@@ -75,7 +81,7 @@ function card(state = initialState, action) {
 }
 
 export default undoable(card, {
-    filter: includeAction([MOVE_CARD]),
+    filter: includeAction([MOVE_CARDS]),
     limit: 20,
     debug: true,
     undoType: UNDO_MOVE,
