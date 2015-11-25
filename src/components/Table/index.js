@@ -40,13 +40,12 @@ class Table extends Component {
       this[elem] = this[elem].bind(this);
     });
     
-    console.log('Document? ', document.getElementById('table'));
     this.state = { redeal: false };
   }
 
   getOffsetFromTable(elem) {
-    let thisElem = document.getElementById('table');
-    let offset = { x: thisElem.offsetLeft, y: thisElem.offsetTop };
+    let tableElem = document.getElementById('table');
+    let offset = { x: tableElem.offsetLeft, y: tableElem.offsetTop };
     for (let node = elem.parentNode; node.id !== 'table'; node = node.parentNode) {
       offset.x += node.offsetLeft;
       offset.y += node.offsetTop;
@@ -54,7 +53,7 @@ class Table extends Component {
     return offset;
   }
   handleResize(e) {
-    console.log('Resized Fire');
+    //console.log('Resized Fire');
     this.setState(Object.assign({}, this.state, {
         width: document.getElementById('table').clientWidth 
       })
@@ -67,7 +66,6 @@ class Table extends Component {
   }
   handleDealButtonClick(e) {
     this.dealCards();
-    console.log('Deal Button Clicked');
   }
   handleMouseUp(e) {
     let { isDragging } = this.props.dragdrop;
@@ -76,7 +74,6 @@ class Table extends Component {
   }
   
   handleTouchMove(e) {
-    console.log('Touch Moving');
     let touchObj = e.changedTouches[0];
     if (touchObj) {
       this.handleMouseMove(touchObj);
@@ -146,14 +143,11 @@ class Table extends Component {
         return false;
       }
     }
-
-    //console.log("Drop Target: (" + clientX + ", " + clientY + ")");
     let dropped = tableDroppables.some(dropCheck('STACK')) ||
                   aceDroppables.some(dropCheck('ACE'));
 
     if (!dropped) {
       // Snap back if not dropped
-      //console.log("Not Dropped");
       let { dragOrigins } = dragdrop;
       dragNodes.forEach((node, index) => {
         node.style.left = dragOrigins[index].x;
@@ -224,7 +218,6 @@ class Table extends Component {
   cardSlice(location, offsetX = 0, offsetY = 0) {
     let cardMap = (offsetWidth = 0, offsetHeight = 0) => {
       return (card, index) => {
-        //console.log(index + ": " + card.name + " Flipped? " + card.flipped);
         return <Card isDragging={this.props.dragdrop.isDragging}
                      handleBeginDragDrop={this.handleBeginDragDrop}
                      offsetY={index*offsetHeight}
