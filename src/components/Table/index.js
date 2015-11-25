@@ -26,8 +26,9 @@ class Table extends Component {
     let ownFuncs = [ "handleMouseUp", "handleMouseMove",
                      "handleEndDragDrop", "handleBeginDragDrop", 
                      "getOffsetFromTable", "cardSlice", "cardLocate",
-                     "createRow", "dealCards", "handleButtonClick",
+                     "createRow", "dealCards",
                      "handleTouchEnd", "handleTouchMove",
+                     "handleDealButtonClick", "handleUndoButtonClick",
                      "handleCardFlip", "handleResize",
                      "render" ]
 
@@ -46,7 +47,6 @@ class Table extends Component {
   getOffsetFromTable(elem) {
     let thisElem = document.getElementById('table');
     let offset = { x: thisElem.offsetLeft, y: thisElem.offsetTop };
-    console.log('Node: ', elem.parentNode);
     for (let node = elem.parentNode; node.id !== 'table'; node = node.parentNode) {
       offset.x += node.offsetLeft;
       offset.y += node.offsetTop;
@@ -60,7 +60,12 @@ class Table extends Component {
       })
     );
   }
-  handleButtonClick(e) {
+  handleUndoButtonClick(e) {
+    console.log('Undoing!!');
+    let { undoMove } = this.props;
+    undoMove();
+  }
+  handleDealButtonClick(e) {
     this.dealCards();
     console.log('Deal Button Clicked');
   }
@@ -292,8 +297,12 @@ class Table extends Component {
                         onTouchMove={this.handleTouchMove}
                         onTouchEnd={this.handleTouchEnd} >
         <button type={'button'}
-                onClick={this.handleButtonClick}>
+                onClick={this.handleDealButtonClick}>
           {'Deal!'}
+        </button>
+        <button type={'button'}
+                onClick={this.handleUndoButtonClick}>
+          {'Undo!'}
         </button>
         <DealArea moveCard={this.props.moveCard}
                   faceUp={dealAreaFaceUpCards}
