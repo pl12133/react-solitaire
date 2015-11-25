@@ -51,7 +51,8 @@ class DealArea extends Component {
   }
   handleTouchStart(e) {
     e.preventDefault();
-    e.preventPropagation();
+    //e.preventPropagation();
+
     let touchObj = e.changedTouches[0];
     if (touchObj) {
       this.handleMouseDown(touchObj);
