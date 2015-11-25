@@ -2,12 +2,12 @@
 
 :local(.styles) {
   position: absolute;
-  width: 25%;
+  width: 28.5%;
   height: 30%;
 
-  left: 10%;
+  left: 8%;
   top: 10%;
-  background: #fa5;
+//  background: #fa5;
 
   & div.reset {
     width: 100%;
@@ -17,7 +17,7 @@
     position: relative;
     padding: 0;
     float: left;
-    background-color: red;
+//    background-color: red;
     margin-top: 1%;
     width: 55%;
     height: 95%;
@@ -28,7 +28,7 @@
     display: inline-block;
     padding: 0;
     float: right;
-    background-color: lightblue;
+//    background-color: lightblue;
     margin-top: 1%;
     width: 30%;
     height: 95%;
