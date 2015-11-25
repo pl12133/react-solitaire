@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as cardActionCreators from 'actions/cards';
 import * as dragActionCreators from 'actions/dragdrop';
+import undoActionCreators from 'redux-undo';
 
 import Table from 'components/Table'
 
@@ -23,17 +24,15 @@ class App extends Component {
 function mapStateToProps(state) {
   return {
     dragdrop: state.dragdrop,
-    cards: state.cards
+    cards: state.cards.present
   }
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ doDrag: dragActionCreators.doDrag,
-                              beginDrag: dragActionCreators.beginDrag,
-                              endDrag: dragActionCreators.endDrag,
-                              moveCard: cardActionCreators.moveCard,
-                              flipCard: cardActionCreators.flipCard,
-                              shuffleCards: cardActionCreators.shuffleCards }, dispatch);
+  let allActionCreators = Object.assign({},
+                                        dragActionCreators,
+                                        cardActionCreators);
+  return bindActionCreators(allActionCreators, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
