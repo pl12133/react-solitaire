@@ -18,7 +18,7 @@ const propTypes = {
   cards: PropTypes.array.isRequired,
   beginDrag: PropTypes.func.isRequired,
   endDrag: PropTypes.func.isRequired,
-  moveCard: PropTypes.func.isRequired
+  moveCards: PropTypes.func.isRequired
 }
 class Table extends Component {
   constructor(props) {
@@ -129,14 +129,16 @@ class Table extends Component {
           }
           if (droppedOn.checkGoodDrop(testCard)) {
             //Successful drop!
-            let { moveCard } = this.props;
-            dragCards.forEach((card) => {
+            let { moveCards } = this.props;
+            let toMove = dragCards.map((card) => {
+            //dragCards.forEach((card) => {
               let dropCard = {
                 name: card.props.name,
                 flipped: false
               }
-              moveCard(dropCard, toStack);
+              return dropCard;
             });
+            moveCards(toMove, toStack);
             return true;
           }
           return false;
@@ -253,39 +255,41 @@ class Table extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (this.state.redeal) {
-      let { moveCard, cards } = this.props;
+      let { moveCards, cards } = this.props;
       let count = 0;
       for (let index = 1; index <= 7; ++index) {
         for (let innerIndex = index; innerIndex <= 7; ++innerIndex) {
           let card = cards[count++];
           card.flipped = (innerIndex !== index);
-          moveCard(card, 'STACK-' + innerIndex);
+          moveCards([card], 'STACK-' + innerIndex);
         }
       }
       while (count < cards.length) {
         let card = cards[count++];
         card.flipped = true;
-        moveCard(card, 'DEAL-AREA-FACEDOWN');
+        moveCards([card], 'DEAL-AREA-FACEDOWN');
       }
       this.setState(Object.assign({}, this.state, { redeal: false }));
     }
   }
   render() {
+    // calculations
     let tableWidth = this.state.width || 800;
     let offsetLeft = parseInt(tableWidth * .08);     // 8% of table;
     let cardXDistance = parseInt(tableWidth * .05);  // 2% of table;
-    console.log(`tableWidth: ${tableWidth}, offsetLeft: ${offsetLeft}, cardXDist: ${cardXDistance}`);
-    //let sevenDroppableStacks = this.createRow('STACK', 7, 0, CARD_Y_DISTANCE, 65, 140);
+
+    // renderables
     let sevenDroppableStacks = this.createRow('STACK', 7, 0, CARD_Y_DISTANCE, cardXDistance, offsetLeft);
     let aceDroppableStacks = this.createRow('ACE', 4, 0, 0, cardXDistance / 4, offsetLeft / 2);
     let dealAreaFaceDownCards = this.cardSlice('DEAL-AREA-FACEDOWN', 4, 0);
     let dealAreaFaceUpCards = this.cardSlice('DEAL-AREA-FACEUP', 4, 0);
     let tableCards = this.cardSlice('TABLE');
+
+    // win condition, terribly placed
     let allAceChildren = this.props.cards.filter((elem) => {
       if (!elem) return false;
       return (elem.location.indexOf('ACE') >= 0);
     });
-
     if (allAceChildren.length === 52) {
       alert('You Win!!');
     }
@@ -304,7 +308,7 @@ class Table extends Component {
                 onClick={this.handleUndoButtonClick}>
           {'Undo!'}
         </button>
-        <DealArea moveCard={this.props.moveCard}
+        <DealArea moveCards={this.props.moveCards}
                   faceUp={dealAreaFaceUpCards}
                   faceDown={dealAreaFaceDownCards}>
         </DealArea>

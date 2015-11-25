@@ -2,6 +2,7 @@ import React, {Component, PropTypes } from 'react';
 import styles from './styles'
 
 const DISPLAY_NAME = '<DealArea>';
+const FLIP_AT_A_TIME = 3;
 
 class DealArea extends Component {
   constructor(props) {
@@ -24,34 +25,26 @@ class DealArea extends Component {
     let childRefName = 'child-' + (children.length-1);
     let lastChild = this.refs[childRefName];
     if (!lastChild) {
-      let { moveCard, faceUp } = this.props;
-      faceUp.reverse().forEach((elem) => {
-        let { name } = elem.props;
-        let card = {
-          name,
+      let { moveCards, faceUp } = this.props;
+      let toMove = faceUp.reverse().map((card) => {
+        return {
+          name: card.props.name,
           flipped: true,
         }
-        moveCard(card, 'DEAL-AREA-FACEDOWN');
       });
+      moveCards(toMove, 'DEAL-AREA-FACEDOWN');
       return;
     }
     if (lastChild.isFlipped()) {
       // If the card is face down, flip the top three cards off the stack and move to FACEUP
-      let { moveCard } = this.props;
-      let cardsMoving = children.slice(-3).forEach((card) => {
-        let moving = { 
+      let { moveCards } = this.props;
+      let toMove = children.slice(-FLIP_AT_A_TIME).map((card) => {
+        return { 
           name: card.props.name,
           flipped: false
         };
-        moveCard(moving, 'DEAL-AREA-FACEUP');
       });
-      console.log(`cardsMoving: `, cardsMoving)
-//      for (let end = children.length - 1, index = end; index > end - 3; --index) {
-//        if (index < 0) return; // (end - 3) might go negative so check for below 0
-//        let refName = 'child-'+index;
-//        let { name } = this.refs[refName].props;
-//        moveCard({name, flipped: false}, 'DEAL-AREA-FACEUP');
-//      }
+      moveCards(toMove, 'DEAL-AREA-FACEUP');
     } else {
       // If the card is already face up, let it handle its own MouseDown
       lastChild.handleMouseDown(e);
@@ -59,7 +52,6 @@ class DealArea extends Component {
   }
   handleTouchStart(e) {
     e.preventDefault();
-    //e.preventPropagation();
 
     let touchObj = e.changedTouches[0];
     if (touchObj) {
