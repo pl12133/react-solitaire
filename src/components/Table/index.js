@@ -6,10 +6,10 @@ import styles from './styles/'
 /* Co-Components */
 
 
-import DealArea from '/home/krirken/projects/react-solitair/src/components/DealArea/'
-import AceArea from '/home/krirken/projects/react-solitair/src/components/AceArea/'
-import Card from '/home/krirken/projects/react-solitair/src/components/Card/'
-import DroppableStack from '/home/krirken/projects/react-solitair/src/components/DroppableStack/'
+import DealArea from '/home/krirken/projects/react-solitaire/src/components/DealArea/'
+import AceArea from '/home/krirken/projects/react-solitaire/src/components/AceArea/'
+import Card from '/home/krirken/projects/react-solitaire/src/components/Card/'
+import DroppableStack from '/home/krirken/projects/react-solitaire/src/components/DroppableStack/'
 
 const DISPLAY_NAME = '<Table>';
 const CARD_Y_DISTANCE = 15;
@@ -28,7 +28,7 @@ class Table extends Component {
                      "getOffsetFromTable", "cardSlice", "cardLocate",
                      "createRow", "dealCards", "handleButtonClick",
                      "handleTouchEnd", "handleTouchMove",
-                     "handleCardFlip", 
+                     "handleCardFlip", "handleResize",
                      "render" ]
 
     ownFuncs.forEach((elem) => {
@@ -38,16 +38,27 @@ class Table extends Component {
       }
       this[elem] = this[elem].bind(this);
     });
+    
+    console.log('Document? ', document.getElementById('table'));
     this.state = { redeal: false };
   }
 
   getOffsetFromTable(elem) {
-    let offset = {x: 0, y: 0};
+    let thisElem = document.getElementById('table');
+    let offset = { x: thisElem.offsetLeft, y: thisElem.offsetTop };
+    console.log('Node: ', elem.parentNode);
     for (let node = elem.parentNode; node.id !== 'table'; node = node.parentNode) {
       offset.x += node.offsetLeft;
       offset.y += node.offsetTop;
     }
     return offset;
+  }
+  handleResize(e) {
+    console.log('Resized Fire');
+    this.setState(Object.assign({}, this.state, {
+        width: document.getElementById('table').clientWidth 
+      })
+    );
   }
   handleButtonClick(e) {
     this.dealCards();
@@ -224,11 +235,15 @@ class Table extends Component {
 
   dealCards() {
     this.props.shuffleCards();
-    this.setState({ redeal: true });
+    this.setState({
+      redeal: true,
+      width: document.getElementById('table').clientWidth 
+    });
   }
 
   componentDidMount() {
     this.dealCards();
+    window.addEventListener('resize', this.handleResize);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -247,12 +262,17 @@ class Table extends Component {
         card.flipped = true;
         moveCard(card, 'DEAL-AREA-FACEDOWN');
       }
-      this.setState({ redeal: false });
+      this.setState(Object.assign({}, this.state, { redeal: false }));
     }
   }
   render() {
-    let sevenDroppableStacks = this.createRow('STACK', 7, 0, CARD_Y_DISTANCE, 65, 140);
-    let aceDroppableStacks = this.createRow('ACE', 4, 0, 0, 20, 40);
+    let tableWidth = this.state.width || 800;
+    let offsetLeft = parseInt(tableWidth * .08);     // 8% of table;
+    let cardXDistance = parseInt(tableWidth * .05);  // 2% of table;
+    console.log(`tableWidth: ${tableWidth}, offsetLeft: ${offsetLeft}, cardXDist: ${cardXDistance}`);
+    //let sevenDroppableStacks = this.createRow('STACK', 7, 0, CARD_Y_DISTANCE, 65, 140);
+    let sevenDroppableStacks = this.createRow('STACK', 7, 0, CARD_Y_DISTANCE, cardXDistance, offsetLeft);
+    let aceDroppableStacks = this.createRow('ACE', 4, 0, 0, cardXDistance / 4, offsetLeft / 2);
     let dealAreaFaceDownCards = this.cardSlice('DEAL-AREA-FACEDOWN', 4, 0);
     let dealAreaFaceUpCards = this.cardSlice('DEAL-AREA-FACEUP', 4, 0);
     let tableCards = this.cardSlice('TABLE');
