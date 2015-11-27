@@ -1,33 +1,33 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as cardActionCreators from 'actions/cards';
 import * as dragActionCreators from 'actions/dragdrop';
 
-import Table from 'components/Table'
+import Table from 'components/Table';
 
 import styles from './styles/';
 
 class App extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
   }
 
-  render() {
+  render () {
     return (
-      <Table {...this.props} />
-    )
+      <Table className={styles} {...this.props} />
+    );
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   return {
     dragdrop: state.dragdrop,
     cards: state.cards.present
-  }
+  };
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps (dispatch) {
   let allActionCreators = Object.assign({},
                                         dragActionCreators,
                                         cardActionCreators);

@@ -1,5 +1,5 @@
 import React, {Component, PropTypes } from 'react';
-import styles from './styles'
+import styles from './styles';
 
 const DISPLAY_NAME = '<DealArea>';
 const FLIP_AT_A_TIME = 3;
@@ -9,39 +9,39 @@ const propTypes = {
   faceDown: PropTypes.array.isRequired,
   getAvailableMoves: PropTypes.func.isRequired,
   moveCards: PropTypes.func.isRequired
-}
+};
 class DealArea extends Component {
-  constructor(props) {
-    super(props)
-    let ownFuncs = [ "componentWillReceiveProps", "handleMouseDown",
-                     "handleDoubleClick", "handleTouchTap",
-                     "handleTouchStart", "render" ];
+  constructor (props) {
+    super(props);
+    let ownFuncs = [ 'componentWillReceiveProps', 'handleMouseDown',
+                     'handleDoubleClick', 'handleTouchTap',
+                     'handleTouchStart', 'render' ];
     ownFuncs.forEach((elem) => {
       if (!this[elem]) {
         console.error(`Attempt to self-bind \'${elem}\' to ${DISPLAY_NAME} failed`);
         return;
       }
       this[elem] = this[elem].bind(this);
-    })
+    });
   }
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps) {
   }
-  handleTouchTap(e) {
+  handleTouchTap (e) {
     e.preventDefault();
     this.handleDoubleClick(e);
   }
-  handleMouseDown(e) {
+  handleMouseDown (e) {
     // Called when the top <Card> of <DealArea> is clicked
     let { faceDown: children } = this.props;
-    let childRefName = 'child-' + (children.length-1);
+    let childRefName = 'child-' + (children.length - 1);
     let lastChild = this.refs[childRefName];
     if (!lastChild) {
       let { moveCards, faceUp } = this.props;
       let toMove = faceUp.reverse().map((card) => {
         return {
           name: card.props.name,
-          flipped: true,
-        }
+          flipped: true
+        };
       });
       moveCards(toMove, 'DEAL-AREA-FACEDOWN');
       return;
@@ -52,7 +52,7 @@ class DealArea extends Component {
       let { moveCards } = this.props;
       let toMove = children.slice(-FLIP_AT_A_TIME).reverse().map((card) => {
         let { name } = card.props;
-        return { 
+        return {
           name,
           flipped: false
         };
@@ -63,7 +63,7 @@ class DealArea extends Component {
       lastChild.handleMouseDown(e);
     }
   }
-  handleDoubleClick(e) {
+  handleDoubleClick (e) {
     let { getAvailableMoves } = this.props;
     let clickedCardName = e.target.id;
     let canMoveTo = getAvailableMoves(clickedCardName, 1);
@@ -75,7 +75,7 @@ class DealArea extends Component {
       }], canMoveTo[0]);
     }
   }
-  handleTouchStart(e) {
+  handleTouchStart (e) {
     e.preventDefault();
 
     let touchObj = e.changedTouches[0];
@@ -83,7 +83,7 @@ class DealArea extends Component {
       this.handleMouseDown(touchObj);
     }
   }
-  render() {
+  render () {
     let { faceUp, faceDown, offsetWidth, offsetHeight } = this.props;
     let faceUpHooked;
     if (!faceUp.length) {
@@ -95,9 +95,8 @@ class DealArea extends Component {
         // Add refs to all children and an onMouseDown handler to the last child
         // Disable mouseDown on all cards except the top one
         // Reposition cards so we always see three
-        
+
         let thisIndex = index++;
-        let offset = (thisIndex % 3) * 15;
         switch (thisIndex) {
           case len - 2:
             return React.cloneElement(child, {
@@ -111,7 +110,7 @@ class DealArea extends Component {
               onDoubleClick: this.handleDoubleClick,
               onTouchTap: this.handleTouchTap
             });
-          
+
           default:
             return React.cloneElement(child, {
               offsetLeft: 0,
@@ -125,7 +124,7 @@ class DealArea extends Component {
     if (!faceDown.length) {
       faceDownHooked = <div className={'reset'}
                             onMouseDown={this.handleMouseDown}
-                            onTouchStart={this.handleTouchStart} />
+                            onTouchStart={this.handleTouchStart} />;
     } else {
       let index = 0;
       faceDownHooked = React.Children.map(faceDown, (child) => {
@@ -157,7 +156,7 @@ class DealArea extends Component {
           {faceUpHooked}
         </span>
       </div>
-    )
+    );
   }
 }
 

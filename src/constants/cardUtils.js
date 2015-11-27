@@ -1,10 +1,9 @@
-function getCardSuit(card) {
+function getCardSuit (card) {
   let { name } = card;
   let suit = name.substr(name.lastIndexOf('-') + 1);
   return suit;
-
 }
-function getCardColor(card) {
+function getCardColor (card) {
   let { name } = card;
   let suit = name.substr(name.lastIndexOf('-') + 1);
   switch (suit) {
@@ -19,9 +18,9 @@ function getCardColor(card) {
       return 'blank';
   }
 }
-function getCardValue(card) {
+function getCardValue (card) {
   let { name } = card;
-  let value = name.substr(0, name.indexOf('-'))
+  let value = name.substr(0, name.indexOf('-'));
   switch (value) {
     case 'ace': return 1;
     case 'two': return 2;

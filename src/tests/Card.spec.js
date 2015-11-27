@@ -11,30 +11,30 @@ var TestUtils = require('react-addons-test-utils');
 const Card = require('../components/Card/').default;
 
 const expect = Unexpected.clone()
-    .use(UnexpectedReact);
+  .use(UnexpectedReact);
 
 describe('Card', () => {
-    let renderer;
+  let renderer;
 
-    beforeEach(() => {
-        renderer = TestUtils.createRenderer();
-        renderer.render(<Card name={"king-of-hearts"}
-                              offsetWidth={50}
-                              offsetHeight={80}
-                              handleBeginDragDrop={function() {} }
-                              isDragging={false}
-                              flipped={false} />);
-    });
+  beforeEach(() => {
+    renderer = TestUtils.createRenderer();
+    renderer.render(<Card name={"king-of-hearts"}
+                          offsetWidth={50}
+                          offsetHeight={80}
+                          handleBeginDragDrop={function () {} }
+                          isDragging={false}
+                          flipped={false} />);
+  });
 
-    it('should be a function', () => {
-      expect(Card, 'to be a', 'function');
-    });
-    it('should render a ReactElement', () => {
-        let result = renderer.getRenderOutput();
-        return expect(TestUtils.isElement(result), 'to be ok');
-    });
+  it('should be a function', () => {
+    expect(Card, 'to be a', 'function');
+  });
+  it('should render a ReactElement', () => {
+    let result = renderer.getRenderOutput();
+    return expect(TestUtils.isElement(result), 'to be ok');
+  });
 
-    it('renders a king of hearts', () => {
-        return expect(renderer, 'to have rendered', <div id={'king-of-hearts'} />);
-    });
+  it('renders a king of hearts', () => {
+    return expect(renderer, 'to have rendered', <div id={'king-of-hearts'} />);
+  });
 });
