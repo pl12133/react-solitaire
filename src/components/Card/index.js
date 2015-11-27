@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 
 /* Styles */
-import styles from './styles/'
+import styles from './styles/';
 
 const DISPLAY_NAME = '<Card>';
 const propTypes = {
@@ -17,34 +17,34 @@ const propTypes = {
   onTouchStart: PropTypes.func, // For overriding a <Cards> TouchStart handler
   onTouchTap: PropTypes.func,
   onDoubleClick: PropTypes.func
-}
+};
 
 class Card extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
-    let ownFuncs = [ "handleMouseDown", "handleTouchStart", "render" ]
+    let ownFuncs = [ 'handleMouseDown', 'handleTouchStart', 'render' ];
     ownFuncs.forEach((elem) => {
       if (!this[elem]) {
         console.error(`Attempt to self-bind \'${elem}\' to ${DISPLAY_NAME} failed`);
         return;
       }
       this[elem] = this[elem].bind(this);
-    })
+    });
 
-    //this.state = { toggleFlip: false }
+    // this.state = { toggleFlip: false }
   }
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate (nextProps, nextState) {
     let { props: currentProps } = this;
-    return ((currentProps.offsetWidth !== nextProps.offsetWidth) || (currentProps.flipped !== nextProps.flipped) || (currentProps.onMouseDown !== nextProps.onMouseDown) || (currentProps.onTouchStart !== nextProps.onTouchStart));
+    return ((currentProps.offsetWidth !== nextProps.offsetWidth) || (currentProps.flipped !== nextProps.flipped) || (currentProps.onMouseDown !== nextProps.onMouseDown) || (currentProps.onTouchStart !== nextProps.onTouchStart) || (currentProps.offsetLeft !== nextProps.offsetLft));
   }
-  handleMouseDown(e) {
+  handleMouseDown (e) {
     let { isDragging } = this.props;
     if (!isDragging) {
       let dragging = [this];
       this.props.handleBeginDragDrop(e, dragging);
     }
   }
-  handleTouchStart(e) {
+  handleTouchStart (e) {
     e.preventDefault();
     e.stopPropagation();
     let touchObj = e.changedTouches[0];
@@ -53,7 +53,7 @@ class Card extends Component {
     }
   }
 
-  render() {
+  render () {
     let { name,
           flipped,
           offsetLeft = 0,
@@ -61,7 +61,7 @@ class Card extends Component {
           offsetWidth = 0,
           offsetHeight = 0 } = this.props;
     return (
-      <div id={name} className={(flipped) ? styles : ""}
+      <div id={name} className={(flipped) ? styles : ''}
                      style={ {
                        zIndex: 10,
                        position: 'absolute',
@@ -74,7 +74,7 @@ class Card extends Component {
                      onTouchTap={this.props.onTouchTap}
                      onDoubleClick={this.props.onDoubleClick} >
       </div>
-    )
+    );
   }
 }
 
