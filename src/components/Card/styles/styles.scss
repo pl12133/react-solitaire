@@ -2,7 +2,8 @@
 
 /* These styles display when a card is flipped */
 :local(.styles) {
-  background: lightblue !important;
+  background: url('/dist/cardback.jpg') no-repeat center center !important;
+  background-size: cover !important;
   border: 1px dashed;
   border-radius: 10px;
 }
