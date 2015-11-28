@@ -16,7 +16,8 @@ const propTypes = {
 class Card extends Component {
   constructor(props) {
     super(props);
-    let ownFuncs = [ "handleMouseDown", "isFlipped", "handleTouchStart" ]
+    let ownFuncs = [ "handleMouseDown", "isFlipped", "handleTouchStart",
+                     "handleDoubleClick" ]
     ownFuncs.forEach((elem) => {
       if (!this[elem]) {
         console.error(`Attempt to self-bind \'${elem}\' to ${DISPLAY_NAME} failed`);
@@ -27,7 +28,9 @@ class Card extends Component {
 
     //this.state = { toggleFlip: false }
   }
-
+  handleDoubleClick(e) {
+    console.log('Card DoubleClicked');
+  }
   handleMouseDown(e) {
     let { isDragging } = this.props;
     if (!isDragging) {
@@ -58,7 +61,8 @@ class Card extends Component {
                        top: (offsetY || 0) + 'px',
                        left: (offsetX || 0) + 'px'} }
                      onMouseDown={this.props.onMouseDown || this.handleMouseDown}
-                     onTouchStart={this.props.onTouchStart || this.handleTouchStart} >
+                     onTouchStart={this.props.onTouchStart || this.handleTouchStart}
+                     onDoubleClick={this.props.onDoubleClick || this.handleDoubleClick} >
       </div>
     )
   }
