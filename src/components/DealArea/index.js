@@ -4,10 +4,16 @@ import styles from './styles'
 const DISPLAY_NAME = '<DealArea>';
 const FLIP_AT_A_TIME = 3;
 
+const propTypes = {
+  faceUp: PropTypes.array.isRequired,
+  faceDown: PropTypes.array.isRequired,
+  getAvailableMoves: PropTypes.func.isRequired,
+  moveCards: PropTypes.func.isRequired
+}
 class DealArea extends Component {
   constructor(props) {
     super(props)
-    let ownFuncs = [ "componentWillReceiveProps", "handleMouseDown",
+    let ownFuncs = [ "componentWillReceiveProps", "handleMouseDown", "handleDoubleClick",
                      "handleTouchStart", "render" ];
     ownFuncs.forEach((elem) => {
       if (!this[elem]) {
@@ -50,6 +56,21 @@ class DealArea extends Component {
       lastChild.handleMouseDown(e);
     }
   }
+  handleDoubleClick(e) {
+    let { getAvailableMoves } = this.props;
+    let clickedCardName = e.target.id;
+    let canMoveTo = getAvailableMoves(clickedCardName);
+    canMoveTo.forEach((elem, index) => {
+      console.log(clickedCardName + ' can move to ' + elem);
+    });
+    if (canMoveTo.length > 0) {
+      let { moveCards } = this.props;
+      moveCards([{
+        name: clickedCardName,
+        flipped: false
+      }], canMoveTo[0]);
+    }
+  }
   handleTouchStart(e) {
     e.preventDefault();
 
@@ -87,7 +108,8 @@ class DealArea extends Component {
             });
           case len - 1:
             return React.cloneElement(child, {
-              offsetX: 30
+              offsetX: 30,
+              onDoubleClick: this.handleDoubleClick
             });
           
           default:
@@ -134,9 +156,6 @@ class DealArea extends Component {
   }
 }
 
-DealArea.propTypes = {
-  faceUp: PropTypes.array.isRequired,
-  faceDown: PropTypes.array.isRequired
-}
+DealArea.propTypes = propTypes;
 
 export default DealArea;
