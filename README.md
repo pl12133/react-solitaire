@@ -16,6 +16,10 @@ Set HOST and PORT environment variables:
     export HOST=example.com
     export PORT=80
 
+For tests to work, make sure NODE_PATH is set to project directory of `react-solitaire/src`
+
+    export NODE_PATH=/home/user/projects/react-solitaire/src
+
 Start:
 
     npm start
