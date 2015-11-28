@@ -1,8 +1,22 @@
 # react-solitaire
 A game of Solitaire in React
 
-This project is incorrectly displaying source-maps, only showing maps for `scss` files.
+React for view, Redux for state, mocha and unexpected-react for testing, Webpack for module bundling, SASS for styles
 
-[Example](http://i.imgur.com/s8WRDoj.png)
+# installation
 
-Setting `devtool: eval` will produce an eval source map for `.js` files, however `devtool: source-map` will only produce a source map for `.scss` files.
+Clone git repo and install:
+
+    git clone https://github.com/pl12133/react-solitaire/
+    cd react-solitaire
+    npm install
+
+Set HOST and PORT environment variables:
+
+    export HOST=example.com
+    export PORT=80
+
+Start:
+    npm start
+
+Play!
