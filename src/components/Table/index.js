@@ -9,10 +9,10 @@ injectTapEventPlugin();
 import styles from './styles/'
 
 /* Co-Components */
-import DealArea from '/home/krirken/projects/react-solitaire/src/components/DealArea/'
-import AceArea from '/home/krirken/projects/react-solitaire/src/components/AceArea/'
-import Card from '/home/krirken/projects/react-solitaire/src/components/Card/'
-import DroppableStack from '/home/krirken/projects/react-solitaire/src/components/DroppableStack/'
+import DealArea from 'components/DealArea/'
+import AceArea from 'components/AceArea/'
+import Card from 'components/Card/'
+import DroppableStack from 'components/DroppableStack/'
 
 const DISPLAY_NAME = '<Table>';
 const CARD_Y_DISTANCE = 15;
