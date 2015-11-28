@@ -19,7 +19,7 @@ const propTypes = {
 class DroppableStack extends Component {
   constructor(props) {
     super(props);
-    let ownFuncs = [ "checkGoodDrop", "handleStackDrop", "handleAceDrop",
+    let ownFuncs = [ "checkGoodDrop", "handleStackDrop", "handleAceDrop", "handleTouchTap",
                      "handleMouseDown", "handleTouchStart", "handleDoubleClick" ];
     ownFuncs.forEach((elem) => {
       if (!this[elem]) {
@@ -101,7 +101,6 @@ class DroppableStack extends Component {
   }
   handleTouchStart(e, childIndex) {
     e.preventDefault();
-    e.stopPropagation();
     let touchObj = e.changedTouches[0];
     if (touchObj) {
       this.handleMouseDown(touchObj, childIndex);
@@ -121,6 +120,9 @@ class DroppableStack extends Component {
       let clickedChild = stackBelowClicked[0];
       clickedChild.handleMouseDown(e);
     }
+  }
+  handleTouchTap(e, childIndex) {
+    this.handleDoubleClick(e, childIndex);
   }
   handleDoubleClick(e, childIndex) {
     e.preventDefault();
@@ -161,6 +163,7 @@ class DroppableStack extends Component {
         onMouseDown: fnWrap(this.handleMouseDown, cardIndex),
         onTouchStart: fnWrap(this.handleTouchStart, cardIndex),
         onDoubleClick: fnWrap(this.handleDoubleClick, cardIndex),
+        onTouchTap: fnWrap(this.handleTouchTap, cardIndex),
         ref: 'child-' + (cardIndex++)
       });
     });

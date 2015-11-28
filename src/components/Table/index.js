@@ -1,5 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 
+/* TouchTap event injection */
+import injectTapEventPlugin from "react-tap-event-plugin";
+injectTapEventPlugin();
+//
+
 /* Styles */
 import styles from './styles/'
 

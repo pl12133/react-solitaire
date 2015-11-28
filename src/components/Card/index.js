@@ -13,14 +13,14 @@ const propTypes = {
   handleBeginDragDrop: PropTypes.func.isRequired,
   onMouseDown: PropTypes.func, // For overriding a <Cards> MouseDown handler
   onTouchStart: PropTypes.func, // For overriding a <Cards> TouchStart handler
+  onTouchTap: PropTypes.func,
   onDoubleClick: PropTypes.func
 }
 
 class Card extends Component {
   constructor(props) {
     super(props);
-    let ownFuncs = [ "handleMouseDown", "isFlipped", "handleTouchStart",
-                     "handleDoubleClick" ]
+    let ownFuncs = [ "handleMouseDown", "isFlipped", "handleTouchStart", "render" ]
     ownFuncs.forEach((elem) => {
       if (!this[elem]) {
         console.error(`Attempt to self-bind \'${elem}\' to ${DISPLAY_NAME} failed`);
@@ -30,9 +30,6 @@ class Card extends Component {
     })
 
     //this.state = { toggleFlip: false }
-  }
-  handleDoubleClick(e) {
-    console.log('Card DoubleClicked');
   }
   handleMouseDown(e) {
     let { isDragging } = this.props;
@@ -64,6 +61,7 @@ class Card extends Component {
                        left: (offsetX || 0) + 'px'} }
                      onMouseDown={this.props.onMouseDown || this.handleMouseDown}
                      onTouchStart={this.props.onTouchStart || this.handleTouchStart}
+                     onTouchTap={this.props.onTouchTap}
                      onDoubleClick={this.props.onDoubleClick} >
       </div>
     )

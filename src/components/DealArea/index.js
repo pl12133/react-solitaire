@@ -13,7 +13,8 @@ const propTypes = {
 class DealArea extends Component {
   constructor(props) {
     super(props)
-    let ownFuncs = [ "componentWillReceiveProps", "handleMouseDown", "handleDoubleClick",
+    let ownFuncs = [ "componentWillReceiveProps", "handleMouseDown",
+                     "handleDoubleClick", "handleTouchTap",
                      "handleTouchStart", "render" ];
     ownFuncs.forEach((elem) => {
       if (!this[elem]) {
@@ -24,6 +25,9 @@ class DealArea extends Component {
     })
   }
   componentWillReceiveProps(nextProps) {
+  }
+  handleTouchTap(e) {
+    this.handleDoubleClick(e);
   }
   handleMouseDown(e) {
     // Called when the top <Card> of <DealArea> is clicked
@@ -106,7 +110,8 @@ class DealArea extends Component {
           case len - 1:
             return React.cloneElement(child, {
               offsetX: 30,
-              onDoubleClick: this.handleDoubleClick
+              onDoubleClick: this.handleDoubleClick,
+              onTouchTap: this.handleTouchTap
             });
           
           default:
