@@ -3,13 +3,7 @@ import React, { Component, PropTypes } from 'react';
 /* Styles */
 import styles from './styles/'
 
-
-/* Helpers */
-import cardUtils from '/home/krirken/projects/react-solitaire/src/constants/cardUtils'
-
 /* Co-Components */
-
-
 import DealArea from '/home/krirken/projects/react-solitaire/src/components/DealArea/'
 import AceArea from '/home/krirken/projects/react-solitaire/src/components/AceArea/'
 import Card from '/home/krirken/projects/react-solitaire/src/components/Card/'
