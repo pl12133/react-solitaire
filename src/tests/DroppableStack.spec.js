@@ -21,6 +21,10 @@ describe('DroppableStack', () => {
         renderer = TestUtils.createRenderer();
         renderer.render(<DroppableStack stackName={'ACE-1'} 
                                         index={1}
+                                        handleBeginDragDrop={ function() {} }
+                                        getAvailableMoves={ function() {} }
+                                        moveCards={ function () {} }
+                                        flipCard={ function() {} }
                                         offsetLeft={50}>
                           <div />
                           <div />

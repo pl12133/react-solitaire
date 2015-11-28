@@ -19,6 +19,7 @@ describe('Card', () => {
     beforeEach(() => {
         renderer = TestUtils.createRenderer();
         renderer.render(<Card name={"king-of-hearts"}
+                              handleBeginDragDrop={function() {} }
                               isDragging={false}
                               flipped={false} />);
     });

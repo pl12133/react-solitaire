@@ -25,7 +25,9 @@ describe('DealArea', () => {
 
     beforeEach(() => {
         renderer = TestUtils.createRenderer();
-        renderer.render(<DealArea faceUp={[]}
+        renderer.render(<DealArea getAvailableMoves={ function () {} }
+                                  moveCards={ function() {} }
+                                  faceUp={[]}
                                   faceDown={[]} />);
     });
 
