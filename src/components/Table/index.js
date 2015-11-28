@@ -3,6 +3,10 @@ import React, { Component, PropTypes } from 'react';
 /* Styles */
 import styles from './styles/'
 
+
+/* Helpers */
+import cardUtils from '/home/krirken/projects/react-solitaire/src/constants/cardUtils'
+
 /* Co-Components */
 
 
@@ -30,7 +34,7 @@ class Table extends Component {
                      "handleTouchEnd", "handleTouchMove",
                      "handleDealButtonClick", "handleUndoButtonClick",
                      "handleCardFlip", "handleResize",
-                     "getAllFacingCards", "handleCardDoubleClick",
+                     "getAvailableMoves",
                      "render" ]
 
     ownFuncs.forEach((elem) => {
@@ -54,17 +58,12 @@ class Table extends Component {
     }
     return offset;
   }
-  getAllFacingCards() {
-    return Object.keys(this.refs).map((key, index) => {
-      let elem = this.refs[key];
-      let { children } = elem.props;
-      let lastChild = children[children.length - 1];
-      return lastChild;
+
+  getAvailableMoves(cardName) {
+    return Object.keys(this.refs).filter((key, index) => {
+      let stack = this.refs[key];
+      return stack.checkGoodDrop({name: cardName})
     });
-  }
-  handleCardDoubleClick(e) {
-    let facingCards = this.getAllFacingCards();
-    console.log(`Card Double Clickitty`);
   }
   handleResize(e) {
     const DEBUG_DISPLAY_DEVICE_SIZE = false;
@@ -216,6 +215,8 @@ class Table extends Component {
                         offsetLeft={offsetLeft}
                         ref={stackName}
                         handleBeginDragDrop={this.handleBeginDragDrop}
+                        getAvailableMoves={this.getAvailableMoves}
+                        moveCards={this.props.moveCards}
                         flipCard={this.handleCardFlip}>
           {stackChildren}
         </DroppableStack>
@@ -241,7 +242,6 @@ class Table extends Component {
                      offsetY={index*offsetHeight}
                      offsetX={index*offsetWidth}
                      flipped={card.flipped}
-                     onDoubleClick={this.handleCardDoubleClick}
                      key={card.name}
                      name={card.name} />
       }
@@ -321,6 +321,7 @@ class Table extends Component {
           {'Undo!'}
         </button>
         <DealArea moveCards={this.props.moveCards}
+                  getAvailableMoves={this.getAvailableMoves}
                   faceUp={dealAreaFaceUpCards}
                   faceDown={dealAreaFaceDownCards}>
         </DealArea>
