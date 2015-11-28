@@ -5,12 +5,15 @@ import styles from './styles/'
 
 const DISPLAY_NAME = '<Card>';
 const propTypes = {
+  name: PropTypes.string.isRequired,
   offsetX: PropTypes.number,
   offsetY: PropTypes.number,
   isDragging: PropTypes.bool.isRequired,
   flipped: PropTypes.bool.isRequired,
+  handleBeginDragDrop: PropTypes.func.isRequired,
   onMouseDown: PropTypes.func, // For overriding a <Cards> MouseDown handler
-  onTouchStart: PropTypes.func // For overriding a <Cards> TouchStart handler
+  onTouchStart: PropTypes.func, // For overriding a <Cards> TouchStart handler
+  onDoubleClick: PropTypes.func
 }
 
 class Card extends Component {
@@ -62,7 +65,7 @@ class Card extends Component {
                        left: (offsetX || 0) + 'px'} }
                      onMouseDown={this.props.onMouseDown || this.handleMouseDown}
                      onTouchStart={this.props.onTouchStart || this.handleTouchStart}
-                     onDoubleClick={this.props.onDoubleClick || this.handleDoubleClick} >
+                     onDoubleClick={this.props.onDoubleClick} >
       </div>
     )
   }
