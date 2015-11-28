@@ -2,14 +2,25 @@ import React, { Component, PropTypes } from 'react';
 /* Styles */
 import styles from './styles/'
 
+import cardUtils from '/home/krirken/projects/react-solitaire/src/constants/cardUtils'
 const DISPLAY_NAME = '<DroppableStack>';
+
+const propTypes = {
+  stackName: PropTypes.string.isRequired,
+  index: PropTypes.number,
+  distance: PropTypes.number,
+  offsetLeft: PropTypes.number,
+  handleBeginDragDrop: PropTypes.func.isRequired,
+  getAvailableMoves: PropTypes.func.isRequired,
+  moveCards: PropTypes.func.isRequired,
+  flipCard: PropTypes.func.isRequired,
+}
 
 class DroppableStack extends Component {
   constructor(props) {
     super(props);
     let ownFuncs = [ "checkGoodDrop", "handleStackDrop", "handleAceDrop",
-                     "handleMouseDown", "handleTouchStart",
-                     "getCardColor", "getCardValue", "getCardSuit" ]
+                     "handleMouseDown", "handleTouchStart", "handleDoubleClick" ];
     ownFuncs.forEach((elem) => {
       if (!this[elem]) {
         console.error(`Attempt to self-bind \'${elem}\' to ${DISPLAY_NAME} failed`);
@@ -21,58 +32,16 @@ class DroppableStack extends Component {
     this.width = 75;
   }
   
-  getCardSuit(card) {
-    let { name } = card;
-    let suit = name.substr(name.lastIndexOf('-') + 1);
-    return suit;
-
-  }
-  getCardColor(card) {
-    let { name } = card;
-    let suit = name.substr(name.lastIndexOf('-') + 1);
-    switch (suit) {
-      case 'hearts':
-      case 'diamonds':
-        return 'red';
-      case 'spades':
-      case 'clubs':
-        return 'black';
-
-      default:
-        return 'blank';
-    }
-  }
-  getCardValue(card) {
-    let { name } = card;
-    let value = name.substr(0, name.indexOf('-'))
-    switch (value) {
-      case 'ace': return 1;
-      case 'two': return 2;
-      case 'three': return 3;
-      case 'four': return 4;
-      case 'five': return 5;
-      case 'six': return 6;
-      case 'seven': return 7;
-      case 'eight': return 8;
-      case 'nine': return 9;
-      case 'ten': return 10;
-      case 'jack': return 11;
-      case 'queen': return 12;
-      case 'king': return 13;
-
-      default: return -1;
-    }
-  }
   handleAceDrop(card) {
     let { name } = card;
     let numChildren = this.props.children.length;
-    let cardValue = this.getCardValue(card);
-    let cardSuit = this.getCardSuit(card);
+    let cardValue = cardUtils.getCardValue(card);
+    let cardSuit = cardUtils.getCardSuit(card);
 
     if (cardValue === (numChildren + 1)) {
       if (numChildren > 0) {
         let firstChild = this.props.children[0];
-        let stackSuit = this.getCardSuit({name: firstChild.props.name});
+        let stackSuit = cardUtils.getCardSuit({name: firstChild.props.name});
         return (stackSuit === cardSuit)
       } else {
         return (cardValue === 1);
@@ -84,15 +53,15 @@ class DroppableStack extends Component {
   handleStackDrop(card) {
     let { name } = card;
     let numChildren = this.props.children.length;
-    let cardValue = this.getCardValue(card);
-    let cardColor = this.getCardColor(card);
+    let cardValue = cardUtils.getCardValue(card);
+    let cardColor = cardUtils.getCardColor(card);
 
     if (numChildren > 0) {
       let { children } = this.props;
       let lastChild = children[children.length - 1];
       let stackCard = {name: lastChild.props.name};
-      let stackValue = this.getCardValue(stackCard);
-      let stackColor = this.getCardColor(stackCard);
+      let stackValue = cardUtils.getCardValue(stackCard);
+      let stackColor = cardUtils.getCardColor(stackCard);
 
       return ((stackColor !== cardColor) && (stackValue === (cardValue + 1)))
     } else {
@@ -153,6 +122,28 @@ class DroppableStack extends Component {
       clickedChild.handleMouseDown(e);
     }
   }
+  handleDoubleClick(e, childIndex) {
+    e.preventDefault();
+    let clickedCardName = e.target.id;
+    let canMoveTo = this.props.getAvailableMoves(clickedCardName);
+    let { children } = this.props;
+    let stackBelowClicked = [];
+    for (let index = childIndex, len = children.length; index < len; ++index) {
+      let refName = 'child-' + index;
+      let child = this.refs[refName];
+      if (child.isFlipped())
+        return;
+
+      stackBelowClicked.push({
+        name: child.props.name,
+        flipped: false
+      });
+    }
+    if (canMoveTo.length > 0) {
+      let { moveCards } = this.props;
+      moveCards(stackBelowClicked, canMoveTo[0]);
+    }
+  }
   render() {
     let { offsetLeft = 0, index = 1 } = this.props;
     index -= 1; 
@@ -160,10 +151,16 @@ class DroppableStack extends Component {
                    offsetLeft : 
                    offsetLeft + index * (this.width + this.props.distance);
     let cardIndex = 0;
+    let fnWrap = (fn, index) => {
+      return (e) => {
+        fn(e, index);
+      }
+    }
     let children = React.Children.map(this.props.children, (child) => {
       return React.cloneElement(child, {
-        onMouseDown: ((index) => { return (e) => this.handleMouseDown(e, index) })(cardIndex),
-        onTouchStart: ((index) => { return (e) => this.handleTouchStart(e, index) })(cardIndex),
+        onMouseDown: fnWrap(this.handleMouseDown, cardIndex),
+        onTouchStart: fnWrap(this.handleTouchStart, cardIndex),
+        onDoubleClick: fnWrap(this.handleDoubleClick, cardIndex),
         ref: 'child-' + (cardIndex++)
       });
     });
@@ -177,11 +174,5 @@ class DroppableStack extends Component {
 
 }
 
-DroppableStack.propTypes = {
-  stackName: PropTypes.string.isRequired,
-  index: PropTypes.number,
-  distance: PropTypes.number,
-  offsetLeft: PropTypes.number,
-  handleBeginDragDrop: PropTypes.func
-}
+DroppableStack.propTypes = propTypes;
 export default DroppableStack;
