@@ -30,6 +30,7 @@ class Table extends Component {
                      "handleTouchEnd", "handleTouchMove",
                      "handleDealButtonClick", "handleUndoButtonClick",
                      "handleCardFlip", "handleResize",
+                     "getAllFacingCards", "handleCardDoubleClick",
                      "render" ]
 
     ownFuncs.forEach((elem) => {
@@ -45,22 +46,39 @@ class Table extends Component {
 
   getOffsetFromTable(elem) {
     let tableElem = document.getElementById('table');
-    let offset = { x: tableElem.offsetLeft, y: tableElem.offsetTop };
+    let offset = { x: tableElem.offsetLeft - tableElem.scrollLeft,
+                   y: tableElem.offsetTop - tableElem.scrollTop };
     for (let node = elem.parentNode; node.id !== 'table'; node = node.parentNode) {
       offset.x += node.offsetLeft;
       offset.y += node.offsetTop;
     }
     return offset;
   }
+  getAllFacingCards() {
+    return Object.keys(this.refs).map((key, index) => {
+      let elem = this.refs[key];
+      let { children } = elem.props;
+      let lastChild = children[children.length - 1];
+      return lastChild;
+    });
+  }
+  handleCardDoubleClick(e) {
+    let facingCards = this.getAllFacingCards();
+    console.log(`Card Double Clickitty`);
+  }
   handleResize(e) {
-    //console.log('Resized Fire');
+    const DEBUG_DISPLAY_DEVICE_SIZE = false;
+    if (DEBUG_DISPLAY_DEVICE_SIZE) {
+      let width = document.body.clientWidth;
+      let height = document.body.clientHeight;
+      alert(`(height x width): ${height} x ${width}`);
+    }
     this.setState(Object.assign({}, this.state, {
         width: document.getElementById('table').clientWidth 
       })
     );
   }
   handleUndoButtonClick(e) {
-    console.log('Undoing!!');
     let { undoMove } = this.props;
     undoMove();
   }
@@ -100,7 +118,7 @@ class Table extends Component {
   handleEndDragDrop(e) {
     let { endDrag, dragdrop } = this.props;
     let { dragNodes, dragCards } = dragdrop;
-    let { clientX, clientY } = e;
+    let { pageX, pageY } = e;
     let tableDroppables = [].slice.call(document.querySelectorAll('#table > .droppable'));
     let aceDroppables = [].slice.call(document.querySelectorAll('#aceArea > .droppable'));
 
@@ -116,7 +134,7 @@ class Table extends Component {
         let top = elem.offsetTop + offset.y;
         if (pointInsideRect(left, top,
                             elem.offsetWidth, elem.offsetHeight,
-                            clientX, clientY)) {
+                            pageX, pageY)) {
           // Collision, check if drop is acceptable
           let toStack = stackName + '-' + (index+1);
           let droppedOn = this.refs[toStack];
@@ -150,8 +168,8 @@ class Table extends Component {
       // Snap back if not dropped
       let { dragOrigins } = dragdrop;
       dragNodes.forEach((node, index) => {
-        node.style.left = dragOrigins[index].x;
-        node.style.top = dragOrigins[index].y;
+        node.style.left = dragOrigins[index].x + 'px';
+        node.style.top = dragOrigins[index].y + 'px';
       });
     }
 
@@ -165,11 +183,11 @@ class Table extends Component {
   handleMouseMove(e) {
     let { isDragging, dragNodes } = this.props.dragdrop;
     if (isDragging) {
-      let { clientX, clientY } = e;
+      let { pageX, pageY } = e;
       dragNodes.forEach((node,index) => {
         let offset = this.getOffsetFromTable(node);
-        let elemLeft = clientX - offset.x;
-        let elemTop = clientY - offset.y;
+        let elemLeft = pageX - offset.x;
+        let elemTop = pageY - offset.y;
         let off = { x: elemLeft - (node.offsetWidth / 2),
                     y: (elemTop - (node.offsetHeight / 2)) + index * CARD_Y_DISTANCE};
         node.style.left = off.x + 'px';
@@ -223,6 +241,7 @@ class Table extends Component {
                      offsetY={index*offsetHeight}
                      offsetX={index*offsetWidth}
                      flipped={card.flipped}
+                     onDoubleClick={this.handleCardDoubleClick}
                      key={card.name}
                      name={card.name} />
       }
@@ -268,8 +287,8 @@ class Table extends Component {
   render() {
     // calculations
     let tableWidth = this.state.width || 800;
-    let offsetLeft = parseInt(tableWidth * .08);     // 8% of table;
-    let cardXDistance = parseInt(tableWidth * .05);  // 2% of table;
+    let offsetLeft = parseInt(tableWidth * .08);
+    let cardXDistance = parseInt(tableWidth * .03);
 
     // renderables
     let sevenDroppableStacks = this.createRow('STACK', 7, 0, CARD_Y_DISTANCE, cardXDistance, offsetLeft);
