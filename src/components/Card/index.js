@@ -45,7 +45,6 @@ class Card extends Component {
     e.preventDefault();
     e.stopPropagation();
     let touchObj = e.changedTouches[0];
-    //console.log('Card Touche: ', e);
     if (touchObj) {
       this.handleMouseDown(touchObj);
     }

@@ -60,9 +60,6 @@ class DealArea extends Component {
     let { getAvailableMoves } = this.props;
     let clickedCardName = e.target.id;
     let canMoveTo = getAvailableMoves(clickedCardName);
-    canMoveTo.forEach((elem, index) => {
-      console.log(clickedCardName + ' can move to ' + elem);
-    });
     if (canMoveTo.length > 0) {
       let { moveCards } = this.props;
       moveCards([{
@@ -135,7 +132,6 @@ class DealArea extends Component {
             ref: 'child-' + (index++)
           });
         }
-        console.log('Hooking MouseDown onto child ', child);
         return React.cloneElement(child, {
           onMouseDown: this.handleMouseDown,
           onTouchStart: this.handleTouchStart,
