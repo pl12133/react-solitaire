@@ -1,9 +1,12 @@
 var path = require('path');
 var webpack = require('webpack');
 
+var host = process.env.HOST || 'localhost';
+var port = process.env.PORT || '8080';
+
 module.exports = {
   entry: [
-    'webpack-dev-server/client?http://localhost:8080',
+    'webpack-dev-server/client?http://'+host+':'+port,
     './src/index'
   ],
   output: {
