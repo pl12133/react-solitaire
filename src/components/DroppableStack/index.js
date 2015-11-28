@@ -122,6 +122,7 @@ class DroppableStack extends Component {
     }
   }
   handleTouchTap(e, childIndex) {
+    e.preventDefault();
     this.handleDoubleClick(e, childIndex);
   }
   handleDoubleClick(e, childIndex) {

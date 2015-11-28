@@ -27,6 +27,7 @@ class DealArea extends Component {
   componentWillReceiveProps(nextProps) {
   }
   handleTouchTap(e) {
+    e.preventDefault();
     this.handleDoubleClick(e);
   }
   handleMouseDown(e) {
@@ -84,14 +85,15 @@ class DealArea extends Component {
     let { faceUp, faceDown } = this.props;
     let faceUpHooked;
     if (!faceUp.length) {
-      faceDownHooked = [];
+      faceUpHooked = [];
     } else {
       let len = faceUp.length;
-      let index = len % 3;
-      if (index) {
-        // Round length to the nearest multiple of three
-        len += index;
-      }
+      let index = 0;
+//      let index = len % 3;
+//      if (index) {
+//        // Round length to the nearest multiple of three
+//        len += index;
+//      }
 
       faceUpHooked = React.Children.map(faceUp, (child) => {
         // Add refs to all children and an onMouseDown handler to the last child

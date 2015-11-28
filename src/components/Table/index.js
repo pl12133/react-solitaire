@@ -90,6 +90,7 @@ class Table extends Component {
   }
   
   handleTouchMove(e) {
+    e.preventDefault();
     let touchObj = e.changedTouches[0];
     if (touchObj) {
       this.handleMouseMove(touchObj);
