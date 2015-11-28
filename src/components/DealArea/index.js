@@ -38,7 +38,7 @@ class DealArea extends Component {
     if (lastChild.isFlipped()) {
       // If the card is face down, flip the top three cards off the stack and move to FACEUP
       let { moveCards } = this.props;
-      let toMove = children.slice(-FLIP_AT_A_TIME).map((card) => {
+      let toMove = children.slice(-FLIP_AT_A_TIME).reverse().map((card) => {
         return { 
           name: card.props.name,
           flipped: false
@@ -61,7 +61,6 @@ class DealArea extends Component {
   render() {
     let { faceUp, faceDown } = this.props;
     let faceUpHooked;
-    let faceDownHooked;
     if (!faceUp.length) {
       faceDownHooked = [];
     } else {
@@ -100,6 +99,7 @@ class DealArea extends Component {
         }
       });
     }
+    let faceDownHooked;
     if (!faceDown.length) {
       faceDownHooked = <div className={'reset'}
                             onMouseDown={this.handleMouseDown}
