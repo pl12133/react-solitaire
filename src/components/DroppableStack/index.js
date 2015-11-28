@@ -45,7 +45,6 @@ class DroppableStack extends Component {
   getCardValue(card) {
     let { name } = card;
     let value = name.substr(0, name.indexOf('-'))
-    //console.log(`Getting Card Value of ${name}: ${value}`);
     switch (value) {
       case 'ace': return 1;
       case 'two': return 2;
@@ -70,7 +69,6 @@ class DroppableStack extends Component {
     let cardValue = this.getCardValue(card);
     let cardSuit = this.getCardSuit(card);
 
-    //console.log(`!ACE DROP! Value of ${name} = ${cardValue} and ${cardSuit}`);
     if (cardValue === (numChildren + 1)) {
       if (numChildren > 0) {
         let firstChild = this.props.children[0];
@@ -89,7 +87,6 @@ class DroppableStack extends Component {
     let cardValue = this.getCardValue(card);
     let cardColor = this.getCardColor(card);
 
-    //console.log(`!STACK DROP! Value of ${name} = ${cardValue} and ${cardColor}`);
     if (numChildren > 0) {
       let { children } = this.props;
       let lastChild = children[children.length - 1];
@@ -123,15 +120,12 @@ class DroppableStack extends Component {
       let lastChild = 'child-' + (newChildren.length-1);
       let child = this.refs[lastChild];
       if (child && child.isFlipped()) {
-        //let { stackName } = this.props;
-        //console.log(`Flipping on: ${stackName}`);
         let { stackName, flipCard } = this.props;
         flipCard({
           name: child.props.name,
           location: stackName,
           flipped: child.isFlipped()
         });
-        //child.flip();
       }
     }
 
@@ -151,14 +145,9 @@ class DroppableStack extends Component {
       let refName = 'child-' + index;
       stackBelowClicked.push(this.refs[refName]);
     }
-    stackBelowClicked.forEach((elem) => {
-      console.log(`Below Clicked: ${elem.props.name}`);
-    });
     if (stackBelowClicked.length > 1) {
       let { handleBeginDragDrop } = this.props;
       handleBeginDragDrop(e, stackBelowClicked);
-      console.log(`Starting Multidrag`);
-
     } else if (stackBelowClicked.length === 1) {
       let clickedChild = stackBelowClicked[0];
       clickedChild.handleMouseDown(e);
