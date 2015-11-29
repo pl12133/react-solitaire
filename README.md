@@ -25,3 +25,5 @@ Start:
     npm start
 
 Play!
+
+All content Copyright Peter Lenahan 2015, Licensed under Apache 2.0
