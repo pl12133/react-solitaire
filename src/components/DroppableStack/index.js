@@ -10,6 +10,8 @@ const propTypes = {
   index: PropTypes.number,
   distance: PropTypes.number,
   offsetLeft: PropTypes.number,
+  offsetWidth: PropTypes.number,
+  offsetHeight: PropTypes.number,
   handleBeginDragDrop: PropTypes.func.isRequired,
   getAvailableMoves: PropTypes.func.isRequired,
   moveCards: PropTypes.func.isRequired,
@@ -29,7 +31,6 @@ class DroppableStack extends Component {
       this[elem] = this[elem].bind(this);
     })
 
-    this.width = 75;
   }
   
   handleAceDrop(card) {
@@ -148,11 +149,11 @@ class DroppableStack extends Component {
     }
   }
   render() {
-    let { offsetLeft = 0, index = 1 } = this.props;
+    let { offsetLeft = 0, index = 1, stackName, offsetHeight, offsetWidth, distance } = this.props;
     index -= 1; 
     let offset = (index === 0) ?
                    offsetLeft : 
-                   offsetLeft + index * (this.width + this.props.distance);
+                   offsetLeft + index * (offsetWidth + distance);
     let cardIndex = 0;
     let fnWrap = (fn, index) => {
       return (e) => {
@@ -168,9 +169,15 @@ class DroppableStack extends Component {
         ref: 'child-' + (cardIndex++)
       });
     });
+    let numChildren = children.length;
+
+    if (stackName.indexOf('STACK') >= 0)
+      offsetHeight += (numChildren > 2) ? (numChildren - 2) * 15 : 0;
     return (
       <div className={'droppable ' + styles}
-           style={{left: offset + "px"}} >
+           style={{height: offsetHeight + 'px',
+                   width: offsetWidth + 'px',
+                   left: offset + "px"}} >
         {children}
       </div>
     )
