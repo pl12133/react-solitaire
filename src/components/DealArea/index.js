@@ -82,7 +82,7 @@ class DealArea extends Component {
     }
   }
   render() {
-    let { faceUp, faceDown } = this.props;
+    let { faceUp, faceDown, offsetWidth, offsetHeight } = this.props;
     let faceUpHooked;
     if (!faceUp.length) {
       faceUpHooked = [];
@@ -105,20 +105,20 @@ class DealArea extends Component {
         switch (thisIndex) {
           case len - 2:
             return React.cloneElement(child, {
-              offsetX: 15,
+              offsetLeft: 15,
               onMouseDown: (e) => false,
               onTouchStart: (e) => false
             });
           case len - 1:
             return React.cloneElement(child, {
-              offsetX: 30,
+              offsetLeft: 30,
               onDoubleClick: this.handleDoubleClick,
               onTouchTap: this.handleTouchTap
             });
           
           default:
             return React.cloneElement(child, {
-              offsetX: 0,
+              offsetLeft: 0,
               onMouseDown: (e) => false,
               onTouchStart: (e) => false
             });
@@ -146,12 +146,18 @@ class DealArea extends Component {
         });
       });
     }
+    let leftOffsetWidth = (faceDownHooked.length) ? offsetWidth + 'px'
+                                                  : '50%';
     return (
       <div className={styles}>
-        <span id={'left'}>
+        <span id={'left'}
+              style={ {width: leftOffsetWidth,
+                       height: offsetHeight + 'px' } }>
           {faceDownHooked}
         </span>
-        <span id={'right'}>
+        <span id={'right'}
+              style={ {width: offsetWidth + 'px',
+                       height: offsetHeight + 'px' } }>
           {faceUpHooked}
         </span>
       </div>
