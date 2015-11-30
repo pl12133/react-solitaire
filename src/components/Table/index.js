@@ -33,7 +33,7 @@ class Table extends Component {
                      "handleTouchEnd", "handleTouchMove",
                      "handleDealButtonClick", "handleUndoButtonClick",
                      "handleCardFlip", "handleResize",
-                     "getAvailableMoves",
+                     "getAvailableMoves", "getCardDimensions",
                      "render" ]
 
     ownFuncs.forEach((elem) => {
@@ -202,17 +202,19 @@ class Table extends Component {
     let { flipCard } = this.props;
     flipCard(card)
   }
-  createRow(namePrefix, numCols, cardsXOffset, cardsYOffset, stackDistance, offsetLeft) {
+  createRow(namePrefix, numCols, cardsXOffset, cardsYOffset, stackDistance, offsetLeft, offsetWidth, offsetHeight) {
     let row = [];
     for (let index = 0; index < numCols; ++index) {
       let stackName = namePrefix + '-' + (index+1);
-      let stackChildren = this.cardSlice(stackName, cardsXOffset, cardsYOffset);
+      let stackChildren = this.cardSlice(stackName, cardsXOffset, cardsYOffset, offsetWidth, offsetHeight);
       row.push(
         <DroppableStack key={stackName}
                         stackName={stackName}
                         index={index+1}
                         distance={stackDistance}
                         offsetLeft={offsetLeft}
+                        offsetWidth={offsetWidth}
+                        offsetHeight={offsetHeight}
                         ref={stackName}
                         handleBeginDragDrop={this.handleBeginDragDrop}
                         getAvailableMoves={this.getAvailableMoves}
@@ -234,13 +236,15 @@ class Table extends Component {
     return locationFilter(location);
   }
 
-  cardSlice(location, offsetX = 0, offsetY = 0) {
-    let cardMap = (offsetWidth = 0, offsetHeight = 0) => {
+  cardSlice(location, offsetLeft = 0, offsetTop = 0, offsetWidth = 0, offsetHeight = 0) {
+    let cardMap = (offsetLeft = 0, offsetTop = 0, offsetWidth = 0, offsetHeight = 0) => {
       return (card, index) => {
         return <Card isDragging={this.props.dragdrop.isDragging}
                      handleBeginDragDrop={this.handleBeginDragDrop}
-                     offsetY={index*offsetHeight}
-                     offsetX={index*offsetWidth}
+                     offsetLeft={index*offsetLeft}
+                     offsetTop={index*offsetTop}
+                     offsetWidth={offsetWidth}
+                     offsetHeight={offsetHeight}
                      flipped={card.flipped}
                      key={card.name}
                      name={card.name} />
@@ -249,7 +253,7 @@ class Table extends Component {
     let { cards } = this.props;
     return cards
       .filter(this.cardLocate(location))
-      .map(cardMap(offsetX, offsetY));
+      .map(cardMap(offsetLeft, offsetTop, offsetWidth, offsetHeight));
   }
 
   dealCards() {
@@ -284,17 +288,63 @@ class Table extends Component {
       this.setState(Object.assign({}, this.state, { redeal: false }));
     }
   }
+  getCardDimensions(tableWidth) {
+    const CARD_WIDTH = 222.77;
+    const CARD_HEIGHT = 323.551;
+    const ASPECT = CARD_WIDTH / CARD_HEIGHT;
+    const SCALE_TEST = Math.floor(tableWidth / 100);
+    let scale;
+    switch (SCALE_TEST) {
+      case 18:
+        scale = 2/3;
+        break;
+      case 17:
+      case 16:
+      case 15:
+      case 14:
+        scale = 1/2;
+        break;
+      case 13:
+      case 12:
+      case 11:
+      case 10:
+        scale = 1/2;
+        break;
+      case 9:
+      case 8:
+        scale = 1/3;
+        break;
+      case 7:
+      case 6:
+      case 5:
+        scale = 1/4;
+        break;
+      case 4:
+      case 3:
+        scale = 1/5;
+        break;
+
+      default:
+        scale = 1/2;
+        break;
+    }
+    let offsetWidth = CARD_WIDTH * scale;
+    let offsetHeight = CARD_HEIGHT * scale;
+
+    return { offsetWidth, offsetHeight };
+  }
   render() {
     // calculations
     let tableWidth = this.state.width || 800;
     let offsetLeft = parseInt(tableWidth * .08);
-    let cardXDistance = parseInt(tableWidth * .03);
+    let { offsetWidth: droppableWidth, offsetHeight: droppableHeight } = this.getCardDimensions(tableWidth);
+    let distanceBetweenStacks = parseInt(tableWidth * .03);
 
     // renderables
-    let sevenDroppableStacks = this.createRow('STACK', 7, 0, CARD_Y_DISTANCE, cardXDistance, offsetLeft);
-    let aceDroppableStacks = this.createRow('ACE', 4, 0, 0, cardXDistance / 4, offsetLeft / 2);
-    let dealAreaFaceDownCards = this.cardSlice('DEAL-AREA-FACEDOWN', 4, 0);
-    let dealAreaFaceUpCards = this.cardSlice('DEAL-AREA-FACEUP', 4, 0);
+    let sevenDroppableStacks = this.createRow('STACK', 7, 0, CARD_Y_DISTANCE, distanceBetweenStacks, offsetLeft, droppableWidth, droppableHeight);
+    let aceDroppableStacks = this.createRow('ACE', 4, 0, 0, distanceBetweenStacks / 4, offsetLeft / 2, droppableWidth, droppableHeight);
+    let dealAreaFaceDownCards = this.cardSlice('DEAL-AREA-FACEDOWN', 4, 0, droppableWidth, droppableHeight);
+    let dealAreaFaceUpCards = this.cardSlice('DEAL-AREA-FACEUP', 4, 0, droppableWidth, droppableHeight);
     let tableCards = this.cardSlice('TABLE');
 
     // win condition, terribly placed
@@ -322,6 +372,8 @@ class Table extends Component {
         </button>
         <DealArea moveCards={this.props.moveCards}
                   getAvailableMoves={this.getAvailableMoves}
+                  offsetWidth={droppableWidth}
+                  offsetHeight={droppableHeight}
                   faceUp={dealAreaFaceUpCards}
                   faceDown={dealAreaFaceDownCards}>
         </DealArea>
