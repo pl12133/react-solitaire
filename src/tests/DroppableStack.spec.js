@@ -25,7 +25,9 @@ describe('DroppableStack', () => {
                                         getAvailableMoves={ function() {} }
                                         moveCards={ function () {} }
                                         flipCard={ function() {} }
-                                        offsetLeft={50}>
+                                        offsetLeft={50}
+                                        offsetWidth={100}
+                                        offsetHeight={100}>
                           <div />
                           <div />
                         </DroppableStack>
@@ -40,10 +42,12 @@ describe('DroppableStack', () => {
         let result = renderer.getRenderOutput();
         return expect(TestUtils.isElement(result), 'to be ok');
     });
-    it('should render with \'left:50\'', () => {
+    it('should render with its offsetLeft, offsetWidth, and offsetHeight', () => {
         let result = renderer.getRenderOutput();
         return expect(renderer, 'to have rendered', 
-            <div style={ {left: '50px'} }>
+            <div style={ {width: '100px',
+                          height: '100px',
+                          left: '50px'} }>
               <div />
               <div />
             </div>
