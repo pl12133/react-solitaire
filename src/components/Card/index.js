@@ -6,8 +6,10 @@ import styles from './styles/'
 const DISPLAY_NAME = '<Card>';
 const propTypes = {
   name: PropTypes.string.isRequired,
-  offsetX: PropTypes.number,
-  offsetY: PropTypes.number,
+  offsetLeft: PropTypes.number,
+  offsetTop: PropTypes.number,
+  offsetWidth: PropTypes.number.isRequired,
+  offsetHeight: PropTypes.number.isRequired,
   isDragging: PropTypes.bool.isRequired,
   flipped: PropTypes.bool.isRequired,
   handleBeginDragDrop: PropTypes.func.isRequired,
@@ -51,14 +53,21 @@ class Card extends Component {
   }
 
   render() {
-    let { name, flipped, offsetX, offsetY } = this.props;
+    let { name,
+          flipped,
+          offsetLeft = 0,
+          offsetTop = 0,
+          offsetWidth = 0,
+          offsetHeight = 0 } = this.props;
     return (
       <div id={name} className={(flipped) ? styles : ""}
                      style={ {
                        zIndex: 10,
                        position: 'absolute',
-                       top: (offsetY || 0) + 'px',
-                       left: (offsetX || 0) + 'px'} }
+                       width: offsetWidth + 'px',
+                       height: offsetHeight + 'px',
+                       top: offsetTop + 'px',
+                       left: offsetLeft + 'px'} }
                      onMouseDown={this.props.onMouseDown || this.handleMouseDown}
                      onTouchStart={this.props.onTouchStart || this.handleTouchStart}
                      onTouchTap={this.props.onTouchTap}
