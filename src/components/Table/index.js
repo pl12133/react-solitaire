@@ -142,6 +142,11 @@ class Table extends Component {
             flipped: false
           }
           if (droppedOn.checkGoodDrop(testCard)) {
+            
+            if ((toStack.indexOf('ACE') >= 0) && (dragCards.length > 1)) {
+              //Don't move if player tries to drop more than 1 card on an ACE stack
+              return false;
+            }
             //Successful drop!
             let { moveCards } = this.props;
             let toMove = dragCards.map((card) => {
