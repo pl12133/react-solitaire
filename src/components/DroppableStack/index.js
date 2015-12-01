@@ -22,7 +22,7 @@ class DroppableStack extends Component {
   constructor(props) {
     super(props);
     let ownFuncs = [ "checkGoodDrop", "handleStackDrop", "handleAceDrop", "handleTouchTap",
-                     "handleMouseDown", "handleTouchStart", "handleDoubleClick" ];
+                     "shouldComponentUpdate", "handleMouseDown", "handleTouchStart", "handleDoubleClick" ];
     ownFuncs.forEach((elem) => {
       if (!this[elem]) {
         console.error(`Attempt to self-bind \'${elem}\' to ${DISPLAY_NAME} failed`);
@@ -69,16 +69,24 @@ class DroppableStack extends Component {
       return (cardValue === 13)
     }
   }
-  checkGoodDrop(card) {
+  checkGoodDrop(cards, numCards) {
     // This is called when there is a drop on this droppable from <Table>
     // return true to accept the drop, false to rejct it
     let { stackName } = this.props;
     if (stackName.indexOf('ACE') >= 0) {
-      return this.handleAceDrop(card);
+      if (numCards > 1)
+        return false;
+
+      return this.handleAceDrop(cards);
     }
     if (stackName.indexOf('STACK') >= 0) {
-      return this.handleStackDrop(card);
+      return this.handleStackDrop(cards);
     }
+  }
+  shouldComponentUpdate(nextProps, nextState) {
+    let { children: oldChildren } = this.props;
+    let { children: newChildren } = nextProps;
+    return ((oldChildren.length !== newChildren.length) || (this.props.offsetWidth !== nextProps.offsetWidth) || (oldChildren[oldChildren.length - 1] !== newChildren[newChildren.length - 1]));
   }
   componentWillReceiveProps(nextProps) {
     // When receiving new props, if the facing card is face down,
@@ -89,12 +97,13 @@ class DroppableStack extends Component {
     if ((newChildren.length > 0) && (newChildren.length < oldChildren.length)) {
       let lastChild = 'child-' + (newChildren.length-1);
       let child = this.refs[lastChild];
-      if (child && child.isFlipped()) {
+      if (child && child.props.flipped) {
+        let { flipped, name } = child.props;
         let { stackName, flipCard } = this.props;
         flipCard({
-          name: child.props.name,
-          location: stackName,
-          flipped: child.isFlipped()
+          name,
+          flipped,
+          location: stackName
         });
       }
     }
@@ -129,21 +138,23 @@ class DroppableStack extends Component {
   handleDoubleClick(e, childIndex) {
     e.preventDefault();
     let clickedCardName = e.target.id;
-    let canMoveTo = this.props.getAvailableMoves(clickedCardName);
     let { children } = this.props;
+    let numCardsBelowClicked = children.length - childIndex;
+    let canMoveTo = this.props.getAvailableMoves(clickedCardName, numCardsBelowClicked);
     let stackBelowClicked = [];
     for (let index = childIndex, len = children.length; index < len; ++index) {
       let refName = 'child-' + index;
       let child = this.refs[refName];
-      if (child.isFlipped())
+      let { flipped, name } = child.props;
+      if (flipped)
         return;
 
       stackBelowClicked.push({
-        name: child.props.name,
+        name,
         flipped: false
       });
     }
-    if (canMoveTo.length > 0) {
+    if (canMoveTo.length) {
       let { moveCards } = this.props;
       moveCards(stackBelowClicked, canMoveTo[0]);
     }
