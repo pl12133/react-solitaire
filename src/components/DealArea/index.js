@@ -46,12 +46,14 @@ class DealArea extends Component {
       moveCards(toMove, 'DEAL-AREA-FACEDOWN');
       return;
     }
-    if (lastChild.isFlipped()) {
+    let { flipped } = lastChild.props;
+    if (flipped) {
       // If the card is face down, flip the top three cards off the stack and move to FACEUP
       let { moveCards } = this.props;
       let toMove = children.slice(-FLIP_AT_A_TIME).reverse().map((card) => {
+        let { name } = card.props;
         return { 
-          name: card.props.name,
+          name,
           flipped: false
         };
       });
@@ -64,8 +66,8 @@ class DealArea extends Component {
   handleDoubleClick(e) {
     let { getAvailableMoves } = this.props;
     let clickedCardName = e.target.id;
-    let canMoveTo = getAvailableMoves(clickedCardName);
-    if (canMoveTo.length > 0) {
+    let canMoveTo = getAvailableMoves(clickedCardName, 1);
+    if (canMoveTo.length) {
       let { moveCards } = this.props;
       moveCards([{
         name: clickedCardName,
@@ -89,12 +91,6 @@ class DealArea extends Component {
     } else {
       let len = faceUp.length;
       let index = 0;
-//      let index = len % 3;
-//      if (index) {
-//        // Round length to the nearest multiple of three
-//        len += index;
-//      }
-
       faceUpHooked = React.Children.map(faceUp, (child) => {
         // Add refs to all children and an onMouseDown handler to the last child
         // Disable mouseDown on all cards except the top one
