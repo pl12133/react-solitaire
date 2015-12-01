@@ -33,7 +33,7 @@ class Table extends Component {
                      "handleTouchEnd", "handleTouchMove",
                      "handleDealButtonClick", "handleUndoButtonClick",
                      "handleCardFlip", "handleResize",
-                     "getAvailableMoves", "getCardDimensions",
+                     "getAvailableMoves", "getCardDimensions", "checkGameWon",
                      "render" ]
 
     ownFuncs.forEach((elem) => {
@@ -58,10 +58,10 @@ class Table extends Component {
     return offset;
   }
 
-  getAvailableMoves(cardName) {
+  getAvailableMoves(cardName, numCards) {
     return Object.keys(this.refs).filter((key, index) => {
       let stack = this.refs[key];
-      return stack.checkGoodDrop({name: cardName})
+      return stack.checkGoodDrop({name: cardName}, numCards)
     });
   }
   handleResize(e) {
@@ -90,10 +90,13 @@ class Table extends Component {
   }
   
   handleTouchMove(e) {
-    e.preventDefault();
-    let touchObj = e.changedTouches[0];
-    if (touchObj) {
-      this.handleMouseMove(touchObj);
+    let { isDragging } = this.props.dragdrop;
+    if (isDragging) {
+      e.preventDefault();
+      let touchObj = e.changedTouches[0];
+      if (touchObj) {
+        this.handleMouseMove(touchObj);
+      }
     }
   }
   handleTouchEnd(e) {
@@ -108,7 +111,7 @@ class Table extends Component {
       console.error('Invalid Cards Array! ', cards);
       return;
     }
-    let isFlipped = cards[0].isFlipped(); // Don't drag face down cards
+    let isFlipped = cards[0].props.flipped; // Don't drag face down cards
     if (!isDragging && !isFlipped) {
       let { beginDrag } = this.props;
       beginDrag(cards);
@@ -138,19 +141,13 @@ class Table extends Component {
           let toStack = stackName + '-' + (index+1);
           let droppedOn = this.refs[toStack];
           let testCard = {
-            name: dragCards[0].props.name,
-            flipped: false
+              name: dragCards[0].props.name,
+              flipped: false
           }
-          if (droppedOn.checkGoodDrop(testCard)) {
-            
-            if ((toStack.indexOf('ACE') >= 0) && (dragCards.length > 1)) {
-              //Don't move if player tries to drop more than 1 card on an ACE stack
-              return false;
-            }
+          if (droppedOn.checkGoodDrop(testCard, dragCards.length)) {
             //Successful drop!
             let { moveCards } = this.props;
             let toMove = dragCards.map((card) => {
-            //dragCards.forEach((card) => {
               let dropCard = {
                 name: card.props.name,
                 flipped: false
@@ -268,6 +265,15 @@ class Table extends Component {
       width: document.getElementById('table').clientWidth 
     });
   }
+  checkGameWon() {
+    // win condition, terribly placed
+    let { cards } = this.props;
+    let allAceChildren = cards.filter((elem) => {
+      if (!elem) return false;
+      return (elem.location.indexOf('ACE') >= 0);
+    });
+    return (allAceChildren.length === 52)
+  }
 
   componentDidMount() {
     this.dealCards();
@@ -275,6 +281,9 @@ class Table extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    if (this.checkGameWon()) {
+      alert('You Won!');
+    }
     if (this.state.redeal) {
       let { moveCards, cards } = this.props;
       let count = 0;
@@ -352,14 +361,6 @@ class Table extends Component {
     let dealAreaFaceUpCards = this.cardSlice('DEAL-AREA-FACEUP', 4, 0, droppableWidth, droppableHeight);
     let tableCards = this.cardSlice('TABLE');
 
-    // win condition, terribly placed
-    let allAceChildren = this.props.cards.filter((elem) => {
-      if (!elem) return false;
-      return (elem.location.indexOf('ACE') >= 0);
-    });
-    if (allAceChildren.length === 52) {
-      alert('You Win!!');
-    }
 
     return (
       <div id={'table'} className={styles}
