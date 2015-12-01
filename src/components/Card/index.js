@@ -22,7 +22,7 @@ const propTypes = {
 class Card extends Component {
   constructor(props) {
     super(props);
-    let ownFuncs = [ "handleMouseDown", "isFlipped", "handleTouchStart", "render" ]
+    let ownFuncs = [ "handleMouseDown", "handleTouchStart", "render" ]
     ownFuncs.forEach((elem) => {
       if (!this[elem]) {
         console.error(`Attempt to self-bind \'${elem}\' to ${DISPLAY_NAME} failed`);
@@ -32,6 +32,10 @@ class Card extends Component {
     })
 
     //this.state = { toggleFlip: false }
+  }
+  shouldComponentUpdate(nextProps, nextState) {
+    let { props: currentProps } = this;
+    return ((currentProps.offsetWidth !== nextProps.offsetWidth) || (currentProps.flipped !== nextProps.flipped) || (currentProps.onMouseDown !== nextProps.onMouseDown) || (currentProps.onTouchStart !== nextProps.onTouchStart));
   }
   handleMouseDown(e) {
     let { isDragging } = this.props;
@@ -47,9 +51,6 @@ class Card extends Component {
     if (touchObj) {
       this.handleMouseDown(touchObj);
     }
-  }
-  isFlipped() {
-    return (this.props.flipped);
   }
 
   render() {
