@@ -44,13 +44,30 @@ function shuffle(array) {
     array[currentIndex] = array[randomIndex];
     array[randomIndex] = temporaryValue;
   }
+
   return array;
+}
+function deal(cards) {
+  let count = 0;
+  for (let index = 1; index <= 7; ++index) {
+    for (let innerIndex = index; innerIndex <= 7; ++innerIndex) {
+      let card = cards[count++];
+      card.flipped = (innerIndex !== index);
+      card.location = 'STACK-' + innerIndex;
+    }
+  }
+  while (count < cards.length) {
+    let card = cards[count++];
+    card.flipped = true;
+    card.location = 'DEAL-AREA-FACEDOWN';
+  }
+  return cards;
 }
 
 function card(state = initialState, action) {
   switch (action.type) {
     case SHUFFLE_CARDS:
-      return shuffle(initialState);
+      return deal(shuffle(initialState));
     case MOVE_CARDS: {
       let next = state.filter((stateCard) => {
         return !action.cards.some((card) => {
@@ -80,10 +97,12 @@ function card(state = initialState, action) {
 
 }
 
-export default undoable(card, {
+let undoConfig = {
     filter: includeAction([MOVE_CARDS]),
-    limit: 20,
+    limit: 256,
     debug: true,
     undoType: UNDO_MOVE,
     redoType: REDO_MOVE
-});
+};
+
+export default undoable(card, undoConfig);

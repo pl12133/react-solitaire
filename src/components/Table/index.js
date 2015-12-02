@@ -259,14 +259,17 @@ class Table extends Component {
   }
 
   dealCards() {
-    this.props.shuffleCards();
+    // Emit a dummy moveCards action so that UNDO can undo a shuffle.
+    // UNDO_ACTION does not work as planned here
+    let { moveCards, cards } = this.props;
+    let dummyCard = cards[cards.length - 1];
+    moveCards([dummyCard], dummyCard.location);
     this.setState({
       redeal: true,
-      width: document.getElementById('table').clientWidth 
+      width: this.state.width
     });
   }
   checkGameWon() {
-    // win condition, terribly placed
     let { cards } = this.props;
     let allAceChildren = cards.filter((elem) => {
       if (!elem) return false;
@@ -276,7 +279,10 @@ class Table extends Component {
   }
 
   componentDidMount() {
-    this.dealCards();
+    this.setState({
+      redeal: true,
+      width: document.getElementById('table').clientWidth 
+    });
     window.addEventListener('resize', this.handleResize);
   }
 
@@ -285,21 +291,11 @@ class Table extends Component {
       alert('You Won!');
     }
     if (this.state.redeal) {
-      let { moveCards, cards } = this.props;
-      let count = 0;
-      for (let index = 1; index <= 7; ++index) {
-        for (let innerIndex = index; innerIndex <= 7; ++innerIndex) {
-          let card = cards[count++];
-          card.flipped = (innerIndex !== index);
-          moveCards([card], 'STACK-' + innerIndex);
-        }
-      }
-      while (count < cards.length) {
-        let card = cards[count++];
-        card.flipped = true;
-        moveCards([card], 'DEAL-AREA-FACEDOWN');
-      }
-      this.setState(Object.assign({}, this.state, { redeal: false }));
+      let { shuffleCards } = this.props;
+      shuffleCards();
+      this.setState(Object.assign({}, this.state, {
+        redeal: false
+      }));
     }
   }
   getCardDimensions(tableWidth) {
