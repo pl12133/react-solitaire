@@ -1,7 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 
 /* Styles */
-import styles from './styles/';
+import cssStyles from './styles/';
+let cardStyle = cssStyles.styles || '';
+let unflippedStyle = cssStyles.unflipped || '';
+let flippedStyle = cssStyles.flipped || '';
+////
 
 const DISPLAY_NAME = '<Card>';
 const propTypes = {
@@ -30,12 +34,10 @@ class Card extends Component {
       }
       this[elem] = this[elem].bind(this);
     });
-
-    // this.state = { toggleFlip: false }
   }
   shouldComponentUpdate (nextProps, nextState) {
     let { props: currentProps } = this;
-    return ((currentProps.offsetWidth !== nextProps.offsetWidth) || (currentProps.flipped !== nextProps.flipped) || (currentProps.onMouseDown !== nextProps.onMouseDown) || (currentProps.onTouchStart !== nextProps.onTouchStart) || (currentProps.offsetLeft !== nextProps.offsetLft));
+    return ((currentProps.offsetWidth !== nextProps.offsetWidth) || (currentProps.flipped !== nextProps.flipped) || (currentProps.onMouseDown !== nextProps.onMouseDown) || (currentProps.onTouchStart !== nextProps.onTouchStart) || (currentProps.offsetLeft !== nextProps.offsetLeft));
   }
   handleMouseDown (e) {
     let { isDragging } = this.props;
@@ -60,8 +62,13 @@ class Card extends Component {
           offsetTop = 0,
           offsetWidth = 0,
           offsetHeight = 0 } = this.props;
+    let className = cardStyle + ' '
+    className += (flipped)
+      ? flippedStyle
+      : unflippedStyle;
+
     return (
-      <div id={name} className={(flipped) ? styles : ''}
+      <div id={name} className={className}
                      style={ {
                        zIndex: 10,
                        position: 'absolute',

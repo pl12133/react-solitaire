@@ -1,7 +1,17 @@
 /* Card styles */
 
-/* These styles display when a card is flipped */
+/* .styles are always applied to the card */
 :local(.styles) {
+  outline: black solid thick;
+}
+
+/* .unflipped for when a card is not flipped (face up)*/
+:local(.unflipped) {
+}
+
+/* .flipped for when a card is flipped (face down)*/
+:local(.flipped) {
+  /* These styles display when a card is flipped */
   background: url('/dist/cardback.jpg') no-repeat center center !important;
   background-size: cover !important;
   border-radius: 10px;
