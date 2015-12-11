@@ -52,5 +52,9 @@
     "unexpected": "^10.2.0",
     "webpack": "^1.12.3",
     "webpack-dev-server": "^1.12.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pl12133/react-solitaire.git"
   }
 }
