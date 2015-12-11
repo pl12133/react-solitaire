@@ -4,7 +4,7 @@
   "description": "A solitair game with react",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --compilers js:./src/tests/compiler.js ./src/tests/*.spec.js",
+    "test": "NODE_PATH=$PWD/src; mocha --compilers js:./src/tests/compiler.js ./src/tests/*.spec.js",
     "lint": "eslint src",
     "start": "node ./server.js",
     "prepublish": "npm run lint && npm run test"
