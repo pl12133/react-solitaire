@@ -9,7 +9,14 @@
     "start": "node ./server.js",
     "prepublish": "npm run lint && npm run test"
   },
-  "keywords": [],
+  "keywords": [
+    "react",
+    "redux",
+    "es2015",
+    "webpack",
+    "sass-node",
+    "mocha"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
