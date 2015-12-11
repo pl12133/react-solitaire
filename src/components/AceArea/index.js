@@ -1,4 +1,6 @@
+/* eslint-disable no-unused-vars*/
 import React, {Component, PropTypes } from 'react';
+/* eslint-enable no-unused-vars*/
 import styles from './styles';
 
 class AceArea extends Component {

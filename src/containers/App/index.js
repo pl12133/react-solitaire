@@ -1,4 +1,6 @@
+/* eslint-disable no-unused-vars*/
 import React, { Component } from 'react';
+/* eslint-enable no-unused-vars*/
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as cardActionCreators from 'actions/cards';

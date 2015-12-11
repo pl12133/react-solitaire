@@ -5,7 +5,9 @@
 const Unexpected = require('unexpected');
 const UnexpectedReact = require('unexpected-react');
 
+/* eslint-disable no-unused-vars*/
 var React = require('react');
+/* eslint-enable no-unused-vars*/
 var TestUtils = require('react-addons-test-utils');
 
 const Card = require('../components/Card/').default;

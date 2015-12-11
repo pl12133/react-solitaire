@@ -1,4 +1,3 @@
-
 /*
  * These tests use the shallow renderer, which is faster and doesn't require an emulated DOM
  */
@@ -6,7 +5,9 @@
 const Unexpected = require('unexpected');
 const UnexpectedReact = require('unexpected-react');
 
+/* eslint-disable no-unused-vars*/
 var React = require('react');
+/* eslint-enable no-unused-vars*/
 var TestUtils = require('react-addons-test-utils');
 
 const Table = require('../components/Table/').default;

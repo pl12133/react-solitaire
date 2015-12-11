@@ -1,4 +1,6 @@
+/* eslint-disable no-unused-vars*/
 import React, { Component, PropTypes } from 'react';
+/* eslint-enable no-unused-vars*/
 
 /* TouchTap event injection */
 import injectTapEventPlugin from 'react-tap-event-plugin';

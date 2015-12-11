@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars*/
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
@@ -6,6 +7,8 @@ import App from './containers/App/';
 
 /* redux-devtools */
 import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react';
+
+/* eslint-enable no-unused-vars*/
 
 const store = configureStore();
 
