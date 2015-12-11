@@ -5,7 +5,7 @@ import cssStyles from './styles/';
 let cardStyle = cssStyles.styles || '';
 let unflippedStyle = cssStyles.unflipped || '';
 let flippedStyle = cssStyles.flipped || '';
-////
+//
 
 const DISPLAY_NAME = '<Card>';
 const propTypes = {
@@ -62,7 +62,7 @@ class Card extends Component {
           offsetTop = 0,
           offsetWidth = 0,
           offsetHeight = 0 } = this.props;
-    let className = cardStyle + ' '
+    let className = cardStyle + ' ';
     className += (flipped)
       ? flippedStyle
       : unflippedStyle;
