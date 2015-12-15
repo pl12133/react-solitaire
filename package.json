@@ -4,6 +4,7 @@
   "description": "A solitair game with react",
   "main": "index.js",
   "scripts": {
+    "build": "webpack",
     "test": "export NODE_PATH=$PWD/src; echo $NODE_PATH; mocha --compilers js:./src/tests/compiler.js ./src/tests/*.spec.js",
     "lint": "eslint src",
     "start": "node ./server.js",
