@@ -292,68 +292,32 @@ class Table extends Component {
   }
 
   componentDidUpdate (prevProps, prevState) {
-    if (this.checkGameWon()) {
-      alert('You Won!');
-    }
     if (this.state.redeal) {
       let { shuffleCards } = this.props;
       shuffleCards();
       this.setState(Object.assign({}, this.state, {
         redeal: false
       }));
+    } else if (this.checkGameWon()) {
+      alert('You Won!');
     }
   }
-  getCardDimensions (tableWidth) {
-    const CARD_WIDTH = 222.77;
-    const CARD_HEIGHT = 323.551;
-    // const ASPECT = CARD_WIDTH / CARD_HEIGHT;
-    const SCALE_TEST = Math.floor(tableWidth / 100);
-    let scale;
-    switch (SCALE_TEST) {
-      case 18:
-        scale = 2 / 3;
-        break;
-      case 17:
-      case 16:
-      case 15:
-      case 14:
-        scale = 1 / 2;
-        break;
-      case 13:
-      case 12:
-      case 11:
-      case 10:
-        scale = 1 / 2;
-        break;
-      case 9:
-      case 8:
-        scale = 1 / 3;
-        break;
-      case 7:
-      case 6:
-      case 5:
-        scale = 1 / 4;
-        break;
-      case 4:
-      case 3:
-        scale = 1 / 5;
-        break;
-
-      default:
-        scale = 1 / 2;
-        break;
+    getCardDimensions (tableWidth) {
+      // 7.5% padding on left, 7.5% padding on right, 85% in the middle
+      // cards should take up 11% of the table with 1.14% padding between
+      const CARD_WIDTH = 222.77;
+      const CARD_HEIGHT = 323.551;
+      const ASPECT = CARD_HEIGHT / CARD_WIDTH;
+      let offsetWidth =  Math.floor(tableWidth * 0.11);
+      let offsetHeight = ASPECT * offsetWidth;
+      return { offsetWidth, offsetHeight };
     }
-    let offsetWidth = CARD_WIDTH * scale;
-    let offsetHeight = CARD_HEIGHT * scale;
-
-    return { offsetWidth, offsetHeight };
-  }
   render () {
     // calculations
     let tableWidth = this.state.width || 800;
-    let offsetLeft = parseInt(tableWidth * 0.08, 10);
+    let offsetLeft = parseInt(tableWidth * 0.075, 10);
     let { offsetWidth: droppableWidth, offsetHeight: droppableHeight } = this.getCardDimensions(tableWidth);
-    let distanceBetweenStacks = parseInt(tableWidth * 0.03, 10);
+    let distanceBetweenStacks = parseInt(tableWidth * 0.0114, 10);
 
     // renderables
     let sevenDroppableStacks = this.createRow('STACK', 7, 0, CARD_Y_DISTANCE, distanceBetweenStacks, offsetLeft, droppableWidth, droppableHeight);
