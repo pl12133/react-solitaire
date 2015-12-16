@@ -120,6 +120,11 @@ class Table extends Component {
     }
   }
   handleBeginDragDrop (e, cards) {
+    cards = (Array.isArray(cards)) ? cards : [cards];
+    if (!e || !cards.length) {
+      console.error('Invalid Arguments');
+      return;
+    }
     let { isDragging } = this.props.dragdrop;
     let isFlipped = cards[0].props.flipped; // Don't drag face down cards
     if (!isDragging && !isFlipped) {

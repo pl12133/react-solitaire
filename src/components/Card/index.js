@@ -9,14 +9,13 @@ let unflippedStyle = cssStyles.unflipped || '';
 let flippedStyle = cssStyles.flipped || '';
 //
 
-const DISPLAY_NAME = '<Card>';
+// const DISPLAY_NAME = '<Card>';
 const propTypes = {
   name: PropTypes.string.isRequired,
   offsetLeft: PropTypes.number,
   offsetTop: PropTypes.number,
   offsetWidth: PropTypes.number.isRequired,
   offsetHeight: PropTypes.number.isRequired,
-  isDragging: PropTypes.bool.isRequired,
   flipped: PropTypes.bool.isRequired,
   handleBeginDragDrop: PropTypes.func.isRequired,
   onMouseDown: PropTypes.func, // For overriding a <Cards> MouseDown handler
@@ -25,39 +24,21 @@ const propTypes = {
   onDoubleClick: PropTypes.func
 };
 
+// const Card = ({name,
+//               offsetLeft,
+//               offsetTop,
+//               offsetWidth,
+//               offsetHeight,
+//               flipped,
+//               handleBeginDragDrop,
+//               onMouseDown,
+//               onTouchStart,
+//               onTouchTap,
+//               onDoubleClick}) => {
 class Card extends Component {
   constructor (props) {
     super(props);
-    let ownFuncs = [ 'handleMouseDown', 'handleTouchStart', 'render' ];
-    ownFuncs.forEach((elem) => {
-      if (!this[elem]) {
-        console.error(`Attempt to self-bind \'${elem}\' to ${DISPLAY_NAME} failed`);
-        return;
-      }
-      this[elem] = this[elem].bind(this);
-    });
   }
-  shouldComponentUpdate (nextProps, nextState) {
-    return true;
-    // let { props: currentProps } = this;
-    // return ((currentProps.offsetWidth !== nextProps.offsetWidth) || (currentProps.flipped !== nextProps.flipped) || (currentProps.onMouseDown !== nextProps.onMouseDown) || (currentProps.onTouchStart !== nextProps.onTouchStart) || (currentProps.offsetLeft !== nextProps.offsetLeft));
-  }
-  handleMouseDown (e) {
-    let { isDragging } = this.props;
-    if (!isDragging) {
-      let dragging = [this];
-      this.props.handleBeginDragDrop(e, dragging);
-    }
-  }
-  handleTouchStart (e) {
-    e.preventDefault();
-    e.stopPropagation();
-    let touchObj = e.changedTouches[0];
-    if (touchObj) {
-      this.handleMouseDown(touchObj);
-    }
-  }
-
   render () {
     let { name,
           flipped,
@@ -79,8 +60,8 @@ class Card extends Component {
                        height: offsetHeight + 'px',
                        top: offsetTop + 'px',
                        left: offsetLeft + 'px'} }
-                     onMouseDown={this.props.onMouseDown || this.handleMouseDown}
-                     onTouchStart={this.props.onTouchStart || this.handleTouchStart}
+                     onMouseDown={this.props.onMouseDown || ((e) => this.props.handleBeginDragDrop(e, this))}
+                     onTouchStart={this.props.onTouchStart || ((e) => this.props.handleBeginDragDrop(e.changedTouches[0], this))}
                      onTouchTap={this.props.onTouchTap}
                      onDoubleClick={this.props.onDoubleClick} >
       </div>

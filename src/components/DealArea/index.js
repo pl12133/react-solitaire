@@ -58,9 +58,6 @@ class DealArea extends Component {
         };
       });
       moveCards(toMove, 'DEAL-AREA-FACEUP');
-    } else {
-      // If the card is already face up, let it handle its own MouseDown
-      lastChild.handleMouseDown(e);
     }
   }
   handleDoubleClick (e) {

@@ -24,7 +24,6 @@ describe('Card', () => {
                           offsetWidth={50}
                           offsetHeight={80}
                           handleBeginDragDrop={function () {} }
-                          isDragging={false}
                           flipped={false} />);
   });
 
