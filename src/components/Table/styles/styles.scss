@@ -8,12 +8,13 @@
   margin: 0 auto;
   background: #0a0;
   user-select: none;
+  background: url('/dist/table-background.png') no-repeat fixed center;
+  background-size: 100% 100%;
 
   overflow: auto;
 
   button[type='button'] {
-    margin-left: 5px;
-    margin-top: 5px;
+    margin: 0.5%;
   }
 
   /* Deck styles */
