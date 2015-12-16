@@ -290,7 +290,6 @@ class Table extends Component {
       card.style.top = randomWithinHeight + 'px';
 
       card.style.transition = 'top 1s, left 1s';
-      //setTimeout(() => moveAllOverAnimation(card), timeout);
     };
     let degrees = 90;
     let spinInCirclesAnimation = (card, index, arr) => {
@@ -301,8 +300,8 @@ class Table extends Component {
           ? 0
           : degrees + 90;
       }
-      //setTimeout(() => spinInCirclesAnimation(card,index,arr), timeout);
     };
+    console.log(spinInCirclesAnimation);
 //    let doAnimation = (arr) => {
 //      let chance = Math.round(Math.random());
 //      let anim;
@@ -316,11 +315,9 @@ class Table extends Component {
 //      }
 //      arr.forEach(anim);
 //    };
-    let start = 0;
-
-    function debounce(func, wait, immediate) {
+    function debounce (func, wait, immediate) {
       let timeout;
-      return function(...args) {
+      return function (...args) {
         let later = () => {
           timeout = null;
           func.apply(this, args);
@@ -330,7 +327,7 @@ class Table extends Component {
         timeout = setTimeout(later, wait);
         if (callNow) func.apply(this, args);
       };
-    };
+    }
     let tableElem = document.getElementById('table');
     tableElem.style.overflow = 'visible';
     document.documentElement.style.overflow = 'hidden';
