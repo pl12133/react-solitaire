@@ -3,13 +3,11 @@
 :local(.styles) {
   display: inline-block;
   position: absolute;
-  max-width: 45%;
-  max-height: 25%;
 
-  left: 45%;
+  left: 42%;
   top: 11%;
 
-  & div { 
+  & div.droppable { 
     top: 1%;
   }
 }

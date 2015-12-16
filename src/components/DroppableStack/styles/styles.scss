@@ -2,9 +2,11 @@
 
 :local(.styles) {
   position: absolute;
-
-  border-radius: .375em;
   top: 50%;
+  left: 10%;
+  background: #00f;
+  border-radius: .375em;
+  user-select: none;
 
   @media screen and (max-width: 768px) {
     & {
@@ -16,8 +18,4 @@
       top: 30%;
     }
   }
- 
-  left: 10%;
-  background: #00f;
-  user-select: none;
 }

@@ -2,13 +2,11 @@
 
 :local(.styles) {
   position: relative;
-  max-width: 90%;
+  max-width: 95%;
   height: 100%;
-  min-height: 40%;
   margin: 0 auto;
-  background: #0a0;
   user-select: none;
-  background: url('/dist/table-background.png') no-repeat fixed center;
+  background: url('/dist/table-background.png') no-repeat local center;
   background-size: 100% 100%;
 
   overflow: auto;
