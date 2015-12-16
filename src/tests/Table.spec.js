@@ -43,8 +43,12 @@ describe('Table', () => {
     renderer = TestUtils.createRenderer();
     renderer.render(<Table dragdrop={ {isDragging: false} }
                            cards={ deck }
+                           undoMove={function () {}}
+                           redoMove={function () {}}
                            beginDrag={function () {}}
                            endDrag={function () {}}
+                           flipCard={function () {}}
+                           shuffleCards={function () {}}
                            moveCards={function () {}} />);
   });
 
