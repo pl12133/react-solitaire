@@ -9,6 +9,7 @@ injectTapEventPlugin();
 
 /* Styles */
 import styles from './styles/';
+import buttonStyles from './styles/buttons';
 
 /* Co-Components */
 import DealArea from 'components/DealArea/';
@@ -322,23 +323,27 @@ class Table extends Component {
     // renderables
     let sevenDroppableStacks = this.createRow('STACK', 7, 0, CARD_Y_DISTANCE, distanceBetweenStacks, offsetLeft, droppableWidth, droppableHeight);
     let aceDroppableStacks = this.createRow('ACE', 4, 0, 0, distanceBetweenStacks / 4, offsetLeft / 2, droppableWidth, droppableHeight);
-    let dealAreaFaceDownCards = this.cardSlice('DEAL-AREA-FACEDOWN', 4, 0, droppableWidth, droppableHeight);
-    let dealAreaFaceUpCards = this.cardSlice('DEAL-AREA-FACEUP', 4, 0, droppableWidth, droppableHeight);
+    let dealAreaFaceDownCards = this.cardSlice('DEAL-AREA-FACEDOWN', tableWidth * 0.004, 0, droppableWidth, droppableHeight);
+    let dealAreaFaceUpCards = this.cardSlice('DEAL-AREA-FACEUP', 0, 0, droppableWidth, droppableHeight);
     let tableCards = this.cardSlice('TABLE');
 
     return (
-      <div id={'table'} className={styles}
+      <div id={'table'} className={styles + ' ' + buttonStyles}
                         onMouseMove={this.handleMouseMove}
                         onMouseUp={this.handleMouseUp}
                         onTouchMove={this.handleTouchMove}
                         onTouchEnd={this.handleTouchEnd} >
         <button type={'button'}
-                onClick={this.handleDealButtonClick}>
-          {'Deal!'}
-        </button>
-        <button type={'button'}
+                className={'btn btn-sucess'}
+                style={ {float: 'left'} }
                 onClick={this.handleUndoButtonClick}>
           {'Undo!'}
+        </button>
+        <button type={'button'}
+                className={'btn btn-primary'}
+                style={ {float: 'right'} }
+                onClick={this.handleDealButtonClick}>
+          {'Deal!'}
         </button>
         <DealArea moveCards={this.props.moveCards}
                   getAvailableMoves={this.getAvailableMoves}
