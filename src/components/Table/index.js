@@ -283,6 +283,21 @@ class Table extends Component {
     });
     return (allAceChildren.length === 52);
   }
+  doWinAnimation () {
+    let cards = [].slice.call(document.querySelectorAll('div[id*="-of-"]'));
+    console.log('Wow you won!', cards);
+    function animateCard (card) {
+      let { left, top } = card.style;
+      left = parseInt(left, 10) - 200;
+      top = parseInt(top, 10) - 150;
+
+      card.style.left = left + 'px';
+      card.style.top = top + 'px';
+
+      card.style.transition = 'top 1s, left 1s';
+    }
+    cards.forEach(animateCard);
+  }
 
   componentDidMount () {
     this.setState({
@@ -300,19 +315,20 @@ class Table extends Component {
         redeal: false
       }));
     } else if (this.checkGameWon()) {
+      this.doWinAnimation();
       alert('You Won!');
     }
   }
-    getCardDimensions (tableWidth) {
-      // 7.5% padding on left, 7.5% padding on right, 85% in the middle
-      // cards should take up 11% of the table with 1.14% padding between
-      const CARD_WIDTH = 222.77;
-      const CARD_HEIGHT = 323.551;
-      const ASPECT = CARD_HEIGHT / CARD_WIDTH;
-      let offsetWidth =  Math.floor(tableWidth * 0.11);
-      let offsetHeight = ASPECT * offsetWidth;
-      return { offsetWidth, offsetHeight };
-    }
+  getCardDimensions (tableWidth) {
+    // 7.5% padding on left, 7.5% padding on right, 85% in the middle
+    // cards should take up 11% of the table with 1.14% padding between
+    const CARD_WIDTH = 222.77;
+    const CARD_HEIGHT = 323.551;
+    const ASPECT = CARD_HEIGHT / CARD_WIDTH;
+    let offsetWidth = Math.floor(tableWidth * 0.11);
+    let offsetHeight = ASPECT * offsetWidth;
+    return { offsetWidth, offsetHeight };
+  }
   render () {
     // calculations
     let tableWidth = this.state.width || 800;
