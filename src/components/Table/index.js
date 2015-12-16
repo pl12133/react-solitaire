@@ -20,24 +20,31 @@ import DroppableStack from 'components/DroppableStack/';
 const DISPLAY_NAME = '<Table>';
 const CARD_Y_DISTANCE = 15;
 const propTypes = {
+  // Two slices of state from redux
   dragdrop: PropTypes.object.isRequired,
   cards: PropTypes.array.isRequired,
+  // Dragdrop actionCreators
   beginDrag: PropTypes.func.isRequired,
   endDrag: PropTypes.func.isRequired,
-  moveCards: PropTypes.func.isRequired
+  // Card actionCreators
+  moveCards: PropTypes.func.isRequired,
+  shuffleCards: PropTypes.func.isRequired,
+  flipCard: PropTypes.func.isRequired,
+  // redux-undo actionCreators
+  undoMove: PropTypes.func.isRequired,
+  redoMove: PropTypes.func.isRequired
 };
 class Table extends Component {
   constructor (props) {
     super(props);
     let ownFuncs = [ 'handleMouseUp', 'handleMouseMove',
-                     'handleEndDragDrop', 'handleBeginDragDrop',
-                     'getOffsetFromTable', 'cardSlice', 'cardLocate',
-                     'createRow', 'dealCards',
+                     'handleBeginDragDrop', 'handleEndDragDrop',
+                     'handleCardFlip', 'handleResize', 'handleKeyUp',
+                     'handleDealButtonClick', 'handleUndoButtonClick', 'handleRedoButtonClick',
                      'handleTouchEnd', 'handleTouchMove',
-                     'handleDealButtonClick', 'handleUndoButtonClick',
-                     'handleCardFlip', 'handleResize',
-                     'getAvailableMoves', 'getCardDimensions', 'checkGameWon',
-                     'handleKeyUp', 'handleUndoHotkey',
+                     'getOffsetFromTable', 'getCardDimensions', 'getAvailableMoves',
+                     'cardSlice', 'cardLocate', 'createRow', 'dealCards',
+                     'checkGameWon', 'doWinAnimation',
                      'render' ];
 
     ownFuncs.forEach((elem) => {
@@ -61,7 +68,6 @@ class Table extends Component {
     }
     return offset;
   }
-
   getAvailableMoves (cardName, numCards) {
     return Object.keys(this.refs).filter((key, index) => {
       let stack = this.refs[key];
@@ -69,15 +75,17 @@ class Table extends Component {
     });
   }
   handleResize (e) {
-    const DEBUG_DISPLAY_DEVICE_SIZE = false;
-    if (DEBUG_DISPLAY_DEVICE_SIZE) {
-      let width = document.body.clientWidth;
-      let height = document.body.clientHeight;
-      alert(`(height x width): ${height} x ${width}`);
-    }
-    this.setState(Object.assign({}, this.state, {
+    this.setState({
       width: document.getElementById('table').clientWidth
-    }));
+    });
+  }
+  handleCardFlip (card) {
+    let { flipCard } = this.props;
+    flipCard(card);
+  }
+  handleRedoButtonClick (e) {
+    let { redoMove } = this.props;
+    redoMove();
   }
   handleUndoButtonClick (e) {
     let { undoMove } = this.props;
@@ -92,7 +100,6 @@ class Table extends Component {
       this.handleEndDragDrop(e);
     }
   }
-
   handleTouchMove (e) {
     let { isDragging } = this.props.dragdrop;
     if (isDragging) {
@@ -111,10 +118,6 @@ class Table extends Component {
   }
   handleBeginDragDrop (e, cards) {
     let { isDragging } = this.props.dragdrop;
-    if (!cards || !Array.isArray(cards)) {
-      console.error('Invalid Cards Array! ', cards);
-      return;
-    }
     let isFlipped = cards[0].props.flipped; // Don't drag face down cards
     if (!isDragging && !isFlipped) {
       let { beginDrag } = this.props;
@@ -206,11 +209,6 @@ class Table extends Component {
       });
     }
   }
-
-  handleCardFlip (card) {
-    let { flipCard } = this.props;
-    flipCard(card);
-  }
   createRow (namePrefix, numCols, cardsXOffset, cardsYOffset, stackDistance, offsetLeft, offsetWidth, offsetHeight) {
     let row = [];
     for (let index = 0; index < numCols; ++index) {
@@ -266,23 +264,15 @@ class Table extends Component {
   }
 
   dealCards () {
-    // Emit a dummy moveCards action so that UNDO can undo a shuffle.
-    // UNDO_ACTION does not work as planned here
-    let { moveCards, cards } = this.props;
-    let dummyCard = cards[cards.length - 1];
-    moveCards([dummyCard], dummyCard.location);
     this.setState({
-      redeal: true,
-      width: this.state.width
+      redeal: true
     });
   }
   checkGameWon () {
     let { cards } = this.props;
-    let allAceChildren = cards.filter((elem) => {
-      if (!elem) return false;
+    return cards.every((elem) => {
       return (elem.location.indexOf('ACE') >= 0);
     });
-    return (allAceChildren.length === 52);
   }
   doWinAnimation () {
     let cards = [].slice.call(document.querySelectorAll('div[id*="-of-"]'));
@@ -309,23 +299,21 @@ class Table extends Component {
     document.addEventListener('keyup', this.handleKeyUp);
   }
 
-  handleUndoHotkey(e) {
-    console.log('Keyup Here', e);
-    if (e.ctrlKey && e.keyCode == 'Z'.charCodeAt(0)) {
-        this.handleUndoButtonClick();
+  handleKeyUp (e) {
+    if (e.ctrlKey && e.keyCode === 'Z'.charCodeAt(0)) {
+      this.handleUndoButtonClick();
+    } else if (e.ctrlKey && e.keyCode === 'Y'.charCodeAt(0)) {
+      this.handleRedoButtonClick();
     }
-  }
-  handleKeyUp(e) {
-    this.handleUndoHotkey(e);
   }
 
   componentDidUpdate (prevProps, prevState) {
     if (this.state.redeal) {
       let { shuffleCards } = this.props;
       shuffleCards();
-      this.setState(Object.assign({}, this.state, {
+      this.setState({
         redeal: false
-      }));
+      });
     } else if (this.checkGameWon()) {
       this.doWinAnimation();
       alert('You Won!');
@@ -366,6 +354,12 @@ class Table extends Component {
                 style={ {float: 'left'} }
                 onClick={this.handleUndoButtonClick}>
           {'Undo!'}
+        </button>
+        <button type={'button'}
+                className={'btn btn-sucess'}
+                style={ {float: 'left'} }
+                onClick={this.handleRedoButtonClick}>
+          {'Redo!'}
         </button>
         <button type={'button'}
                 className={'btn btn-primary'}
