@@ -3,11 +3,10 @@
 :local(.styles) {
   position: absolute;
   width: 28.5%;
-  height: 30%;
-
   left: 8%;
   top: 10%;
-//  background: #fa5;
+  border: 2px solid white;
+  padding: 0.5% 4% 0.5% 0.5%;
 
   & div.reset {
     width: 100%;
@@ -17,10 +16,6 @@
     position: relative;
     padding: 0;
     float: left;
-//    background-color: red;
-    margin-top: 1%;
-    width: 55%;
-    height: 95%;
   }
 
   & span#right {
@@ -28,9 +23,5 @@
     display: inline-block;
     padding: 0;
     float: right;
-//    background-color: lightblue;
-    margin-top: 1%;
-    width: 30%;
-    height: 95%;
   }
 }

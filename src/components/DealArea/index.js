@@ -100,13 +100,13 @@ class DealArea extends Component {
         switch (thisIndex) {
           case len - 2:
             return React.cloneElement(child, {
-              offsetLeft: 15,
+              offsetLeft: offsetWidth * 0.15,
               onMouseDown: (e) => false,
               onTouchStart: (e) => false
             });
           case len - 1:
             return React.cloneElement(child, {
-              offsetLeft: 30,
+              offsetLeft: offsetWidth * 0.30,
               onDoubleClick: this.handleDoubleClick,
               onTouchTap: this.handleTouchTap
             });
@@ -144,15 +144,16 @@ class DealArea extends Component {
     let leftOffsetWidth = (faceDownHooked.length) ? offsetWidth + 'px'
                                                   : '50%';
     return (
-      <div className={styles}>
+      <div className={styles}
+           style={ {height: (1.02 * offsetHeight) + 'px'} }>
         <span id={'left'}
               style={ {width: leftOffsetWidth,
-                       height: offsetHeight + 'px' } }>
+                       height: offsetHeight + 'px'} }>
           {faceDownHooked}
         </span>
         <span id={'right'}
               style={ {width: offsetWidth + 'px',
-                       height: offsetHeight + 'px' } }>
+                       height: offsetHeight + 'px'} }>
           {faceUpHooked}
         </span>
       </div>
