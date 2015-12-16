@@ -9,10 +9,12 @@
   background: url('/dist/table-background.png') no-repeat local center;
   background-size: 100% 100%;
 
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
 
   button[type='button'] {
     margin: 0.5%;
+    z-index: 20;
   }
 
   /* Deck styles */
