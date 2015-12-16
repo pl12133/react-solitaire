@@ -5,6 +5,18 @@
 
   border-radius: .375em;
   top: 50%;
+
+  @media screen and (max-width: 768px) {
+    & {
+      top: 40%;
+    }
+  }
+  @media screen and (max-width: 480px) {
+    & {
+      top: 30%;
+    }
+  }
+ 
   left: 10%;
   background: #00f;
   user-select: none;
