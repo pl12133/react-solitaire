@@ -279,7 +279,6 @@ class Table extends Component {
     console.log('Wow you won!', cards);
     let height = document.body.clientHeight;
     let animateCard = (card) => {
-      let { left, top } = card.style;
       let { offsetWidth, offsetHeight } = this.getCardDimensions();
       let { x, y } = this.getOffsetFromTable(card);
       let randomWithinWidth = Math.floor(Math.random() * this.state.width) - x - offsetWidth;
@@ -289,7 +288,7 @@ class Table extends Component {
 
       card.style.transition = 'top 1s, left 1s';
       setTimeout(() => animateCard(card), 2000);
-    }
+    };
     cards.forEach(animateCard);
   }
 

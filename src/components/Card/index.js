@@ -39,8 +39,8 @@ class Card extends Component {
   }
   shouldComponentUpdate (nextProps, nextState) {
     return true;
-    let { props: currentProps } = this;
-    //return ((currentProps.offsetWidth !== nextProps.offsetWidth) || (currentProps.flipped !== nextProps.flipped) || (currentProps.onMouseDown !== nextProps.onMouseDown) || (currentProps.onTouchStart !== nextProps.onTouchStart) || (currentProps.offsetLeft !== nextProps.offsetLeft));
+    // let { props: currentProps } = this;
+    // return ((currentProps.offsetWidth !== nextProps.offsetWidth) || (currentProps.flipped !== nextProps.flipped) || (currentProps.onMouseDown !== nextProps.onMouseDown) || (currentProps.onTouchStart !== nextProps.onTouchStart) || (currentProps.offsetLeft !== nextProps.offsetLeft));
   }
   handleMouseDown (e) {
     let { isDragging } = this.props;
