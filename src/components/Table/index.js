@@ -37,6 +37,7 @@ class Table extends Component {
                      'handleDealButtonClick', 'handleUndoButtonClick',
                      'handleCardFlip', 'handleResize',
                      'getAvailableMoves', 'getCardDimensions', 'checkGameWon',
+                     'handleKeyUp', 'handleUndoHotkey',
                      'render' ];
 
     ownFuncs.forEach((elem) => {
@@ -305,6 +306,17 @@ class Table extends Component {
       width: document.getElementById('table').clientWidth
     });
     window.addEventListener('resize', this.handleResize);
+    document.addEventListener('keyup', this.handleKeyUp);
+  }
+
+  handleUndoHotkey(e) {
+    console.log('Keyup Here', e);
+    if (e.ctrlKey && e.keyCode == 'Z'.charCodeAt(0)) {
+        this.handleUndoButtonClick();
+    }
+  }
+  handleKeyUp(e) {
+    this.handleUndoHotkey(e);
   }
 
   componentDidUpdate (prevProps, prevState) {
