@@ -277,15 +277,18 @@ class Table extends Component {
   doWinAnimation () {
     let cards = [].slice.call(document.querySelectorAll('div[id*="-of-"]'));
     console.log('Wow you won!', cards);
-    function animateCard (card) {
+    let height = document.body.clientHeight;
+    let animateCard = (card) => {
       let { left, top } = card.style;
-      left = parseInt(left, 10) - 200;
-      top = parseInt(top, 10) - 150;
-
-      card.style.left = left + 'px';
-      card.style.top = top + 'px';
+      let { offsetWidth, offsetHeight } = this.getCardDimensions();
+      let { x, y } = this.getOffsetFromTable(card);
+      let randomWithinWidth = Math.floor(Math.random() * this.state.width) - x - offsetWidth;
+      let randomWithinHeight = Math.floor(Math.random() * height) - y - offsetHeight;
+      card.style.left = randomWithinWidth + 'px';
+      card.style.top = randomWithinHeight + 'px';
 
       card.style.transition = 'top 1s, left 1s';
+      setTimeout(() => animateCard(card), 2000);
     }
     cards.forEach(animateCard);
   }
@@ -319,13 +322,14 @@ class Table extends Component {
       alert('You Won!');
     }
   }
-  getCardDimensions (tableWidth) {
+  getCardDimensions () {
     // 7.5% padding on left, 7.5% padding on right, 85% in the middle
     // cards should take up 11% of the table with 1.14% padding between
     const CARD_WIDTH = 222.77;
     const CARD_HEIGHT = 323.551;
     const ASPECT = CARD_HEIGHT / CARD_WIDTH;
-    let offsetWidth = Math.floor(tableWidth * 0.11);
+    let { width } = this.state;
+    let offsetWidth = Math.floor(width * 0.11);
     let offsetHeight = ASPECT * offsetWidth;
     return { offsetWidth, offsetHeight };
   }
@@ -333,7 +337,7 @@ class Table extends Component {
     // calculations
     let tableWidth = this.state.width || 800;
     let offsetLeft = parseInt(tableWidth * 0.075, 10);
-    let { offsetWidth: droppableWidth, offsetHeight: droppableHeight } = this.getCardDimensions(tableWidth);
+    let { offsetWidth: droppableWidth, offsetHeight: droppableHeight } = this.getCardDimensions();
     let distanceBetweenStacks = parseInt(tableWidth * 0.0114, 10);
 
     // renderables
@@ -352,14 +356,20 @@ class Table extends Component {
         <button type={'button'}
                 className={'btn btn-sucess'}
                 style={ {float: 'left'} }
+                onClick={this.handleRedoButtonClick}>
+          {'Redo!'}
+        </button>
+        <button type={'button'}
+                className={'btn btn-sucess'}
+                style={ {float: 'left'} }
                 onClick={this.handleUndoButtonClick}>
           {'Undo!'}
         </button>
         <button type={'button'}
                 className={'btn btn-sucess'}
                 style={ {float: 'left'} }
-                onClick={this.handleRedoButtonClick}>
-          {'Redo!'}
+                onClick={this.doWinAnimation}>
+          {'Win!'}
         </button>
         <button type={'button'}
                 className={'btn btn-primary'}
