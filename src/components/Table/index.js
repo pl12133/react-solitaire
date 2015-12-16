@@ -59,6 +59,9 @@ class Table extends Component {
   }
 
   getOffsetFromTable (elem) {
+    if (!elem || !elem.parentNode) {
+      return {x: 0, y: 0};
+    }
     let tableElem = document.getElementById('table');
     let offset = { x: tableElem.offsetLeft - tableElem.scrollLeft,
                    y: tableElem.offsetTop - tableElem.scrollTop };
@@ -276,20 +279,70 @@ class Table extends Component {
   }
   doWinAnimation () {
     let cards = [].slice.call(document.querySelectorAll('div[id*="-of-"]'));
-    console.log('Wow you won!', cards);
+    console.log('Wow you won!');
     let height = document.body.clientHeight;
-    let animateCard = (card) => {
+    let moveAllOverAnimation = (card) => {
       let { offsetWidth, offsetHeight } = this.getCardDimensions();
       let { x, y } = this.getOffsetFromTable(card);
-      let randomWithinWidth = Math.floor(Math.random() * this.state.width) - x - offsetWidth;
-      let randomWithinHeight = Math.floor(Math.random() * height) - y - offsetHeight;
+      let randomWithinWidth = Math.floor(Math.random() * this.state.width) - x - (offsetWidth / 2);
+      let randomWithinHeight = Math.floor(Math.random() * height) - y - (offsetHeight / 2);
       card.style.left = randomWithinWidth + 'px';
       card.style.top = randomWithinHeight + 'px';
 
       card.style.transition = 'top 1s, left 1s';
-      setTimeout(() => animateCard(card), 2000);
+      //setTimeout(() => moveAllOverAnimation(card), timeout);
     };
-    cards.forEach(animateCard);
+    let degrees = 90;
+    let spinInCirclesAnimation = (card, index, arr) => {
+      card.style.transform = 'rotate(' + degrees + 'deg)';
+      card.style.transition = 'transform 2s';
+      if (index === arr.length - 1) {
+        degrees = (degrees >= 720)
+          ? 0
+          : degrees + 90;
+      }
+      //setTimeout(() => spinInCirclesAnimation(card,index,arr), timeout);
+    };
+//    let doAnimation = (arr) => {
+//      let chance = Math.round(Math.random());
+//      let anim;
+//      switch (chance) {
+//        case 0:
+//          anim = spinInCirclesAnimation;
+//          break;
+//        case 1:
+//          anim = moveAllOverAnimation;
+//          break;
+//      }
+//      arr.forEach(anim);
+//    };
+    let start = 0;
+
+    function debounce(func, wait, immediate) {
+      let timeout;
+      return function(...args) {
+        let later = () => {
+          timeout = null;
+          func.apply(this, args);
+        };
+        let callNow = immediate && !timeout;
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+        if (callNow) func.apply(this, args);
+      };
+    };
+    let tableElem = document.getElementById('table');
+    tableElem.style.overflow = 'visible';
+    document.documentElement.style.overflow = 'hidden';
+
+    let timeout = 2000;
+    let useAnimation = moveAllOverAnimation;
+
+    let step = debounce((timestamp) => {
+      cards.forEach(useAnimation);
+      window.requestAnimationFrame(step);
+    }, timeout, true);
+    window.requestAnimationFrame(step);
   }
 
   componentDidMount () {
