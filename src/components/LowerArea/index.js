@@ -1,4 +1,6 @@
+/* eslint-disable no-unused-vars*/
 import React, { Component, PropTypes } from 'react';
+/* eslint-enable no-unused-vars*/
 
 import styles from './styles/';
 
@@ -7,13 +9,13 @@ const propTypes = {
 };
 
 class LowerArea extends Component {
-  render() {
+  render () {
     let { children } = this.props;
     return (
       <div className={styles}>
         {children}
       </div>
-    )
+    );
   }
 }
 

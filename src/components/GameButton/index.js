@@ -1,4 +1,6 @@
-import React, { Component, PropTypes } from 'react';
+/* eslint-disable no-unused-vars*/
+import React, { PropTypes } from 'react';
+/* eslint-enable no-unused-vars*/
 
 import styles from './styles/';
 
@@ -7,7 +9,7 @@ const propTypes = {
   float: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired
-}
+};
 
 const GameButton = ({className, float, onClick, children}) => {
   return (
@@ -16,7 +18,7 @@ const GameButton = ({className, float, onClick, children}) => {
             onClick={onClick}>
       {children}
     </button>
-  )
+  );
 };
 
 GameButton.propTypes = propTypes;

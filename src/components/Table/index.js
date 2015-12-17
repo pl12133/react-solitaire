@@ -218,7 +218,7 @@ class Table extends Component {
       });
     }
   }
-  createRow (namePrefix, numCols, cardsXOffset, cardsYOffset, stackDistance, offsetLeft, offsetWidth, offsetHeight) {
+  createRow (namePrefix, numCols, cardsXOffset, cardsYOffset, stackDistance, UNUSED_REMOVE_ME, offsetWidth, offsetHeight) {
     let row = [];
     for (let index = 0; index < numCols; ++index) {
       let stackName = namePrefix + '-' + (index + 1);
@@ -227,8 +227,6 @@ class Table extends Component {
         <DroppableStack key={stackName}
                         stackName={stackName}
                         index={index + 1}
-                        distance={stackDistance}
-                        offsetLeft={offsetLeft}
                         offsetWidth={offsetWidth}
                         offsetHeight={offsetHeight}
                         ref={stackName}
@@ -391,14 +389,12 @@ class Table extends Component {
   render () {
     // calculations
     let tableWidth = this.state.width || 800;
-    //let offsetLeft = parseInt(tableWidth * 0.075, 10);
-    let offsetLeft = 0;
     let { offsetWidth: droppableWidth, offsetHeight: droppableHeight } = this.getCardDimensions();
     let distanceBetweenStacks = parseInt(tableWidth * 0.0114, 10);
 
     // renderables
-    let sevenDroppableStacks = this.createRow('STACK', 7, 0, CARD_Y_DISTANCE, distanceBetweenStacks, offsetLeft, droppableWidth, droppableHeight);
-    let aceDroppableStacks = this.createRow('ACE', 4, 0, 0, distanceBetweenStacks / 4, offsetLeft / 2, droppableWidth, droppableHeight);
+    let sevenDroppableStacks = this.createRow('STACK', 7, 0, CARD_Y_DISTANCE, distanceBetweenStacks, 0, droppableWidth, droppableHeight);
+    let aceDroppableStacks = this.createRow('ACE', 4, 0, 0, distanceBetweenStacks / 4, 0, droppableWidth, droppableHeight);
     let dealAreaFaceDownCards = this.cardSlice('DEAL-AREA-FACEDOWN', tableWidth * 0.004, 0, droppableWidth, droppableHeight);
     let dealAreaFaceUpCards = this.cardSlice('DEAL-AREA-FACEUP', 0, 0, droppableWidth, droppableHeight);
     let tableCards = this.cardSlice('TABLE');
