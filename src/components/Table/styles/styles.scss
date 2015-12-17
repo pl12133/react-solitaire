@@ -1,5 +1,4 @@
 /* Table styles */
-
 :local(.styles) {
   position: relative;
   max-width: 95%;
@@ -12,10 +11,6 @@
   overflow-x: hidden;
   overflow-y: auto;
 
-  button[type='button'] {
-    margin: 0.5%;
-    z-index: 20;
-  }
 
   /* Deck styles */
   & div[id*='-of-'] {

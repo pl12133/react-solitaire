@@ -9,13 +9,14 @@ injectTapEventPlugin();
 
 /* Styles */
 import styles from './styles/';
-import buttonStyles from './styles/buttons';
 
 /* Co-Components */
 import DealArea from 'components/DealArea/';
 import AceArea from 'components/AceArea/';
+import LowerArea from 'components/LowerArea/';
 import Card from 'components/Card/';
 import DroppableStack from 'components/DroppableStack/';
+import GameButton from 'components/GameButton/';
 
 const DISPLAY_NAME = '<Table>';
 const CARD_Y_DISTANCE = 15;
@@ -390,7 +391,8 @@ class Table extends Component {
   render () {
     // calculations
     let tableWidth = this.state.width || 800;
-    let offsetLeft = parseInt(tableWidth * 0.075, 10);
+    //let offsetLeft = parseInt(tableWidth * 0.075, 10);
+    let offsetLeft = 0;
     let { offsetWidth: droppableWidth, offsetHeight: droppableHeight } = this.getCardDimensions();
     let distanceBetweenStacks = parseInt(tableWidth * 0.0114, 10);
 
@@ -402,35 +404,31 @@ class Table extends Component {
     let tableCards = this.cardSlice('TABLE');
 
     return (
-      <div id={'table'} className={styles + ' ' + buttonStyles}
+      <div id={'table'} className={styles}
                         onMouseMove={this.handleMouseMove}
                         onMouseUp={this.handleMouseUp}
                         onTouchMove={this.handleTouchMove}
                         onTouchEnd={this.handleTouchEnd} >
-        <button type={'button'}
-                className={'btn btn-sucess'}
-                style={ {float: 'left'} }
-                onClick={this.handleRedoButtonClick}>
+        <GameButton className={'btn btn-sucess'}
+                    float={'left'}
+                    onClick={this.handleRedoButtonClick}>
           {'Redo!'}
-        </button>
-        <button type={'button'}
-                className={'btn btn-sucess'}
-                style={ {float: 'left'} }
-                onClick={this.handleUndoButtonClick}>
+        </GameButton>
+        <GameButton className={'btn btn-sucess'}
+                    float={'left'}
+                    onClick={this.handleUndoButtonClick}>
           {'Undo!'}
-        </button>
-        <button type={'button'}
-                className={'btn btn-sucess'}
-                style={ {float: 'left'} }
-                onClick={this.doWinAnimation}>
+        </GameButton>
+        <GameButton className={'btn btn-sucess'}
+                    float={'left'}
+                    onClick={this.doWinAnimation}>
           {'Win!'}
-        </button>
-        <button type={'button'}
-                className={'btn btn-primary'}
-                style={ {float: 'right'} }
-                onClick={this.handleDealButtonClick}>
+        </GameButton>
+        <GameButton className={'btn btn-primary'}
+                    float={'right'}
+                    onClick={this.handleDealButtonClick}>
           {'Deal!'}
-        </button>
+        </GameButton>
         <DealArea moveCards={this.props.moveCards}
                   getAvailableMoves={this.getAvailableMoves}
                   offsetWidth={droppableWidth}
@@ -443,7 +441,9 @@ class Table extends Component {
           {aceDroppableStacks}
         </AceArea>
 
-        {sevenDroppableStacks}
+        <LowerArea>
+          {sevenDroppableStacks}
+        </LowerArea>
 
         {/* tableCards are rendered for testing */}
         {tableCards}
