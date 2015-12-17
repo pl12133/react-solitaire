@@ -1,20 +1,11 @@
 /* DroppableStack styles */
 
 :local(.styles) {
-  position: absolute;
-  top: 50%;
+  position: relative;
   background: #00f;
   border-radius: .375em;
   user-select: none;
+  float: left;
 
-  @media screen and (max-width: 768px) {
-    & {
-      top: 40%;
-    }
-  }
-  @media screen and (max-width: 480px) {
-    & {
-      top: 30%;
-    }
-  }
+  margin: 0 auto;
 }

@@ -187,8 +187,8 @@ class DroppableStack extends Component {
     return (
       <div className={'droppable ' + styles}
            style={{height: offsetHeight + 'px',
-                   width: offsetWidth + 'px',
-                   left: offset + 'px'}} >
+                   width: offsetWidth + 'px' }} > {/* //,
+                   //left: offset + 'px'}} > */}
         {children}
       </div>
     );
