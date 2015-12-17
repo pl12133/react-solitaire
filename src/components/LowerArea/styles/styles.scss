@@ -1,0 +1,23 @@
+/* LowerArea styles */
+:local(.styles) {
+  position: absolute;
+  width: 85%;
+  max-width: 85%;
+  left: 7.5%;
+  top: 50%;
+  user-select: none;
+
+  display: flex;
+  justify-content: space-between;
+
+  @media screen and (max-width: 768px) {
+    & {
+      top: 40%;
+    }
+  }
+  @media screen and (max-width: 480px) {
+    & {
+      top: 30%;
+    }
+  }
+}
