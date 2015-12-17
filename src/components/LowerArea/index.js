@@ -12,7 +12,9 @@ class LowerArea extends Component {
   render () {
     let { children } = this.props;
     return (
-      <div className={styles}>
+      <div className={styles}
+           id={'lowerArea'}
+      >
         {children}
       </div>
     );
