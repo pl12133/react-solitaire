@@ -16,7 +16,7 @@ import AceArea from 'components/AceArea/';
 import LowerArea from 'components/LowerArea/';
 import Card from 'components/Card/';
 import DroppableStack from 'components/DroppableStack/';
-import GameButton from 'components/GameButton/';
+import ButtonsPanel from 'components/ButtonsPanel/';
 
 const DISPLAY_NAME = '<Table>';
 const CARD_Y_DISTANCE = 15;
@@ -133,7 +133,7 @@ class Table extends Component {
     let { endDrag, dragdrop } = this.props;
     let { dragNodes, dragCards } = dragdrop;
     let { pageX, pageY } = e;
-    let tableDroppables = [].slice.call(document.querySelectorAll('#table > .droppable'));
+    let tableDroppables = [].slice.call(document.querySelectorAll('#lowerArea > .droppable'));
     let aceDroppables = [].slice.call(document.querySelectorAll('#aceArea > .droppable'));
 
     function pointInsideRect (rX, rY, width, height, ptX, ptY) {
@@ -400,27 +400,13 @@ class Table extends Component {
                         onMouseMove={this.handleMouseMove}
                         onMouseUp={this.handleMouseUp}
                         onTouchMove={this.handleTouchMove}
-                        onTouchEnd={this.handleTouchEnd} >
-        <GameButton className={'btn btn-sucess'}
-                    float={'left'}
-                    onClick={this.handleRedoButtonClick}>
-          {'Redo!'}
-        </GameButton>
-        <GameButton className={'btn btn-sucess'}
-                    float={'left'}
-                    onClick={this.handleUndoButtonClick}>
-          {'Undo!'}
-        </GameButton>
-        <GameButton className={'btn btn-sucess'}
-                    float={'left'}
-                    onClick={this.doWinAnimation}>
-          {'Win!'}
-        </GameButton>
-        <GameButton className={'btn btn-primary'}
-                    float={'right'}
-                    onClick={this.handleDealButtonClick}>
-          {'Deal!'}
-        </GameButton>
+                        onTouchEnd={this.handleTouchEnd}
+      >
+        <ButtonsPanel handleRedoButtonClick={this.handleRedoButtonClick}
+                      handleUndoButtonClick={this.handleUndoButtonClick}
+                      doWinAnimation={this.doWinAnimation}
+                      handleDealButtonClick={this.handleDealButtonClick}
+        />
         <DealArea moveCards={this.props.moveCards}
                   getAvailableMoves={this.getAvailableMoves}
                   offsetWidth={droppableWidth}
