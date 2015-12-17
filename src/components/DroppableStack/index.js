@@ -118,12 +118,9 @@ class DroppableStack extends Component {
       let refName = 'child-' + index;
       stackBelowClicked.push(this.refs[refName]);
     }
-    if (stackBelowClicked.length >= 1) {
+    if (stackBelowClicked.length) {
       let { handleBeginDragDrop } = this.props;
       handleBeginDragDrop(e, stackBelowClicked);
-//    } else if (stackBelowClicked.length === 1) {
-//      let clickedChild = stackBelowClicked[0];
-//      clickedChild.handleMouseDown(e);
     }
   }
   handleTouchTap (e, childIndex) {
