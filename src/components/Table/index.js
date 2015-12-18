@@ -214,10 +214,13 @@ class Table extends Component {
       });
     }
   }
-  createRow (namePrefix, numCols, cardsXOffset, cardsYOffset, offsetWidth, offsetHeight) {
+  createRow (namePrefix, numCols, cardsXOffset = 0, cardsYOffset = 0, offsetWidth = 0, offsetHeight = 0) {
     let row = [];
     for (let index = 0; index < numCols; ++index) {
       let stackName = namePrefix + '-' + (index + 1);
+      let { offsetWidth: cardWidth, offsetHeight: cardHeight} = this.getCardDimensions();
+      offsetWidth = offsetWidth || cardWidth;
+      offsetHeight = offsetHeight || cardHeight;
       let stackChildren = this.cardSlice(stackName, cardsXOffset, cardsYOffset, offsetWidth, offsetHeight);
       row.push(
         <DroppableStack stackName={stackName}
@@ -261,6 +264,9 @@ class Table extends Component {
       };
     };
     let { cards } = this.props;
+    let { offsetWidth: cardWidth, offsetHeight: cardHeight} = this.getCardDimensions();
+    offsetWidth = offsetWidth || cardWidth;
+    offsetHeight = offsetHeight || cardHeight;
     return cards
       .filter(this.cardLocate(location))
       .map(cardMap(offsetLeft, offsetTop, offsetWidth, offsetHeight));
@@ -386,13 +392,11 @@ class Table extends Component {
     // calculations
     let tableWidth = this.state.width || 800;
     let { offsetWidth: droppableWidth, offsetHeight: droppableHeight } = this.getCardDimensions();
-    let distanceBetweenStacks = parseInt(tableWidth * 0.0114, 10);
-
     // renderables
-    let sevenDroppableStacks = this.createRow('STACK', 7, 0, CARD_Y_DISTANCE, droppableWidth, droppableHeight);
-    let aceDroppableStacks = this.createRow('ACE', 4, 0, 0, droppableWidth, droppableHeight);
-    let dealAreaFaceDownCards = this.cardSlice('DEAL-AREA-FACEDOWN', tableWidth * 0.004, 0, droppableWidth, droppableHeight);
-    let dealAreaFaceUpCards = this.cardSlice('DEAL-AREA-FACEUP', 0, 0, droppableWidth, droppableHeight);
+    let sevenDroppableStacks = this.createRow('STACK', 7, 0, CARD_Y_DISTANCE);
+    let aceDroppableStacks = this.createRow('ACE', 4);
+    let dealAreaFaceDownCards = this.cardSlice('DEAL-AREA-FACEDOWN', tableWidth * 0.004);
+    let dealAreaFaceUpCards = this.cardSlice('DEAL-AREA-FACEUP');
     let tableCards = this.cardSlice('TABLE');
 
     return (
