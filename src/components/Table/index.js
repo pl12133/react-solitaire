@@ -218,7 +218,7 @@ class Table extends Component {
     let row = [];
     for (let index = 0; index < numCols; ++index) {
       let stackName = namePrefix + '-' + (index + 1);
-      let { offsetWidth: cardWidth, offsetHeight: cardHeight} = this.getCardDimensions();
+      let { offsetWidth: cardWidth, offsetHeight: cardHeight } = this.getCardDimensions();
       offsetWidth = offsetWidth || cardWidth;
       offsetHeight = offsetHeight || cardHeight;
       let stackChildren = this.cardSlice(stackName, cardsXOffset, cardsYOffset, offsetWidth, offsetHeight);
@@ -264,7 +264,7 @@ class Table extends Component {
       };
     };
     let { cards } = this.props;
-    let { offsetWidth: cardWidth, offsetHeight: cardHeight} = this.getCardDimensions();
+    let { offsetWidth: cardWidth, offsetHeight: cardHeight } = this.getCardDimensions();
     offsetWidth = offsetWidth || cardWidth;
     offsetHeight = offsetHeight || cardHeight;
     return cards
