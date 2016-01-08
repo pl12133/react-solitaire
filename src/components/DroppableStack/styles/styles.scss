@@ -1,0 +1,11 @@
+/* DroppableStack styles */
+
+:local(.styles) {
+  position: relative;
+  background: #00f;
+  border-radius: .375em;
+  user-select: none;
+  float: left;
+
+  margin: 0 auto;
+}

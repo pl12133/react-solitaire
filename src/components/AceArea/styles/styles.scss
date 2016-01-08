@@ -1,0 +1,16 @@
+/* AceArea styles */
+
+:local(.styles) {
+  display: inline-block;
+  position: absolute;
+  left: 48%;
+  top: 11%;
+  width: 45%;
+  max-width: 45%;
+  display: flex;
+  justify-content: space-between;
+
+  & div.droppable { 
+    top: 1%;
+  }
+}
