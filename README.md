@@ -20,11 +20,15 @@ Set HOST and PORT environment variables:
     export HOST=example.com
     export PORT=80
 
-Start:
+Start a local server:
 
     npm start
 
 Play!
+
+# features
+![demo screenshot](http://i.imgur.com/07VQ5DA.png)
+Mobile friendly interface, card moves are undoable and redoable, tapping a card will automatically move it to the first available stack.
 
 # license
 
