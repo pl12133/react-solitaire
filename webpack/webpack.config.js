@@ -13,7 +13,9 @@ module.exports = {
       filename: 'bundle.js',
       path: path.join(__dirname, '/dist/'),
       publicPath: '/dist/',
-      sourceMapFilename: 'debugging/[file].map'
+      sourceMapFilename: 'debugging/[file].map',
+      library: 'react-solitaire',
+      libraryTarget: 'umd'
   },
   resolve: {
     extensions: ['', '.jsx', '.js', '.json'],
