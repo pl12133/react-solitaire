@@ -11,12 +11,12 @@ injectTapEventPlugin();
 import styles from './styles/';
 
 /* Co-Components */
-import DealArea from 'components/DealArea/';
-import AceArea from 'components/AceArea/';
-import LowerArea from 'components/LowerArea/';
-import Card from 'components/Card/';
-import DroppableStack from 'components/DroppableStack/';
-import ButtonsPanel from 'components/ButtonsPanel/';
+import DealArea from '../../components/DealArea/';
+import AceArea from '../../components/AceArea/';
+import LowerArea from '../../components/LowerArea/';
+import Card from '../../components/Card/';
+import DroppableStack from '../../components/DroppableStack/';
+import ButtonsPanel from '../../components/ButtonsPanel/';
 
 const DISPLAY_NAME = '<Table>';
 const CARD_Y_DISTANCE = 15;

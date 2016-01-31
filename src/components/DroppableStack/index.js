@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 /* Styles */
 import styles from './styles/';
 
-import cardUtils from 'constants/cardUtils';
+import cardUtils from '../../constants/cardUtils';
 const DISPLAY_NAME = '<DroppableStack>';
 
 const propTypes = {

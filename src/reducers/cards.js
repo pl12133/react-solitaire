@@ -1,4 +1,4 @@
-import { MOVE_CARDS, SHUFFLE_CARDS, FLIP_CARD, UNDO_MOVE, REDO_MOVE } from 'actions/cards';
+import { MOVE_CARDS, SHUFFLE_CARDS, FLIP_CARD, UNDO_MOVE, REDO_MOVE } from '../actions/cards';
 
 /* Undoable setup */
 import undoable, { includeAction } from 'redux-undo';

@@ -3,10 +3,10 @@ import React, { Component } from 'react';
 /* eslint-enable no-unused-vars*/
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as cardActionCreators from 'actions/cards';
-import * as dragActionCreators from 'actions/dragdrop';
+import * as cardActionCreators from '../../actions/cards';
+import * as dragActionCreators from '../../actions/dragdrop';
 
-import Table from 'components/Table';
+import Table from '../../components/Table';
 
 import styles from './styles/';
 

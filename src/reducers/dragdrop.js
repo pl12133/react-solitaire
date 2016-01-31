@@ -1,4 +1,4 @@
-import { DRAGDROP_BEGIN_DRAG, DRAGDROP_END_DRAG } from 'actions/dragdrop';
+import { DRAGDROP_BEGIN_DRAG, DRAGDROP_END_DRAG } from '../actions/dragdrop';
 
 const initialState = {
   isDragging: false,

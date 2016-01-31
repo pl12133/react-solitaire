@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars*/
 import React, { Component, PropTypes } from 'react';
 /* eslint-enable no-unused-vars*/
-import GameButton from 'components/GameButton/';
+import GameButton from '../../components/GameButton/';
 
 const propTypes = {
   handleRedoButtonClick: PropTypes.func.isRequired,
@@ -24,11 +24,11 @@ const ButtonsPanel = ({handleRedoButtonClick,
                 onClick={handleUndoButtonClick}>
       {'Undo!'}
     </GameButton>
-    <GameButton className={'btn btn-sucess'}
+    {/* <GameButton className={'btn btn-sucess'}
                 float={'left'}
                 onClick={doWinAnimation}>
       {'Win!'}
-    </GameButton>
+    </GameButton> */}
     <GameButton className={'btn btn-primary'}
                 float={'right'}
                 onClick={handleDealButtonClick}>
