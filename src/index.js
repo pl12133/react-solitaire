@@ -12,7 +12,7 @@ import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react';
 
 const store = configureStore();
 
-ReactDOM.render(
+const Game = () => (
   <div style={ {height: '100%'} }>
     <Provider store={store}>
       <App />
@@ -20,7 +20,14 @@ ReactDOM.render(
     {/* <DebugPanel top right bottom>
       <DevTools store={store} monitor={LogMonitor} />
     </DebugPanel> */}
-  </div>,
-  document.getElementById('root')
+  </div>
 );
+
+const root = document.getElementById('root');
+if (root) {
+  ReactDOM.render(<Game />, root);
+}
+
 console.log('Runner runner');
+
+export default Game;
