@@ -25,6 +25,7 @@
     "babel-core": "^6.1.2",
     "babel-loader": "^6.0.1",
     "css-loader": "^0.22.0",
+    "file-loader": "^0.8.5",
     "node-sass": "^3.4.1",
     "postcss-modules-extract-imports": "^1.0.0",
     "postcss-modules-scope": "^1.0.0",
@@ -37,7 +38,8 @@
     "sass": "^0.5.0",
     "sass-loader": "^3.1.1",
     "style-loader": "^0.13.0",
-    "unexpected-react": "^0.3.0"
+    "unexpected-react": "^0.3.0",
+    "url-loader": "^0.5.7"
   },
   "devDependencies": {
     "babel-eslint": "^4.1.6",
