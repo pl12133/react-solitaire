@@ -11,7 +11,7 @@
 /* .flipped for when a card is flipped (face down)*/
 :local(.flipped) {
   /* These styles display when a card is flipped */
-  background: url('/dist/cardback.jpg') no-repeat center center !important;
+  background: url('../../../../dist/cardback.jpg') no-repeat center center !important;
   background-size: cover !important;
   border-radius: 10px;
 }
