@@ -2,38 +2,32 @@ var path = require('path');
 var webpack = require('webpack');
 
 module.exports = {
-  entry: './src/index.js',
-  output: {
-    filename: 'index.js',
-    path: path.join(__dirname, '..', '/lib/'),
-    library: 'react-solitaire',
-    libraryTarget: 'umd'
-  },
-  externals: {
-    'react': 'react',
-    'react-dom': 'react-dom'
-  },
-  plugins: [
-    new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('production')
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-          warnings: false
-      }
-    })
+  entry: [
+    './src/index'
   ],
+  output: {
+      filename: 'index.js',
+      path: path.join(__dirname, '..', '/lib/'),
+      publicPath: '/lib/',
+      library: 'react-solitaire',
+      libraryTarget: 'umd'
+  },
+  resolve: {
+    extensions: ['', '.jsx', '.js', '.json'],
+    modulesDirectories: ['node_modules', 'src'],
+  },
   module: {
-    noParse: [ path.resolve(__dirname, 'node_modules', 'react/dist/react.js') ],
     loaders: [{
         test: /\.scss$/,
         loaders: ["style", "css", "sass"] 
       }, {
         test: /\.js$/,
+        loader: 'babel-loader',
         exclude: /node_modules/,
-        loader: 'babel-loader'
-      }, 
-    ],
-  },
+      }, {
+        test: /\.(png|jpg|svg)$/,
+        loader: 'url-loader?limit=1048576'
+      }
+    ]
+  }
 };

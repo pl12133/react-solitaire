@@ -29,6 +29,9 @@ module.exports = {
         test: /\.js$/,
         loader: 'babel-loader',
         exclude: /node_modules/,
+      }, {
+        test: /\.(png|jpg|svg)$/,
+        loader: 'url-loader?limit=1048576'
       }
     ]
   },
