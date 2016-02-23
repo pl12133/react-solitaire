@@ -12,6 +12,10 @@ module.exports = {
       library: 'react-solitaire',
       libraryTarget: 'umd'
   },
+  plugins: [
+    new webpack.optimize.DedupePlugin(),
+    new webpack.optimize.UglifyJsPlugin()
+  ],
   resolve: {
     extensions: ['', '.jsx', '.js', '.json'],
     modulesDirectories: ['node_modules', 'src'],
