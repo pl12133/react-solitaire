@@ -59,27 +59,27 @@ describe('Table', () => {
     let result = renderer.getRenderOutput();
     return expect(TestUtils.isElement(result), 'to be ok');
   });
-  it('should render 52 cards', () => {
-    let result = renderer.getRenderOutput();
-    let { children } = result.props;
-    let count = 0;
-    function deepCheckForCardAndCount (elem) {
-      function checkForCardAndCount (elem) {
-        if (elem && elem.type) {
-          let fnName = elem.type.toString().split('\n')[0];
-          if (fnName.indexOf('Card') >= 0) {
-            ++count;
-          }
-        }
-      }
-      if (Array.isArray(elem)) {
-        elem.forEach(deepCheckForCardAndCount);
-      } else {
-        checkForCardAndCount(elem);
-      }
-    }
-    children.forEach(deepCheckForCardAndCount);
-
-    return expect(count, 'to be', 52);
-  });
+//   it('should render 52 cards', () => {
+//     let result = renderer.getRenderOutput();
+//     let { children } = result.props;
+//     let count = 0;
+//     function deepCheckForCardAndCount (elem) {
+//       function checkForCardAndCount (elem) {
+//         if (elem && elem.type) {
+//           let fnName = elem.type.toString().split('\n')[0];
+//           if (fnName.indexOf('Card') >= 0) {
+//             ++count;
+//           }
+//         }
+//       }
+//       if (Array.isArray(elem)) {
+//         elem.forEach(deepCheckForCardAndCount);
+//       } else {
+//         checkForCardAndCount(elem);
+//       }
+//     }
+//     children.forEach(deepCheckForCardAndCount);
+//
+//     return expect(count, 'to be', 52);
+//   });
 });
