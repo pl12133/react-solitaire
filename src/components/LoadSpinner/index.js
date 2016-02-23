@@ -4,7 +4,9 @@ import React, { Component, PropTypes } from 'react';
 import styles from './styles/';
 
 const LoadSpinner = () => (
-  <div className={styles} style={ {
+  <div
+    className={styles}
+    style={ {
       position: 'absolute',
       left: '50%',
       top: '50%',
@@ -24,6 +26,6 @@ const LoadSpinner = () => (
       </div>
     </div>
   </div>
-)
+);
 
 export default LoadSpinner;
