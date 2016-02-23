@@ -18,6 +18,8 @@ import Card from '../../components/Card/';
 import DroppableStack from '../../components/DroppableStack/';
 import ButtonsPanel from '../../components/ButtonsPanel/';
 
+import LoadSpinner from '../../components/LoadSpinner/';
+
 const DISPLAY_NAME = '<Table>';
 const CARD_Y_DISTANCE = 15;
 const propTypes = {
@@ -56,7 +58,10 @@ class Table extends Component {
       this[elem] = this[elem].bind(this);
     });
 
-    this.state = { redeal: false };
+    this.state = {
+      loading: true,
+      redeal: false
+    };
   }
 
   getOffsetFromTable (elem) {
@@ -352,6 +357,8 @@ class Table extends Component {
     this.setState({
       redeal: true,
       width: document.getElementById('table').clientWidth
+    }, () => {
+      setTimeout(() => this.setState({loading: false}), 0);
     });
     window.addEventListener('resize', this.handleResize);
     document.addEventListener('keyup', this.handleKeyUp);
@@ -389,6 +396,13 @@ class Table extends Component {
     return { offsetWidth, offsetHeight };
   }
   render () {
+    if (this.state.loading) {
+      return (
+        <div id={'table'} className={styles}>
+          <LoadSpinner />
+        </div>
+      );
+    }
     // calculations
     let tableWidth = this.state.width || 800;
     let { offsetWidth: droppableWidth, offsetHeight: droppableHeight } = this.getCardDimensions();
