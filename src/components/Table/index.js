@@ -85,7 +85,10 @@ class Table extends Component {
   }
   handleResize (e) {
     this.setState({
+      loading: true,
       width: document.getElementById('table').clientWidth
+    }, () => {
+      setTimeout(() => this.setState({loading: false}), 0);
     });
   }
   handleCardFlip (card) {
