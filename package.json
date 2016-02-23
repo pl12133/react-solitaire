@@ -43,6 +43,7 @@
   },
   "devDependencies": {
     "babel-eslint": "^4.1.6",
+    "babel-plugin-react-transform": "^2.0.0",
     "babel-preset-es2015": "^6.1.18",
     "babel-preset-react": "^6.1.2",
     "css-modules-require-hook": "^2.0.2",
@@ -55,6 +56,7 @@
     "mocha": "^2.3.4",
     "react-addons-test-utils": "^0.14.2",
     "react-tools": "^0.13.3",
+    "react-transform-render-visualizer": "^0.4.0",
     "redux-devtools": "^2.1.5",
     "redux-logger": "^2.0.4",
     "redux-thunk": "^1.0.0",
