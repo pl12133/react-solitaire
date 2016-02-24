@@ -274,7 +274,7 @@ class Table extends Component {
             offsetHeight={offsetHeight}
             handleBeginDragDrop={this.handleBeginDragDrop}
           />
-        )
+        );
       };
     };
     let { cards } = this.props;

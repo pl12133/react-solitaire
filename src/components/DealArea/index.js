@@ -25,7 +25,7 @@ class DealArea extends Component {
       this[elem] = this[elem].bind(this);
     });
   }
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate (nextProps, nextState) {
     let { faceUp: oldFaceUp, faceDown: oldFaceDown } = this.props;
     let { faceUp: newFaceUp, faceDown: newFaceDown } = nextProps;
     return oldFaceUp.length !== newFaceUp.length || oldFaceDown.length !== newFaceDown.length;
