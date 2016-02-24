@@ -40,15 +40,16 @@ class Card extends Component {
     super(props);
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate (nextProps, nextState) {
     let { props } = this;
     let oldPropKeys = Object.keys(props);
     let newPropKeys = Object.keys(nextProps);
-    if (oldPropKeys.length !== newPropKeys.length)
+    if (oldPropKeys.length !== newPropKeys.length) {
       return true;
+    }
     return !oldPropKeys.every(prop => {
-      return props[prop].toString() === nextProps[prop].toString()
-    })
+      return props[prop].toString() === nextProps[prop].toString();
+    });
   }
   render () {
     let { name,
