@@ -19,8 +19,10 @@ const propTypes = {
 class DroppableStack extends Component {
   constructor (props) {
     super(props);
-    let ownFuncs = [ 'checkGoodDrop', 'handleStackDrop', 'handleAceDrop', 'handleTouchTap',
-                     'shouldComponentUpdate', 'handleMouseDown', 'handleTouchStart', 'handleDoubleClick' ];
+    let ownFuncs = [
+      'checkGoodDrop', 'handleStackDrop', 'handleAceDrop', 'handleTouchTap',
+      'shouldComponentUpdate', 'handleMouseDown', 'handleTouchStart', 'handleDoubleClick'
+    ];
     ownFuncs.forEach((elem) => {
       if (!this[elem]) {
         console.error(`Attempt to self-bind \'${elem}\' to ${DISPLAY_NAME} failed`);
@@ -66,7 +68,7 @@ class DroppableStack extends Component {
   }
   checkGoodDrop (cards, numCards) {
     // This is called when there is a drop on this droppable from <Table>
-    // return true to accept the drop, false to rejct it
+    // return true to accept the drop, false to reject it
     let { stackName } = this.props;
     if (stackName.indexOf('ACE') >= 0) {
       if (numCards > 1) {
@@ -177,9 +179,13 @@ class DroppableStack extends Component {
       offsetHeight += (numChildren > 2) ? (numChildren - 2) * 15 : 0;
     }
     return (
-      <div className={'droppable ' + styles}
-           style={{height: offsetHeight + 'px',
-                   width: offsetWidth + 'px' }} >
+      <div
+        className={'droppable ' + styles}
+        style={ {
+          height: offsetHeight + 'px',
+          width: offsetWidth + 'px'
+        } }
+      >
         {children}
       </div>
     );
