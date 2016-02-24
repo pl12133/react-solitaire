@@ -4,14 +4,9 @@ import { MOVE_CARDS, SHUFFLE_CARDS, FLIP_CARD, UNDO_MOVE, REDO_MOVE } from '../a
 import undoable, { includeAction } from 'redux-undo';
 
 // Cards state is an array of 52 objects of form {name, location}
-//
 function makeDeck () {
-  // deck only generates once
   let initDeck = () => {
     let memo = [];
-//    if (memo.length)
-//      return memo;
-
     const suits = ['hearts', 'diamonds', 'clubs', 'spades'];
     const values = ['two', 'three', 'four', 'five', 'six', 'seven',
                   'eight', 'nine', 'ten', 'jack', 'queen', 'king', 'ace'];
@@ -71,27 +66,23 @@ function card (state = initialState, action) {
     case SHUFFLE_CARDS:
       return deal(shuffle(initialState));
     case MOVE_CARDS: {
-      let next = state.filter((stateCard) => {
-        return !action.cards.some((card) => {
-          return card.name === stateCard.name;
-        });
-      }).concat(action.cards.map((card) => {
-        return {
+      return [
+        ...state.filter(stateCard => !action.cards.some(card => card.name === stateCard.name)),
+        ...action.cards.map(card => ({
           name: card.name,
           location: action.destination,
           flipped: card.flipped
-        };
-      }));
-      return next;
+        }))
+      ];
     }
     case FLIP_CARD: {
-      let next = state.filter((elem) => {
-        return (elem.name !== action.card.name);
-      }).concat({name: action.card.name,
-                 location: action.card.location,
-                 flipped: !action.card.flipped});
-
-      return next;
+      return [
+        ...state.filter((elem) => elem.name !== action.card.name), {
+          name: action.card.name,
+          location: action.card.location,
+          flipped: !action.card.flipped
+        }
+      ];
     }
     default:
       return state;
@@ -100,8 +91,7 @@ function card (state = initialState, action) {
 
 let undoConfig = {
   filter: includeAction([MOVE_CARDS]),
-  limit: 256,
-  debug: true,
+  limit: 128,
   undoType: UNDO_MOVE,
   redoType: REDO_MOVE
 };
