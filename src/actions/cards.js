@@ -10,6 +10,9 @@ export function shuffleCards () {
   };
 }
 export function moveCards (cards, destination) {
+  if (!Array.isArray(cards)) {
+    cards = [cards];
+  }
   return {
     type: MOVE_CARDS,
     cards,
