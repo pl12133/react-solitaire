@@ -1,3 +1,5 @@
+![build-status](https://travis-ci.org/pl12133/react-solitaire.svg?branch=master)
+
 # react-solitaire
 
 A game of Solitaire in React
