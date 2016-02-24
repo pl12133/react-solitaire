@@ -13,9 +13,10 @@ const propTypes = {
 class DealArea extends Component {
   constructor (props) {
     super(props);
-    let ownFuncs = [ 'componentWillReceiveProps', 'handleMouseDown',
-                     'handleDoubleClick', 'handleTouchTap',
-                     'handleTouchStart', 'render' ];
+    let ownFuncs = [
+      'handleMouseDown', 'handleDoubleClick',
+      'handleTouchTap', 'handleTouchStart'
+    ];
     ownFuncs.forEach((elem) => {
       if (!this[elem]) {
         console.error(`Attempt to self-bind \'${elem}\' to ${DISPLAY_NAME} failed`);
@@ -24,7 +25,10 @@ class DealArea extends Component {
       this[elem] = this[elem].bind(this);
     });
   }
-  componentWillReceiveProps (nextProps) {
+  shouldComponentUpdate(nextProps, nextState) {
+    let { faceUp: oldFaceUp, faceDown: oldFaceDown } = this.props;
+    let { faceUp: newFaceUp, faceDown: newFaceDown } = nextProps;
+    return oldFaceUp.length !== newFaceUp.length || oldFaceDown.length !== newFaceDown.length;
   }
   handleTouchTap (e) {
     e.preventDefault();
@@ -66,10 +70,10 @@ class DealArea extends Component {
     let canMoveTo = getAvailableMoves(clickedCardName, 1);
     if (canMoveTo.length) {
       let { moveCards } = this.props;
-      moveCards([{
+      moveCards({
         name: clickedCardName,
         flipped: false
-      }], canMoveTo[0]);
+      }, canMoveTo[0]);
     }
   }
   handleTouchStart (e) {
@@ -86,20 +90,22 @@ class DealArea extends Component {
     if (!faceUp.length) {
       faceUpHooked = [];
     } else {
-      let len = faceUp.length;
+      let { length: len } = faceUp;
       let index = 0;
+      let noopHandlers = {
+        onMouseDown: (e) => false,
+        onTouchStart: (e) => false
+      };
       faceUpHooked = React.Children.map(faceUp, (child) => {
         // Add refs to all children and an onMouseDown handler to the last child
         // Disable mouseDown on all cards except the top one
         // Reposition cards so we always see three
-
         let thisIndex = index++;
         switch (thisIndex) {
           case len - 2:
             return React.cloneElement(child, {
               offsetLeft: offsetWidth * 0.15,
-              onMouseDown: (e) => false,
-              onTouchStart: (e) => false
+              ...noopHandlers
             });
           case len - 1:
             return React.cloneElement(child, {
@@ -111,8 +117,7 @@ class DealArea extends Component {
           default:
             return React.cloneElement(child, {
               offsetLeft: 0,
-              onMouseDown: (e) => false,
-              onTouchStart: (e) => false
+              ...noopHandlers
             });
         }
       });
