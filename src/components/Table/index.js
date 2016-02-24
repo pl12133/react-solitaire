@@ -40,15 +40,16 @@ const propTypes = {
 class Table extends Component {
   constructor (props) {
     super(props);
-    let ownFuncs = [ 'handleMouseUp', 'handleMouseMove',
-                     'handleBeginDragDrop', 'handleEndDragDrop',
-                     'handleCardFlip', 'handleResize', 'handleKeyUp',
-                     'handleDealButtonClick', 'handleUndoButtonClick', 'handleRedoButtonClick',
-                     'handleTouchEnd', 'handleTouchMove',
-                     'getOffsetFromTable', 'getCardDimensions', 'getAvailableMoves',
-                     'cardSlice', 'cardLocate', 'createRow', 'dealCards',
-                     'checkGameWon', 'doWinAnimation',
-                     'render' ];
+    let ownFuncs = [
+      'handleMouseUp', 'handleMouseMove',
+      'handleBeginDragDrop', 'handleEndDragDrop',
+      'handleCardFlip', 'handleResize', 'handleKeyUp',
+      'handleDealButtonClick', 'handleUndoButtonClick', 'handleRedoButtonClick',
+      'handleTouchEnd', 'handleTouchMove',
+      'getOffsetFromTable', 'getCardDimensions', 'getAvailableMoves',
+      'cardSlice', 'cardLocate', 'createRow', 'dealCards',
+      'checkGameWon', 'doWinAnimation'
+    ];
 
     ownFuncs.forEach((elem) => {
       if (!this[elem]) {
@@ -231,16 +232,18 @@ class Table extends Component {
       offsetHeight = offsetHeight || cardHeight;
       let stackChildren = this.cardSlice(stackName, cardsXOffset, cardsYOffset, offsetWidth, offsetHeight);
       row.push(
-        <DroppableStack stackName={stackName}
-                        key={stackName}
-                        ref={stackName}
-                        index={index + 1}
-                        offsetWidth={offsetWidth}
-                        offsetHeight={offsetHeight}
-                        handleBeginDragDrop={this.handleBeginDragDrop}
-                        getAvailableMoves={this.getAvailableMoves}
-                        moveCards={this.props.moveCards}
-                        flipCard={this.handleCardFlip}>
+        <DroppableStack
+          stackName={stackName}
+          key={stackName}
+          ref={stackName}
+          index={index + 1}
+          offsetWidth={offsetWidth}
+          offsetHeight={offsetHeight}
+          handleBeginDragDrop={this.handleBeginDragDrop}
+          getAvailableMoves={this.getAvailableMoves}
+          moveCards={this.props.moveCards}
+          flipCard={this.handleCardFlip}
+        >
           {stackChildren}
         </DroppableStack>
       );
@@ -260,15 +263,18 @@ class Table extends Component {
   cardSlice (location, offsetLeft = 0, offsetTop = 0, offsetWidth = 0, offsetHeight = 0) {
     let cardMap = (offsetLeft = 0, offsetTop = 0, offsetWidth = 0, offsetHeight = 0) => {
       return (card, index) => {
-        return <Card name={card.name}
-                     key={card.name}
-                     flipped={card.flipped}
-                     offsetLeft={index * offsetLeft}
-                     offsetTop={index * offsetTop}
-                     offsetWidth={offsetWidth}
-                     offsetHeight={offsetHeight}
-                     handleBeginDragDrop={this.handleBeginDragDrop}
-               />;
+        return (
+          <Card
+            name={card.name}
+            key={card.name}
+            flipped={card.flipped}
+            offsetLeft={index * offsetLeft}
+            offsetTop={index * offsetTop}
+            offsetWidth={offsetWidth}
+            offsetHeight={offsetHeight}
+            handleBeginDragDrop={this.handleBeginDragDrop}
+          />
+        )
       };
     };
     let { cards } = this.props;
@@ -303,32 +309,8 @@ class Table extends Component {
       card.style.left = randomWithinWidth + 'px';
       card.style.top = randomWithinHeight + 'px';
 
-      card.style.transition = 'top 1s, left 1s';
+      card.style.transition = 'top 1s ease-in-out, left 1s ease-in-out';
     };
-    let degrees = 90;
-    let spinInCirclesAnimation = (card, index, arr) => {
-      card.style.transform = 'rotate(' + degrees + 'deg)';
-      card.style.transition = 'transform 2s';
-      if (index === arr.length - 1) {
-        degrees = (degrees >= 720)
-          ? 0
-          : degrees + 90;
-      }
-    };
-    console.log(spinInCirclesAnimation);
-//    let doAnimation = (arr) => {
-//      let chance = Math.round(Math.random());
-//      let anim;
-//      switch (chance) {
-//        case 0:
-//          anim = spinInCirclesAnimation;
-//          break;
-//        case 1:
-//          anim = moveAllOverAnimation;
-//          break;
-//      }
-//      arr.forEach(anim);
-//    };
     function debounce (func, wait, immediate) {
       let timeout;
       return function (...args) {
@@ -384,7 +366,6 @@ class Table extends Component {
       });
     } else if (this.checkGameWon()) {
       this.doWinAnimation();
-      alert('You Won!');
     }
   }
   getCardDimensions () {
