@@ -8,7 +8,7 @@ React for view, Redux for state, mocha and unexpected-react for testing, Webpack
 
 ###### Demo available: [Github Pages](pl12133.github.io/react-solitaire/)
 
-# installation
+## installation
 
 Clone git repo:
 
@@ -30,10 +30,10 @@ Start a local server:
 
 Play!
 
-# features
+## features
 ![demo screenshot](http://i.imgur.com/07VQ5DA.png)
 Mobile friendly interface, card moves are undoable and redoable, tapping a card will automatically move it to the first available stack.
 
-# license
+## license
 
 All content Copyright Peter Lenahan 2015, Licensed under Apache 2.0
