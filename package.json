@@ -26,6 +26,7 @@
     "babel-core": "^6.1.2",
     "babel-loader": "^6.0.1",
     "babel-plugin-transform-object-rest-spread": "^6.5.0",
+    "babel-polyfill": "^6.5.0",
     "css-loader": "^0.22.0",
     "file-loader": "^0.8.5",
     "node-sass": "^3.4.1",
