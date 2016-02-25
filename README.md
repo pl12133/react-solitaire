@@ -6,6 +6,8 @@ A game of Solitaire in React
 
 React for view, Redux for state, mocha and unexpected-react for testing, Webpack for module bundling, SASS for styles
 
+###### Demo available: [Github Pages](pl12133.github.io/react-solitaire/)
+
 # installation
 
 Clone git repo:
