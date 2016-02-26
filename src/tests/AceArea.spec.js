@@ -1,19 +1,13 @@
-/*
- * These tests use the shallow renderer, which is faster and doesn't require an emulated DOM
- */
-
+/* eslint-disable no-unused-vars*/
+const React = require('react');
+/* eslint-enable no-unused-vars*/
 const Unexpected = require('unexpected');
 const UnexpectedReact = require('unexpected-react');
-
-/* eslint-disable no-unused-vars*/
-var React = require('react');
-/* eslint-enable no-unused-vars*/
-var TestUtils = require('react-addons-test-utils');
-
-const AceArea = require('../components/AceArea/').default;
-
+const TestUtils = require('react-addons-test-utils');
 const expect = Unexpected.clone()
   .use(UnexpectedReact);
+
+const AceArea = require('../components/AceArea/').default;
 
 describe('AceArea', () => {
   let renderer;
@@ -21,12 +15,12 @@ describe('AceArea', () => {
   beforeEach(() => {
     renderer = TestUtils.createRenderer();
     renderer.render(
-       <AceArea>
-         <div />
-         <div />
-         <div />
-         <div />
-       </AceArea>
+      <AceArea>
+        <div />
+        <div />
+        <div />
+        <div />
+      </AceArea>
     );
   });
 
@@ -38,7 +32,7 @@ describe('AceArea', () => {
     return expect(TestUtils.isElement(result), 'to be ok');
   });
 
-  it('render a container with id aceArea', () => {
+  it('should render a container with id aceArea', () => {
     return expect(renderer, 'to have rendered', <div id={'aceArea'} />);
   });
 

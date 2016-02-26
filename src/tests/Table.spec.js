@@ -1,22 +1,16 @@
-/*
- * These tests use the shallow renderer, which is faster and doesn't require an emulated DOM
- */
-
+/* eslint-disable no-unused-vars*/
+const React = require('react');
+/* eslint-enable no-unused-vars*/
 const Unexpected = require('unexpected');
 const UnexpectedReact = require('unexpected-react');
-
-/* eslint-disable no-unused-vars*/
-var React = require('react');
-/* eslint-enable no-unused-vars*/
-var TestUtils = require('react-addons-test-utils');
-
-const Table = require('../components/Table/').default;
-
+const TestUtils = require('react-addons-test-utils');
 const expect = Unexpected.clone()
   .use(UnexpectedReact);
 
+const Table = require('../components/Table/').default;
+const LoadSpinner = require('../components/LoadSpinner/').default;
+
 const deck = (function () {
-  // deck only generates once
   let memo = [];
   let initDeck = () => {
     if (memo.length) {
@@ -41,15 +35,19 @@ describe('Table', () => {
 
   beforeEach(() => {
     renderer = TestUtils.createRenderer();
-    renderer.render(<Table dragdrop={ {isDragging: false} }
-                           cards={ deck }
-                           undoMove={function () {}}
-                           redoMove={function () {}}
-                           beginDrag={function () {}}
-                           endDrag={function () {}}
-                           flipCard={function () {}}
-                           shuffleCards={function () {}}
-                           moveCards={function () {}} />);
+    renderer.render(
+      <Table
+        dragdrop={ {isDragging: false} }
+        cards={ deck }
+        undoMove={function () {}}
+        redoMove={function () {}}
+        beginDrag={function () {}}
+        endDrag={function () {}}
+        flipCard={function () {}}
+        shuffleCards={function () {}}
+        moveCards={function () {}}
+      />
+    );
   });
 
   it('should be a function', () => {
@@ -59,27 +57,16 @@ describe('Table', () => {
     let result = renderer.getRenderOutput();
     return expect(TestUtils.isElement(result), 'to be ok');
   });
-//   it('should render 52 cards', () => {
-//     let result = renderer.getRenderOutput();
-//     let { children } = result.props;
-//     let count = 0;
-//     function deepCheckForCardAndCount (elem) {
-//       function checkForCardAndCount (elem) {
-//         if (elem && elem.type) {
-//           let fnName = elem.type.toString().split('\n')[0];
-//           if (fnName.indexOf('Card') >= 0) {
-//             ++count;
-//           }
-//         }
-//       }
-//       if (Array.isArray(elem)) {
-//         elem.forEach(deepCheckForCardAndCount);
-//       } else {
-//         checkForCardAndCount(elem);
-//       }
-//     }
-//     children.forEach(deepCheckForCardAndCount);
-//
-//     return expect(count, 'to be', 52);
-//   });
+  it('should render with id "table"', () => {
+    return expect(renderer, 'to have rendered',
+      <div id="table" />
+    );
+  });
+  it('should render a loading spinner', () => {
+    return expect(renderer, 'to have rendered',
+      <div>
+        <LoadSpinner />
+      </div>
+    );
+  });
 });

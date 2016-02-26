@@ -1,30 +1,30 @@
-/*
- * These tests use the shallow renderer, which is faster and doesn't require an emulated DOM
- */
-
+/* eslint-disable no-unused-vars*/
+const React = require('react');
+/* eslint-enable no-unused-vars*/
 const Unexpected = require('unexpected');
 const UnexpectedReact = require('unexpected-react');
-
-/* eslint-disable no-unused-vars*/
-var React = require('react');
-/* eslint-enable no-unused-vars*/
-var TestUtils = require('react-addons-test-utils');
-
-const Card = require('../components/Card/').default;
-
+const TestUtils = require('react-addons-test-utils');
 const expect = Unexpected.clone()
   .use(UnexpectedReact);
+
+const Card = require('../components/Card/').default;
 
 describe('Card', () => {
   let renderer;
 
   beforeEach(() => {
     renderer = TestUtils.createRenderer();
-    renderer.render(<Card name={"king-of-hearts"}
-                          offsetWidth={50}
-                          offsetHeight={80}
-                          handleBeginDragDrop={function () {} }
-                          flipped={false} />);
+    renderer.render(
+      <Card
+        name={"king-of-hearts"}
+        offsetLeft={25}
+        offsetTop={35}
+        offsetWidth={50}
+        offsetHeight={80}
+        handleBeginDragDrop={function () {} }
+        flipped={false}
+      />
+    );
   });
 
   it('should be a function', () => {
@@ -35,7 +35,21 @@ describe('Card', () => {
     return expect(TestUtils.isElement(result), 'to be ok');
   });
 
-  it('renders a king of hearts', () => {
+  it('should be positioned with inline style', () => {
+    return expect(renderer, 'to have rendered',
+      <div
+        style={ {
+          zIndex: '10',
+          position: 'absolute',
+          left: '25px',
+          top: '35px',
+          width: '50px',
+          height: '80px'
+        } }
+      />
+    );
+  });
+  it('should render a king of hearts', () => {
     return expect(renderer, 'to have rendered', <div id={'king-of-hearts'} />);
   });
 });

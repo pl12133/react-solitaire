@@ -1,36 +1,33 @@
-/*
- * These tests use the shallow renderer, which is faster and doesn't require an emulated DOM
- */
-
+/* eslint-disable no-unused-vars*/
+const React = require('react');
+/* eslint-enable no-unused-vars*/
 const Unexpected = require('unexpected');
 const UnexpectedReact = require('unexpected-react');
-
-/* eslint-disable no-unused-vars*/
-var React = require('react');
-/* eslint-enable no-unused-vars*/
-var TestUtils = require('react-addons-test-utils');
-
-const DroppableStack = require('../components/DroppableStack/').default;
-
+const TestUtils = require('react-addons-test-utils');
 const expect = Unexpected.clone()
   .use(UnexpectedReact);
+
+const DroppableStack = require('../components/DroppableStack/').default;
 
 describe('DroppableStack', () => {
   let renderer;
 
   beforeEach(() => {
     renderer = TestUtils.createRenderer();
-    renderer.render(<DroppableStack stackName={'ACE-1'}
-                                    index={1}
-                                    handleBeginDragDrop={ function () {} }
-                                    getAvailableMoves={ function () {} }
-                                    moveCards={ function () {} }
-                                    flipCard={ function () {} }
-                                    offsetWidth={100}
-                                    offsetHeight={100}>
-                      <div />
-                      <div />
-                    </DroppableStack>
+    renderer.render(
+      <DroppableStack
+        stackName={'ACE-1'}
+        index={1}
+        handleBeginDragDrop={ function () {} }
+        getAvailableMoves={ function () {} }
+        moveCards={ function () {} }
+        flipCard={ function () {} }
+        offsetWidth={100}
+        offsetHeight={100}
+      >
+          <div />
+          <div />
+      </DroppableStack>
     );
   });
 
@@ -42,10 +39,14 @@ describe('DroppableStack', () => {
     let result = renderer.getRenderOutput();
     return expect(TestUtils.isElement(result), 'to be ok');
   });
-  it('should render with its offsetLeft, offsetWidth, and offsetHeight', () => {
+  it('should render with its offsetWidth, and offsetHeight', () => {
     return expect(renderer, 'to have rendered',
-        <div style={ {width: '100px',
-                      height: '100px' } }>
+        <div
+          style={ {
+            width: '100px',
+            height: '100px'
+          } }
+        >
           <div />
           <div />
         </div>

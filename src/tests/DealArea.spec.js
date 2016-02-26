@@ -1,36 +1,26 @@
-/*
- * These tests use the shallow renderer, which is faster and doesn't require an emulated DOM
- */
-
+/* eslint-disable no-unused-vars*/
+const React = require('react');
+/* eslint-enable no-unused-vars*/
 const Unexpected = require('unexpected');
 const UnexpectedReact = require('unexpected-react');
-
-/* eslint-disable no-unused-vars*/
-var React = require('react');
-/* eslint-enable no-unused-vars*/
-var TestUtils = require('react-addons-test-utils');
-
-const DealArea = require('../components/DealArea/').default;
-
+const TestUtils = require('react-addons-test-utils');
 const expect = Unexpected.clone()
   .use(UnexpectedReact);
 
-// This test is optional, but allows you to easily check that everything has been required in the correct order
-describe('React', () => {
-  it('should have been injected', () => {
-    expect(React, 'to have been injected');
-  });
-});
+const DealArea = require('../components/DealArea/').default;
 
 describe('DealArea', () => {
   let renderer;
 
   beforeEach(() => {
     renderer = TestUtils.createRenderer();
-    renderer.render(<DealArea getAvailableMoves={ function () {} }
-                              moveCards={ function () {} }
-                              faceUp={[]}
-                              faceDown={[]} />);
+    renderer.render(
+      <DealArea getAvailableMoves={ function () {} }
+        moveCards={ function () {} }
+        faceUp={[]}
+        faceDown={[]}
+      />
+    );
   });
 
   it('should be a function', () => {
@@ -46,6 +36,6 @@ describe('DealArea', () => {
   });
   it('should have imported styles', () => {
     let result = renderer.getRenderOutput();
-    return expect(result.props.className, 'to be', void 0);
+    return expect(result.props.className, 'to be', undefined);
   });
 });
