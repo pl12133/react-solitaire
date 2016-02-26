@@ -57,7 +57,7 @@ class Card extends Component {
         id={name}
         className={className}
         style={ {
-          zIndex: 10,
+          zIndex: '10',
           position: 'absolute',
           width: offsetWidth + 'px',
           height: offsetHeight + 'px',
