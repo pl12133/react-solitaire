@@ -124,9 +124,12 @@ class DealArea extends Component {
     }
     let faceDownHooked;
     if (!faceDown.length) {
-      faceDownHooked = <div className={'reset'}
-                            onMouseDown={this.handleMouseDown}
-                            onTouchStart={this.handleTouchStart} />;
+      faceDownHooked = (
+        <div className={'reset'}
+          onMouseDown={this.handleMouseDown}
+          onTouchStart={this.handleTouchStart}
+        />
+      );
     } else {
       let index = 0;
       faceDownHooked = React.Children.map(faceDown, (child) => {
@@ -143,19 +146,32 @@ class DealArea extends Component {
         });
       });
     }
-    let leftOffsetWidth = (faceDownHooked.length) ? offsetWidth + 'px'
-                                                  : '50%';
+    let leftOffsetWidth = (faceDownHooked.length)
+      ? offsetWidth + 'px'
+      : '50%';
     return (
-      <div className={styles}
-           style={ {height: (1.02 * offsetHeight) + 'px'} }>
-        <span id={'left'}
-              style={ {width: leftOffsetWidth,
-                       height: offsetHeight + 'px'} }>
+      <div
+        className={styles}
+        style={ {
+          height: (1.02 * offsetHeight) + 'px'
+        } }
+      >
+        <span
+          id={'left'}
+          style={ {
+            width: leftOffsetWidth,
+            height: offsetHeight + 'px'
+          } }
+        >
           {faceDownHooked}
         </span>
-        <span id={'right'}
-              style={ {width: offsetWidth + 'px',
-                       height: offsetHeight + 'px'} }>
+        <span
+          id={'right'}
+          style={ {
+            width: offsetWidth + 'px',
+            height: offsetHeight + 'px'
+          } }
+        >
           {faceUpHooked}
         </span>
       </div>
