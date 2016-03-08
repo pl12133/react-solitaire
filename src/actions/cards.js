@@ -3,6 +3,13 @@ export const SHUFFLE_CARDS = 'SHUFFLE_CARDS';
 export const FLIP_CARD = 'FLIP_CARD';
 export const UNDO_MOVE = 'UNDO_MOVE';
 export const REDO_MOVE = 'REDO_MOVE';
+export const CLEAR_UNDO_HISTORY = 'CLEAR_UNDO_HISTORY';
+
+export function clearHistory () {
+  return {
+    type: CLEAR_UNDO_HISTORY
+  }
+}
 
 export function shuffleCards () {
   return {

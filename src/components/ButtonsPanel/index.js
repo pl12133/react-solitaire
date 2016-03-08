@@ -7,20 +7,26 @@ const propTypes = {
   handleRedoButtonClick: PropTypes.func.isRequired,
   handleUndoButtonClick: PropTypes.func.isRequired,
   doWinAnimation: PropTypes.func.isRequired,
-  handleDealButtonClick: PropTypes.func.isRequired
+  handleDealButtonClick: PropTypes.func.isRequired,
+  canUndo: PropTypes.bool,
+  canRedo: PropTypes.bool,
 };
 const ButtonsPanel = ({handleRedoButtonClick,
                        handleUndoButtonClick,
                        doWinAnimation,
+                       canUndo,
+                       canRedo,
                        handleDealButtonClick}) => (
   <div>
     <GameButton className={'btn btn-sucess'}
                 float={'left'}
+                disabled={canRedo}
                 onClick={handleRedoButtonClick}>
       {'Redo!'}
     </GameButton>
     <GameButton className={'btn btn-sucess'}
                 float={'left'}
+                disabled={canUndo}
                 onClick={handleUndoButtonClick}>
       {'Undo!'}
     </GameButton>

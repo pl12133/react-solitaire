@@ -8,13 +8,15 @@ const propTypes = {
   className: PropTypes.string.isRequired,
   float: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
+  disabled: PropTypes.bool
 };
 
-const GameButton = ({className, float, onClick, children}) => {
+const GameButton = ({className, float, onClick, children, disabled}) => {
   return (
     <button className={className + ' ' + styles}
             style={ {float} }
+            disabled={disabled}
             onClick={onClick}>
       {children}
     </button>

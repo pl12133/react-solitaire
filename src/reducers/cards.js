@@ -1,4 +1,4 @@
-import { MOVE_CARDS, SHUFFLE_CARDS, FLIP_CARD, UNDO_MOVE, REDO_MOVE } from '../actions/cards';
+import { MOVE_CARDS, SHUFFLE_CARDS, FLIP_CARD, UNDO_MOVE, REDO_MOVE, CLEAR_UNDO_HISTORY } from '../actions/cards';
 
 /* Undoable setup */
 import undoable, { includeAction } from 'redux-undo';
@@ -93,7 +93,8 @@ let undoConfig = {
   filter: includeAction([MOVE_CARDS]),
   limit: 128,
   undoType: UNDO_MOVE,
-  redoType: REDO_MOVE
+  redoType: REDO_MOVE,
+  clearHistoryType: CLEAR_UNDO_HISTORY
 };
 
 export default undoable(card, undoConfig);

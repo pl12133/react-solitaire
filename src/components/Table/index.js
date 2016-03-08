@@ -35,7 +35,9 @@ const propTypes = {
   flipCard: PropTypes.func.isRequired,
   // redux-undo actionCreators
   undoMove: PropTypes.func.isRequired,
-  redoMove: PropTypes.func.isRequired
+  redoMove: PropTypes.func.isRequired,
+  canUndo: PropTypes.bool,
+  canRedo: PropTypes.bool
 };
 class Table extends Component {
   constructor (props) {
@@ -105,6 +107,7 @@ class Table extends Component {
     undoMove();
   }
   handleDealButtonClick (e) {
+    this.props.clearHistory();
     this.dealCards();
   }
   handleMouseUp (e) {
@@ -407,6 +410,8 @@ class Table extends Component {
         <ButtonsPanel handleRedoButtonClick={this.handleRedoButtonClick}
                       handleUndoButtonClick={this.handleUndoButtonClick}
                       doWinAnimation={this.doWinAnimation}
+                      canUndo={!!this.props.canUndo}
+                      canRedo={!!this.props.canRedo}
                       handleDealButtonClick={this.handleDealButtonClick}
         />
         <DealArea moveCards={this.props.moveCards}
