@@ -7,7 +7,7 @@ const TestUtils = require('react-addons-test-utils');
 const expect = Unexpected.clone()
   .use(UnexpectedReact);
 
-const Card = require('../components/Card/').default;
+const Card = require('../src/components/Card/').default;
 
 describe('Card', () => {
   let renderer;

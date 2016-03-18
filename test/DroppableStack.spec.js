@@ -7,10 +7,18 @@ const TestUtils = require('react-addons-test-utils');
 const expect = Unexpected.clone()
   .use(UnexpectedReact);
 
-const DroppableStack = require('../components/DroppableStack/').default;
+const DroppableStack = require('../src/components/DroppableStack/').DroppableStack;
+const Card = require('../src/components/Card/').Card;
+
+function noop () {}
 
 describe('DroppableStack', () => {
   let renderer;
+
+  before(() => {
+    // Ignore PropTypes warnings
+    console.error = noop;
+  });
 
   beforeEach(() => {
     renderer = TestUtils.createRenderer();
@@ -18,16 +26,31 @@ describe('DroppableStack', () => {
       <DroppableStack
         stackName={'ACE-1'}
         index={1}
-        handleBeginDragDrop={ function () {} }
-        getAvailableMoves={ function () {} }
-        moveCards={ function () {} }
-        flipCard={ function () {} }
+        handleBeginDragDrop={noop}
+        getAvailableMoves={noop}
+        moveCards={noop}
+        flipCard={noop}
         offsetWidth={100}
         offsetHeight={100}
-      >
-          <div />
-          <div />
-      </DroppableStack>
+        stackCardMapper={
+          (card, index) => {
+            return (
+              <Card
+                name={card.name}
+                key={card.name}
+                flipped={card.flipped}
+                offsetLeft={0 * index}
+                offsetHeight={15 * index}
+                handleBeginDragDrop={noop}
+              />
+            );
+          }
+        }
+        cards={ [
+          { name: 'king-of-hearts', flipped: false, location: 'ACE-1' },
+          { name: 'queen-of-hearts', flipped: false, location: 'ACE-1' }
+        ] }
+      />
     );
   });
 
@@ -47,8 +70,14 @@ describe('DroppableStack', () => {
             height: '100px'
           } }
         >
-          <div />
-          <div />
+          <Card
+            name={'king-of-hearts'}
+            handleBeginDragDrop={noop}
+          />
+          <Card
+            name={'queen-of-hearts'}
+            handleBeginDragDrop={noop}
+          />
         </div>
     );
   });

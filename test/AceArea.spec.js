@@ -7,7 +7,7 @@ const TestUtils = require('react-addons-test-utils');
 const expect = Unexpected.clone()
   .use(UnexpectedReact);
 
-const AceArea = require('../components/AceArea/').default;
+const AceArea = require('../src/components/AceArea/').default;
 
 describe('AceArea', () => {
   let renderer;

@@ -7,8 +7,8 @@ const TestUtils = require('react-addons-test-utils');
 const expect = Unexpected.clone()
   .use(UnexpectedReact);
 
-const Table = require('../components/Table/').default;
-const LoadSpinner = require('../components/LoadSpinner/').default;
+const Table = require('../src/components/Table/').default;
+const LoadSpinner = require('../src/components/LoadSpinner/').default;
 
 const deck = (function () {
   let memo = [];
