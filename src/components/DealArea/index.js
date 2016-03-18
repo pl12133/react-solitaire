@@ -1,16 +1,21 @@
 import React, {Component, PropTypes } from 'react';
 import styles from './styles';
+import cardZones from '../../constants/cardZones';
+import { connect } from 'react-redux';
 
 const DISPLAY_NAME = '<DealArea>';
 const FLIP_AT_A_TIME = 3;
 
 const propTypes = {
   faceUp: PropTypes.array.isRequired,
+  faceUpCardMap: PropTypes.func.isRequired,
   faceDown: PropTypes.array.isRequired,
+  faceDownCardMap: PropTypes.func.isRequired,
   getAvailableMoves: PropTypes.func.isRequired,
   moveCards: PropTypes.func.isRequired
 };
-class DealArea extends Component {
+// Export unconnected class for testing
+export class DealArea extends Component {
   constructor (props) {
     super(props);
     let ownFuncs = [
@@ -43,7 +48,7 @@ class DealArea extends Component {
       let { moveCards, faceUp } = this.props;
       let toMove = faceUp.reverse().map((card) => {
         return {
-          name: card.props.name,
+          name: card.name,
           flipped: true
         };
       });
@@ -55,7 +60,7 @@ class DealArea extends Component {
       // If the card is face down, flip the top three cards off the stack and move to FACEUP
       let { moveCards } = this.props;
       let toMove = children.slice(-FLIP_AT_A_TIME).reverse().map((card) => {
-        let { name } = card.props;
+        let { name } = card;
         return {
           name,
           flipped: false
@@ -84,8 +89,11 @@ class DealArea extends Component {
       this.handleMouseDown(touchObj);
     }
   }
+
   render () {
-    let { faceUp, faceDown, offsetWidth, offsetHeight } = this.props;
+    let { faceUp, faceDown, offsetWidth, offsetHeight, faceUpCardMap, faceDownCardMap } = this.props;
+    faceUp = faceUp.map(faceUpCardMap);
+    faceDown = faceDown.map(faceDownCardMap);
     let faceUpHooked;
     if (!faceUp.length) {
       faceUpHooked = [];
@@ -181,4 +189,16 @@ class DealArea extends Component {
 
 DealArea.propTypes = propTypes;
 
-export default DealArea;
+function mapStateToProps (state) {
+  let { present } = state.cards;
+  let faceUp = present
+    .filter(card => card.location === cardZones.dealArea.faceUp);
+  let faceDown = present
+    .filter(card => card.location === cardZones.dealArea.faceDown);
+  return {
+    faceUp,
+    faceDown
+  };
+}
+
+export default connect(mapStateToProps)(DealArea);

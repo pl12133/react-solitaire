@@ -36,6 +36,7 @@ const propTypes = {
   // redux-undo actionCreators
   undoMove: PropTypes.func.isRequired,
   redoMove: PropTypes.func.isRequired,
+  // redux-undo action availability
   canUndo: PropTypes.bool,
   canRedo: PropTypes.bool
 };
@@ -49,7 +50,7 @@ class Table extends Component {
       'handleDealButtonClick', 'handleUndoButtonClick', 'handleRedoButtonClick',
       'handleTouchEnd', 'handleTouchMove',
       'getOffsetFromTable', 'getCardDimensions', 'getAvailableMoves',
-      'cardSlice', 'cardLocate', 'createRow', 'dealCards',
+      'cardMap', 'createRow', 'dealCards',
       'checkGameWon', 'doWinAnimation'
     ];
 
@@ -66,7 +67,41 @@ class Table extends Component {
       redeal: false
     };
   }
-
+  componentDidMount () {
+    this.setState({
+      redeal: true,
+      width: document.getElementById('table').clientWidth
+    }, () => {
+      setTimeout(() => this.setState({loading: false}), 0);
+    });
+    window.addEventListener('resize', this.handleResize);
+    document.addEventListener('keyup', this.handleKeyUp);
+  }
+  componentDidUpdate (prevProps, prevState) {
+    if (this.state.redeal) {
+      let { shuffleCards } = this.props;
+      shuffleCards();
+      this.setState({
+        redeal: false
+      });
+    } else if (this.checkGameWon()) {
+      this.doWinAnimation();
+    }
+  }
+  getCardDimensions () {
+    // 7.5% padding on left, 7.5% padding on right, 85% in the middle
+    // cards should take up 11% of the table with 1.14% padding between
+    const CARD_WIDTH = 222.77;
+    const CARD_HEIGHT = 323.551;
+    const ASPECT = CARD_HEIGHT / CARD_WIDTH;
+    let { width } = this.state;
+    let offsetWidth = Math.floor(width * 0.11);
+    let offsetHeight = ASPECT * offsetWidth;
+    return {
+      offsetWidth,
+      offsetHeight
+    };
+  }
   getOffsetFromTable (elem) {
     if (!elem || !elem.parentNode) {
       return {x: 0, y: 0};
@@ -82,7 +117,7 @@ class Table extends Component {
   }
   getAvailableMoves (cardName, numCards) {
     return Object.keys(this.refs).filter((key, index) => {
-      let stack = this.refs[key];
+      let stack = this.refs[key].getWrappedInstance();
       return stack.checkGoodDrop({name: cardName}, numCards);
     });
   }
@@ -93,6 +128,13 @@ class Table extends Component {
     }, () => {
       setTimeout(() => this.setState({loading: false}), 0);
     });
+  }
+  handleKeyUp (e) {
+    if (e.ctrlKey && e.keyCode === 'Z'.charCodeAt(0)) {
+      this.handleUndoButtonClick();
+    } else if (e.ctrlKey && e.keyCode === 'Y'.charCodeAt(0)) {
+      this.handleRedoButtonClick();
+    }
   }
   handleCardFlip (card) {
     let { flipCard } = this.props;
@@ -166,7 +208,7 @@ class Table extends Component {
                             pageX, pageY)) {
           // Collision, check if drop is acceptable
           let toStack = stackName + '-' + (index + 1);
-          let droppedOn = this.refs[toStack];
+          let droppedOn = this.refs[toStack].getWrappedInstance();
           let testCard = {
             name: dragCards[0].props.name,
             flipped: false
@@ -216,8 +258,10 @@ class Table extends Component {
         let offset = this.getOffsetFromTable(node);
         let elemLeft = pageX - offset.x;
         let elemTop = pageY - offset.y;
-        let off = { x: elemLeft - (node.offsetWidth / 2),
-                    y: (elemTop - (node.offsetHeight / 2)) + index * CARD_Y_DISTANCE};
+        let off = {
+          x: elemLeft - (node.offsetWidth / 2),
+          y: (elemTop - (node.offsetHeight / 2)) + index * CARD_Y_DISTANCE
+        };
         node.style.left = off.x + 'px';
         node.style.top = off.y + 'px';
 
@@ -228,12 +272,12 @@ class Table extends Component {
   }
   createRow (namePrefix, numCols, cardsXOffset = 0, cardsYOffset = 0, offsetWidth = 0, offsetHeight = 0) {
     let row = [];
+    const stackCardMapper = this.cardMap(cardsXOffset, cardsYOffset);
+    let { offsetWidth: cardWidth, offsetHeight: cardHeight } = this.getCardDimensions();
+    offsetWidth = offsetWidth || cardWidth;
+    offsetHeight = offsetHeight || cardHeight;
     for (let index = 0; index < numCols; ++index) {
       let stackName = namePrefix + '-' + (index + 1);
-      let { offsetWidth: cardWidth, offsetHeight: cardHeight } = this.getCardDimensions();
-      offsetWidth = offsetWidth || cardWidth;
-      offsetHeight = offsetHeight || cardHeight;
-      let stackChildren = this.cardSlice(stackName, cardsXOffset, cardsYOffset, offsetWidth, offsetHeight);
       row.push(
         <DroppableStack
           stackName={stackName}
@@ -244,49 +288,31 @@ class Table extends Component {
           offsetHeight={offsetHeight}
           handleBeginDragDrop={this.handleBeginDragDrop}
           getAvailableMoves={this.getAvailableMoves}
+          stackCardMapper={stackCardMapper}
           moveCards={this.props.moveCards}
           flipCard={this.handleCardFlip}
-        >
-          {stackChildren}
-        </DroppableStack>
+        />
       );
     }
     return row;
   }
 
-  cardLocate (location) {
-    function locationFilter (location) {
-      return function (elem) {
-        return (elem.location === location);
-      };
-    }
-    return locationFilter(location);
-  }
-
-  cardSlice (location, offsetLeft = 0, offsetTop = 0, offsetWidth = 0, offsetHeight = 0) {
-    let cardMap = (offsetLeft = 0, offsetTop = 0, offsetWidth = 0, offsetHeight = 0) => {
-      return (card, index) => {
-        return (
-          <Card
-            name={card.name}
-            key={card.name}
-            flipped={card.flipped}
-            offsetLeft={index * offsetLeft}
-            offsetTop={index * offsetTop}
-            offsetWidth={offsetWidth}
-            offsetHeight={offsetHeight}
-            handleBeginDragDrop={this.handleBeginDragDrop}
-          />
-        );
-      };
-    };
-    let { cards } = this.props;
+  cardMap (offsetLeft = 0, offsetTop = 0, offsetWidth = 0, offsetHeight = 0) {
     let { offsetWidth: cardWidth, offsetHeight: cardHeight } = this.getCardDimensions();
-    offsetWidth = offsetWidth || cardWidth;
-    offsetHeight = offsetHeight || cardHeight;
-    return cards
-      .filter(this.cardLocate(location))
-      .map(cardMap(offsetLeft, offsetTop, offsetWidth, offsetHeight));
+    return (card, index) => {
+      return (
+        <Card
+          name={card.name}
+          key={card.name}
+          flipped={card.flipped}
+          offsetLeft={index * offsetLeft}
+          offsetTop={index * offsetTop}
+          offsetWidth={offsetWidth || cardWidth}
+          offsetHeight={offsetHeight || cardHeight}
+          handleBeginDragDrop={this.handleBeginDragDrop}
+        />
+      );
+    };
   }
 
   dealCards () {
@@ -296,9 +322,7 @@ class Table extends Component {
   }
   checkGameWon () {
     let { cards } = this.props;
-    return cards.every((elem) => {
-      return (elem.location.indexOf('ACE') >= 0);
-    });
+    return cards.every((elem) => elem.location.indexOf('ACE') >= 0);
   }
   doWinAnimation () {
     let cards = [].slice.call(document.querySelectorAll('div[id*="-of-"]'));
@@ -311,7 +335,6 @@ class Table extends Component {
       let randomWithinHeight = Math.floor(Math.random() * height) - y - (offsetHeight / 2);
       card.style.left = randomWithinWidth + 'px';
       card.style.top = randomWithinHeight + 'px';
-
       card.style.transition = 'top 1s ease-in-out, left 1s ease-in-out';
     };
     function debounce (func, wait, immediate) {
@@ -341,47 +364,6 @@ class Table extends Component {
     window.requestAnimationFrame(step);
   }
 
-  componentDidMount () {
-    this.setState({
-      redeal: true,
-      width: document.getElementById('table').clientWidth
-    }, () => {
-      setTimeout(() => this.setState({loading: false}), 0);
-    });
-    window.addEventListener('resize', this.handleResize);
-    document.addEventListener('keyup', this.handleKeyUp);
-  }
-
-  handleKeyUp (e) {
-    if (e.ctrlKey && e.keyCode === 'Z'.charCodeAt(0)) {
-      this.handleUndoButtonClick();
-    } else if (e.ctrlKey && e.keyCode === 'Y'.charCodeAt(0)) {
-      this.handleRedoButtonClick();
-    }
-  }
-
-  componentDidUpdate (prevProps, prevState) {
-    if (this.state.redeal) {
-      let { shuffleCards } = this.props;
-      shuffleCards();
-      this.setState({
-        redeal: false
-      });
-    } else if (this.checkGameWon()) {
-      this.doWinAnimation();
-    }
-  }
-  getCardDimensions () {
-    // 7.5% padding on left, 7.5% padding on right, 85% in the middle
-    // cards should take up 11% of the table with 1.14% padding between
-    const CARD_WIDTH = 222.77;
-    const CARD_HEIGHT = 323.551;
-    const ASPECT = CARD_HEIGHT / CARD_WIDTH;
-    let { width } = this.state;
-    let offsetWidth = Math.floor(width * 0.11);
-    let offsetHeight = ASPECT * offsetWidth;
-    return { offsetWidth, offsetHeight };
-  }
   render () {
     if (this.state.loading) {
       return (
@@ -391,36 +373,42 @@ class Table extends Component {
       );
     }
     // calculations
-    let tableWidth = this.state.width || 800;
-    let { offsetWidth: droppableWidth, offsetHeight: droppableHeight } = this.getCardDimensions();
+    let { width: tableWidth = 800 } = this.state;
+    let {
+      offsetWidth: droppableWidth,
+      offsetHeight: droppableHeight
+    } = this.getCardDimensions();
     // renderables
     let sevenDroppableStacks = this.createRow('STACK', 7, 0, CARD_Y_DISTANCE);
     let aceDroppableStacks = this.createRow('ACE', 4);
-    let dealAreaFaceDownCards = this.cardSlice('DEAL-AREA-FACEDOWN', tableWidth * 0.004);
-    let dealAreaFaceUpCards = this.cardSlice('DEAL-AREA-FACEUP');
-    let tableCards = this.cardSlice('TABLE');
+    let faceDownCardMap = this.cardMap(tableWidth * 0.004);
+    let faceUpCardMap = this.cardMap();
 
     return (
-      <div id={'table'} className={styles}
-                        onMouseMove={this.handleMouseMove}
-                        onMouseUp={this.handleMouseUp}
-                        onTouchMove={this.handleTouchMove}
-                        onTouchEnd={this.handleTouchEnd}
+      <div
+        id={'table'}
+        className={styles}
+        onMouseMove={this.handleMouseMove}
+        onMouseUp={this.handleMouseUp}
+        onTouchMove={this.handleTouchMove}
+        onTouchEnd={this.handleTouchEnd}
       >
-        <ButtonsPanel handleRedoButtonClick={this.handleRedoButtonClick}
-                      handleUndoButtonClick={this.handleUndoButtonClick}
-                      doWinAnimation={this.doWinAnimation}
-                      canUndo={!!this.props.canUndo}
-                      canRedo={!!this.props.canRedo}
-                      handleDealButtonClick={this.handleDealButtonClick}
+        <ButtonsPanel
+          handleRedoButtonClick={this.handleRedoButtonClick}
+          handleUndoButtonClick={this.handleUndoButtonClick}
+          doWinAnimation={this.doWinAnimation}
+          canUndo={!!this.props.canUndo}
+          canRedo={!!this.props.canRedo}
+          handleDealButtonClick={this.handleDealButtonClick}
         />
-        <DealArea moveCards={this.props.moveCards}
-                  getAvailableMoves={this.getAvailableMoves}
-                  offsetWidth={droppableWidth}
-                  offsetHeight={droppableHeight}
-                  faceUp={dealAreaFaceUpCards}
-                  faceDown={dealAreaFaceDownCards}>
-        </DealArea>
+        <DealArea
+          offsetWidth={droppableWidth}
+          offsetHeight={droppableHeight}
+          moveCards={this.props.moveCards}
+          getAvailableMoves={this.getAvailableMoves}
+          faceUpCardMap={faceUpCardMap}
+          faceDownCardMap={faceDownCardMap}
+        />
 
         <AceArea>
           {aceDroppableStacks}
@@ -429,10 +417,6 @@ class Table extends Component {
         <LowerArea>
           {sevenDroppableStacks}
         </LowerArea>
-
-        {/* tableCards are rendered for testing */}
-        {tableCards}
-
       </div>
     );
   }

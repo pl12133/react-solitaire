@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 /* Styles */
 import styles from './styles/';
+import { connect } from 'react-redux';
 
 import cardUtils from '../../constants/cardUtils';
 const DISPLAY_NAME = '<DroppableStack>';
@@ -12,11 +13,14 @@ const propTypes = {
   offsetHeight: PropTypes.number,
   handleBeginDragDrop: PropTypes.func.isRequired,
   getAvailableMoves: PropTypes.func.isRequired,
+  cards: PropTypes.array.isRequired,
   moveCards: PropTypes.func.isRequired,
-  flipCard: PropTypes.func.isRequired
+  flipCard: PropTypes.func.isRequired,
+  stackCardMapper: PropTypes.func.isRequired // A function to draw cards for us
 };
 
-class DroppableStack extends Component {
+// Export unconnected class for testing
+export class DroppableStack extends Component {
   constructor (props) {
     super(props);
     let ownFuncs = [
@@ -33,14 +37,14 @@ class DroppableStack extends Component {
   }
 
   handleAceDrop (card) {
-    let numChildren = this.props.children.length;
+    let numChildren = this.props.cards.length;
     let cardValue = cardUtils.getCardValue(card);
     let cardSuit = cardUtils.getCardSuit(card);
 
     if (cardValue === (numChildren + 1)) {
       if (numChildren > 0) {
-        let firstChild = this.props.children[0];
-        let stackSuit = cardUtils.getCardSuit({name: firstChild.props.name});
+        let firstChild = this.props.cards[0];
+        let stackSuit = cardUtils.getCardSuit({name: firstChild.name});
         return (stackSuit === cardSuit);
       } else {
         return (cardValue === 1);
@@ -50,14 +54,14 @@ class DroppableStack extends Component {
     return false;
   }
   handleStackDrop (card) {
-    let numChildren = this.props.children.length;
+    let numChildren = this.props.cards.length;
     let cardValue = cardUtils.getCardValue(card);
     let cardColor = cardUtils.getCardColor(card);
 
     if (numChildren > 0) {
-      let { children } = this.props;
-      let lastChild = children[children.length - 1];
-      let stackCard = {name: lastChild.props.name};
+      let { cards } = this.props;
+      let lastChild = cards[cards.length - 1];
+      let stackCard = {name: lastChild.name};
       let stackValue = cardUtils.getCardValue(stackCard);
       let stackColor = cardUtils.getCardColor(stackCard);
 
@@ -82,15 +86,15 @@ class DroppableStack extends Component {
     }
   }
   shouldComponentUpdate (nextProps, nextState) {
-    let { children: oldChildren } = this.props;
-    let { children: newChildren } = nextProps;
+    let { cards: oldChildren } = this.props;
+    let { cards: newChildren } = nextProps;
     return ((oldChildren.length !== newChildren.length) || (this.props.offsetWidth !== nextProps.offsetWidth) || (oldChildren[oldChildren.length - 1] !== newChildren[newChildren.length - 1]));
   }
   componentWillReceiveProps (nextProps) {
     // When receiving new props, if the facing card is face down,
     // then flip it over
-    let { children: newChildren } = nextProps;
-    let { children: oldChildren } = this.props;
+    let { cards: newChildren } = nextProps;
+    let { cards: oldChildren } = this.props;
 
     if ((newChildren.length > 0) && (newChildren.length < oldChildren.length)) {
       let lastChild = 'child-' + (newChildren.length - 1);
@@ -114,9 +118,9 @@ class DroppableStack extends Component {
     }
   }
   handleMouseDown (e, childIndex) {
-    let { children } = this.props;
+    let { cards } = this.props;
     let stackBelowClicked = [];
-    for (let index = childIndex, len = children.length; index < len; ++index) {
+    for (let index = childIndex, len = cards.length; index < len; ++index) {
       let refName = 'child-' + index;
       stackBelowClicked.push(this.refs[refName]);
     }
@@ -132,11 +136,11 @@ class DroppableStack extends Component {
   handleDoubleClick (e, childIndex) {
     e.preventDefault();
     let clickedCardName = e.target.id;
-    let { children } = this.props;
-    let numCardsBelowClicked = children.length - childIndex;
+    let { cards } = this.props;
+    let numCardsBelowClicked = cards.length - childIndex;
     let canMoveTo = this.props.getAvailableMoves(clickedCardName, numCardsBelowClicked);
     let stackBelowClicked = [];
-    for (let index = childIndex, len = children.length; index < len; ++index) {
+    for (let index = childIndex, len = cards.length; index < len; ++index) {
       let refName = 'child-' + index;
       let child = this.refs[refName];
       let { flipped, name } = child.props;
@@ -155,7 +159,7 @@ class DroppableStack extends Component {
     }
   }
   render () {
-    let { index = 1, stackName, offsetHeight, offsetWidth } = this.props;
+    let { index = 1, stackName, offsetHeight, offsetWidth, stackCardMapper } = this.props;
     index -= 1;
 
     let cardIndex = 0;
@@ -164,7 +168,8 @@ class DroppableStack extends Component {
         fn(e, index);
       };
     };
-    let children = React.Children.map(this.props.children, (child) => {
+    let children = this.props.cards.map(stackCardMapper);
+    children = React.Children.map(children, (child) => {
       return React.cloneElement(child, {
         onMouseDown: fnWrap(this.handleMouseDown, cardIndex),
         onTouchStart: fnWrap(this.handleTouchStart, cardIndex),
@@ -193,5 +198,14 @@ class DroppableStack extends Component {
 
 }
 
+function mapStateToProps (state, ownProps) {
+  const { present } = state.cards;
+  const cards = present
+    .filter(card => card.location === ownProps.stackName);
+  return {
+    cards
+  };
+}
+
 DroppableStack.propTypes = propTypes;
-export default DroppableStack;
+export default connect(mapStateToProps, undefined, undefined, { withRef: true })(DroppableStack);
