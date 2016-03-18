@@ -8,7 +8,7 @@ export const CLEAR_UNDO_HISTORY = 'CLEAR_UNDO_HISTORY';
 export function clearHistory () {
   return {
     type: CLEAR_UNDO_HISTORY
-  }
+  };
 }
 
 export function shuffleCards () {
