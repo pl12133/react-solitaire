@@ -9,7 +9,7 @@ const propTypes = {
   doWinAnimation: PropTypes.func.isRequired,
   handleDealButtonClick: PropTypes.func.isRequired,
   canUndo: PropTypes.bool,
-  canRedo: PropTypes.bool,
+  canRedo: PropTypes.bool
 };
 const ButtonsPanel = ({handleRedoButtonClick,
                        handleUndoButtonClick,

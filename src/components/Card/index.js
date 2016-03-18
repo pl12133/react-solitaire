@@ -22,7 +22,8 @@ const propTypes = {
   onDoubleClick: PropTypes.func
 };
 
-class Card extends Component {
+// Export unconnected class for testing
+export class Card extends Component {
   constructor (props) {
     super(props);
   }
